@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/About%20Us/about.dart';
 import 'package:ieee_website/Base/base.dart';
 import 'package:ieee_website/Contact%20Us/contact.dart';
@@ -20,21 +21,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'IEEE PUA SB',
-      theme: MyTheme.theme,
-      initialRoute: HomeScreen.routeName,
-      routes: {
-        HomeScreen.routeName: (context) => HomeScreen(),
-        AboutUs.routeName: (context) => AboutUs(),
-        Events.routeName: (context) => Events(),
-        Projects.routeName: (context) => Projects(),
-        Contact.routeName: (context) => Contact(),
-        Tools.routeName: (context) => Tools(),
-        JoinUs.routeName: (context) => JoinUs(),
-        Base.routeName: (context) => Base(),
-        FAQ.routeName: (context) => FAQ(),
-        WallofHonur.routeName: (context) => WallofHonur(),
+    return ScreenUtilInit(
+      designSize: const Size(1912, 6743),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'IEEE PUA SB',
+          theme: MyTheme.theme,
+          initialRoute: Base.routeName,
+          routes: {
+            HomeScreen.routeName: (context) => HomeScreen(),
+            AboutUs.routeName: (context) => AboutUs(),
+            Events.routeName: (context) => Events(),
+            Projects.routeName: (context) => Projects(),
+            Contact.routeName: (context) => Contact(),
+            Tools.routeName: (context) => Tools(),
+            JoinUs.routeName: (context) => JoinUs(),
+            Base.routeName: (context) => Base(),
+            FAQ.routeName: (context) => FAQ(),
+            WallofHonur.routeName: (context) => WallofHonur(),
+          },
+        );
       },
     );
   }

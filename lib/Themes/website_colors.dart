@@ -8,5 +8,7 @@ class WebsiteColors {
   static const Color darkGreyColor = Color(0xff333333);
   static const Color descGreyColor = Color(0xff696984);
   static const Color whiteColor = Color(0xffFFFFFF);
+  static const Color blackColor = Color(0xff000000);
   static const Color primaryYellowColor = Color(0xffF6A31B);
+  static const Color gradeintBlueColor = Color(0xffE2F1FB);
 }

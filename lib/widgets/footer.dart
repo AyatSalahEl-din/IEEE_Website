@@ -1,0 +1,175 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:ieee_website/Themes/website_colors.dart';
+import 'package:ieee_website/Join%20Us/join.dart'; // ✅ Import JoinUs page
+
+class Footer extends StatelessWidget {
+  final TabController tabController; // ✅ Accept TabController
+
+  Footer({required this.tabController});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // ✅ Gradient Background
+        Container(
+          height: 593.sp,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                WebsiteColors.primaryBlueColor.withOpacity(0.9),
+                WebsiteColors.gradeintBlueColor.withOpacity(0.9),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+        ),
+
+        // ✅ Footer Content
+        Positioned.fill(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // IEEE Logo & Name
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/bluehoriz.png',
+                    height: 300.sp,
+                    width: 300.sp,
+                  ),
+                  //SizedBox(width: 10.sp),
+                  /*Text(
+                    "IEEE PHAROS",
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      fontSize: 22.sp,
+                      color: WebsiteColors.primaryBlueColor,
+                    ),
+                  ),*/
+                ],
+              ),
+              //SizedBox(height: 10.sp),
+
+              // Newsletter Subscription
+              Text(
+                "Subscribe to get our Newsletter",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontSize: 26.sp,
+                  color: WebsiteColors.primaryBlueColor,
+                ),
+              ),
+              SizedBox(height: 10.sp),
+
+              // ✅ Email Input & Subscribe Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 400.sp,
+                    height: 100.sp,
+                    padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: WebsiteColors.darkBlueColor),
+                    ),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Your Email',
+                        hintStyle: Theme.of(context).textTheme.displayMedium
+                            ?.copyWith(color: WebsiteColors.primaryBlueColor),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10.sp),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: WebsiteColors.primaryBlueColor,
+                      foregroundColor: WebsiteColors.whiteColor,
+                      fixedSize: Size(190.sp, 50.sp),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 25.sp,
+                        vertical: 15.sp,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.sp),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Handle subscription logic
+                    },
+                    child: Text("Subscribe"),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20.sp),
+
+              // ✅ Navigation Links (Clickable)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildFooterNavItem(context, "About Us", 1), // Switch Tab
+                  SizedBox(width: 20.sp),
+                  _buildFooterNavItem(context, "Contact Us", 4), // Switch Tab
+                  SizedBox(width: 20.sp),
+                  _buildFooterNavItem(
+                    context,
+                    "Join Us",
+                    null,
+                  ), // ✅ Open New Page
+                ],
+              ),
+              SizedBox(height: 10.sp),
+
+              // ✅ Copyright
+              Text(
+                "© 2025 IEEE Pharos University's Web Team",
+                style: Theme.of(
+                  context,
+                ).textTheme.displayMedium?.copyWith(fontSize: 22.sp),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ✅ Function to Handle Navigation
+  Widget _buildFooterNavItem(BuildContext context, String text, int? tabIndex) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          if (text == "Join Us") {
+            // ✅ Navigate to Join Us Page Instead of Switching Tabs
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => JoinUs()),
+            );
+          } else if (tabIndex != null) {
+            // ✅ Switch Tab Normally
+            tabController.animateTo(tabIndex);
+          }
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.sp),
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: WebsiteColors.whiteColor,
+              fontSize: 22.sp,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
