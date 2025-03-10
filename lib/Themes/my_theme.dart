@@ -9,6 +9,7 @@ class MyTheme {
       displayMedium: GoogleFonts.poppins(
         color: WebsiteColors.whiteColor,
         fontWeight: FontWeight.w400,
+
         fontSize: 30.sp,
       ),
       displaySmall: GoogleFonts.poppins(
