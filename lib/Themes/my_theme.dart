@@ -41,6 +41,16 @@ class MyTheme {
         fontWeight: FontWeight.bold,
         fontSize: 48.sp,
       ),
+      bodyMedium: GoogleFonts.poppins (
+      color: WebsiteColors.whiteColor,
+      fontWeight: FontWeight.bold,
+      fontSize: 45.sp,
+    ),
+      bodySmall: GoogleFonts.poppins(
+        color: WebsiteColors.darkBlueColor,
+        fontWeight: FontWeight.normal,
+        fontSize: 20.sp,
+      ),
       titleLarge: GoogleFonts.poppins(
         color: WebsiteColors.darkGreyColor,
         fontWeight: FontWeight.bold,
