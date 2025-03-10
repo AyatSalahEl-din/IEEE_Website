@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ieee_website/Home_Screen/teammemberclass.dart';
 import 'package:ieee_website/Join%20Us/join.dart';
 import 'package:ieee_website/Our%20Work/Events/events.dart';
 import 'package:ieee_website/Our%20Work/Projects/projects.dart';
@@ -10,7 +11,7 @@ import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:ieee_website/Widgets/text_gradeint.dart';
 import 'package:ieee_website/widgets/card.dart';
 import 'package:ieee_website/widgets/footer.dart';
-import 'package:ieee_website/widgets/imageslider.dart';
+import 'package:ieee_website/widgets/storyslider.dart';
 import 'package:ieee_website/widgets/team_member.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,6 +32,23 @@ class _HomeScreenState extends State<HomeScreen> {
     'assets/images/Picture5.png',
     'assets/images/Picture6.png',
   ];
+  // Variables for hover effect
+  bool isUpcomingEventsHovered = false;
+  bool isNewFeaturesHovered = false;
+  bool isPapersProjectsHovered = false;
+
+  final GlobalKey ourStoryKey = GlobalKey();
+
+  void scrollToOurStory() {
+    final context = ourStoryKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: CircleBorder(),
                             backgroundColor: WebsiteColors.whiteColor,
                           ),
-                          onPressed: () {
-                            ////move to our story slider
-                          },
+                          onPressed: scrollToOurStory,
                           child: Icon(
                             Icons.play_arrow,
                             color: WebsiteColors.primaryYellowColor,
@@ -163,18 +179,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 1391.sp,
                 top: 393.sp,
                 child: MouseRegion(
-                  cursor:
-                      SystemMouseCursors.click, // ✅ Change cursor when hovered
+                  onEnter:
+                      (_) => setState(() => isUpcomingEventsHovered = true),
+                  onExit:
+                      (_) => setState(() => isUpcomingEventsHovered = false),
+                  cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
                       widget.tabController!.animateTo(2);
                     },
                     child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 200,
-                      ), // ✅ Smooth hover effect
-                      width: 341.sp,
-                      height: 100.sp,
+                      duration: Duration(milliseconds: 200),
+                      width: 360.sp,
+                      height: 140.sp,
                       padding: EdgeInsets.symmetric(
                         horizontal: 20.sp,
                         vertical: 15.sp,
@@ -184,17 +201,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(20.sp),
                         boxShadow: [
                           BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(
-                              0.1,
+                            color: WebsiteColors.whiteColor.withOpacity(
+                              isUpcomingEventsHovered ? 0.8 : 0.1,
                             ),
-                            blurRadius: 10.sp,
-                            spreadRadius: 2.sp,
+                            blurRadius: isUpcomingEventsHovered ? 20.sp : 10.sp,
+                            spreadRadius: isUpcomingEventsHovered ? 5.sp : 2.sp,
                           ),
                         ],
                       ),
                       child: Row(
                         children: [
-                          // Icon Container
                           Container(
                             height: 50.sp,
                             width: 50.sp,
@@ -209,9 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(width: 15.sp),
-                          // Text Column
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Upcoming Events",
@@ -235,18 +251,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 1046.sp,
                 top: 577.sp,
                 child: MouseRegion(
-                  cursor:
-                      SystemMouseCursors.click, // ✅ Change cursor when hovered
+                  onEnter: (_) => setState(() => isNewFeaturesHovered = true),
+                  onExit: (_) => setState(() => isNewFeaturesHovered = false),
+                  cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
                       widget.tabController!.animateTo(5);
                     },
                     child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 200,
-                      ), // ✅ Smooth hover effect
-                      width: 323.sp,
-                      height: 113.sp,
+                      duration: Duration(milliseconds: 200),
+                      width: 360.sp,
+                      height: 140.sp,
                       padding: EdgeInsets.symmetric(
                         horizontal: 20.sp,
                         vertical: 15.sp,
@@ -256,11 +271,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(20.sp),
                         boxShadow: [
                           BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(
-                              0.1,
+                            color: WebsiteColors.whiteColor.withOpacity(
+                              isNewFeaturesHovered ? 0.8 : 0.1,
                             ),
-                            blurRadius: 10.sp,
-                            spreadRadius: 2.sp,
+                            blurRadius: isNewFeaturesHovered ? 20.sp : 10.sp,
+                            spreadRadius: isNewFeaturesHovered ? 5.sp : 2.sp,
                           ),
                         ],
                       ),
@@ -272,7 +287,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             size: 63.sp,
                           ),
                           SizedBox(width: 15.sp),
-                          // Text Column
                           Text(
                             "New Features",
                             style: Theme.of(context).textTheme.titleLarge,
@@ -289,18 +303,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: 1449.sp,
                 top: 726.sp,
                 child: MouseRegion(
-                  cursor:
-                      SystemMouseCursors.click, // ✅ Change cursor when hovered
+                  onEnter:
+                      (_) => setState(() => isPapersProjectsHovered = true),
+                  onExit:
+                      (_) => setState(() => isPapersProjectsHovered = false),
+                  cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
                       widget.tabController!.animateTo(3);
                     },
                     child: AnimatedContainer(
-                      duration: Duration(
-                        milliseconds: 200,
-                      ), // ✅ Smooth hover effect
-                      width: 370.sp,
-                      height: 110.sp,
+                      duration: Duration(milliseconds: 200),
+                      width: 360.sp,
+                      height: 140.sp,
                       padding: EdgeInsets.symmetric(
                         horizontal: 20.sp,
                         vertical: 15.sp,
@@ -310,17 +325,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(20.sp),
                         boxShadow: [
                           BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(
-                              0.1,
+                            color: WebsiteColors.whiteColor.withOpacity(
+                              isPapersProjectsHovered ? 0.8 : 0.1,
                             ),
-                            blurRadius: 10.sp,
-                            spreadRadius: 2.sp,
+                            blurRadius: isPapersProjectsHovered ? 20.sp : 10.sp,
+                            spreadRadius: isPapersProjectsHovered ? 5.sp : 2.sp,
                           ),
                         ],
                       ),
                       child: Row(
                         children: [
-                          // Icon Container
                           Container(
                             height: 50.sp,
                             width: 50.sp,
@@ -335,7 +349,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(width: 15.sp),
-                          // Text Column
                           Text(
                             "Papers and Projects",
                             style: Theme.of(context).textTheme.titleLarge,
@@ -404,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 120.sp),
+                  SizedBox(width: 120.w),
                   Column(
                     children: [
                       GradientText(
@@ -427,10 +440,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 200.sp),
+              SizedBox(height: 550.h),
               /////////////////////Our vision
               Text("Our Vision", style: Theme.of(context).textTheme.bodyLarge),
-              SizedBox(height: 40.sp),
+              SizedBox(height: 40.h),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -468,7 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -495,80 +508,44 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+
               /////////////////////////
               ///Our Story
-              SizedBox(height: 150.sp),
-              Text("Our Story", style: Theme.of(context).textTheme.bodyLarge),
-              SizedBox(height: 40.sp),
-              Text(
-                "IEEE PUA SB Accomplishments 2013-2023",
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: WebsiteColors.descGreyColor,
+              Positioned(
+                bottom: 0, // Adjust positioning as needed
+                child: Container(
+                  key: ourStoryKey, // Assign key to the section
+                  child: Column(
+                    children: [
+                      SizedBox(height: 550.h),
+                      Text(
+                        "Our Story",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      SizedBox(height: 40.h),
+                      Text(
+                        "IEEE PUA SB Accomplishments 2014-2025",
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(color: WebsiteColors.descGreyColor),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 20.sp),
-              ContinuousSlideshow(),
+              SizedBox(height: 40.h),
+              StorySlideshow(),
               /////////////////////////
               ///Our team
-              SizedBox(height: 200.sp),
-              Text(
-                "Meet Our Team",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              SizedBox(height: 40.sp),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture1.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                  SizedBox(width: 20.sp),
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture2.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                  SizedBox(width: 20.sp),
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture3.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.sp),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture4.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                  SizedBox(width: 20.sp),
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture5.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                  SizedBox(width: 20.sp),
-                  TeamMemberCard(
-                    imagePath: 'assets/images/Picture6.png',
-                    name: "Ayat SalahEldin",
-                    jobTitle: 'Software Engineer',
-                  ),
-                ],
-              ),
+              SizedBox(height: 100.h),
+              OurTeamSection(),
               //////////////////////////////
               ///our partners
-              SizedBox(height: 150.sp),
+              SizedBox(height: 500.h),
               Text(
                 "Our Partners",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              SizedBox(height: 40.sp),
+              SizedBox(height: 40.h),
               Image.asset(
                 'assets/images/Partners.png',
                 height: 1563.sp,
