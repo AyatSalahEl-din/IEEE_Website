@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Widgets/footer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'models/project_model.dart';
 import 'repositories/project_repository.dart';
@@ -29,6 +30,7 @@ class _ProjectsState extends State<Projects> {
   final ProjectRepository _projectRepository = FirebaseProjectRepository();
 
   List<Project> _projects = [];
+  List<Project> _originalProjects = []; // New list to store original projects
   bool _isLoading = false;
   String? _lastProjectId;
   List<double> projectOpacities = [];
@@ -60,6 +62,7 @@ class _ProjectsState extends State<Projects> {
     setState(() => _isLoading = true);
     try {
       final projects = await _projectRepository.getProjects();
+      _originalProjects = List.from(projects); // Store original projects
       setState(() {
         _projects = projects;
         projectOpacities = List.generate(
@@ -123,7 +126,8 @@ class _ProjectsState extends State<Projects> {
       try {
         List<Project> results;
         if (query.isEmpty && _selectedCategory == null) {
-          results = await _projectRepository.getProjects();
+          // Retrieve all projects in original order
+          _projects = List.from(_originalProjects);
         } else {
           results = await _projectRepository.searchProjects(query);
           if (_selectedCategory != null) {
@@ -134,13 +138,13 @@ class _ProjectsState extends State<Projects> {
                     )
                     .toList();
           }
+          setState(() {
+            _projects = results;
+            projectOpacities = List.generate(results.length, (index) => 1.0);
+            _isSelected = List.generate(results.length, (index) => false);
+            _isHovered = List.generate(results.length, (index) => false);
+          });
         }
-        setState(() {
-          _projects = results;
-          projectOpacities = List.generate(results.length, (index) => 1.0);
-          _isSelected = List.generate(results.length, (index) => false);
-          _isHovered = List.generate(results.length, (index) => false);
-        });
       } catch (e) {
         // TODO: Handle error
         print('Error searching projects: $e');
@@ -234,7 +238,6 @@ class _ProjectsState extends State<Projects> {
                   "Discover our innovative projects and research work",
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: WebsiteColors.whiteColor,
-                    fontSize: 40.sp, // Added fontSize
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -364,19 +367,35 @@ class _ProjectsState extends State<Projects> {
           onPressed: () {
             setState(() {
               _selectedCategory = category == 'All' ? null : category;
+              _searchController.clear();
+              if (category == 'All') {
+                _projects = List.from(
+                  _originalProjects,
+                ); // Reset to original projects
+                projectOpacities = List.generate(
+                  _projects.length,
+                  (index) => 1.0,
+                );
+                _isSelected = List.generate(_projects.length, (index) => false);
+                _isHovered = List.generate(_projects.length, (index) => false);
+              }
             });
-            _handleSearch(_searchController.text);
+            _handleSearch('');
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 40.sp),
-            textStyle: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            textStyle: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: WebsiteColors.lightGreyColor,
+            ),
           ),
           child: Text(
             category ?? 'All',
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-              color: WebsiteColors.lightGreyColor,
+            style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
+              color: WebsiteColors.lightGreyColor,
             ),
           ),
         ),
@@ -520,7 +539,6 @@ class _ProjectsState extends State<Projects> {
             project.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               color: WebsiteColors.primaryBlueColor,
-              fontSize: 32.sp,
             ),
           ),
           SizedBox(height: 20.sp),
@@ -537,9 +555,10 @@ class _ProjectsState extends State<Projects> {
             project.description,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
               height: 1.5,
-              color: WebsiteColors.darkGreyColor,
+              color: WebsiteColors.darkBlueColor,
               fontSize: 28.sp,
             ),
+            maxLines: 3,
             overflow: TextOverflow.visible,
           ),
           SizedBox(height: 15.sp),
@@ -587,9 +606,9 @@ class _ProjectsState extends State<Projects> {
         child: Text(
           text,
           style: TextStyle(
+            fontSize: 18.sp,
             color: WebsiteColors.primaryYellowColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
           ),
         ),
       ),
@@ -630,7 +649,7 @@ class _ProjectsState extends State<Projects> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white, // Set the background color to white
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
