@@ -264,11 +264,9 @@ class _ProjectsState extends State<Projects> {
       ),
       child: TextField(
         controller: _searchController,
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall!.copyWith(
+        style: Theme.of(context).textTheme.bodySmall!.copyWith(
           fontWeight: FontWeight.normal,
-          fontSize: 20.sp, 
+          fontSize: 20.sp,
         ),
         onChanged: _handleSearch,
         decoration: InputDecoration(
@@ -276,7 +274,7 @@ class _ProjectsState extends State<Projects> {
           hintStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
             color: Colors.grey,
             fontWeight: FontWeight.normal,
-            fontSize: 20.sp, 
+            fontSize: 20.sp,
           ),
           prefixIcon: Icon(Icons.search),
           border: InputBorder.none,
@@ -311,12 +309,16 @@ class _ProjectsState extends State<Projects> {
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                onPressed: _currentCategoryIndex > 0 ? () {
-                  setState(() {
-                    _currentCategoryIndex -= 6;
-                  });
-                } : null,
+                onPressed:
+                    _currentCategoryIndex > 0
+                        ? () {
+                          setState(() {
+                            _currentCategoryIndex -= 6;
+                          });
+                        }
+                        : null,
               ),
+              _buildGradientButton('All'), // Add "All" button
               ...List.generate(6, (index) {
                 int categoryIndex = _currentCategoryIndex + index;
                 if (categoryIndex < _allCategories.length) {
@@ -327,11 +329,14 @@ class _ProjectsState extends State<Projects> {
               }),
               IconButton(
                 icon: Icon(Icons.arrow_forward),
-                onPressed: _currentCategoryIndex + 6 < _allCategories.length ? () {
-                  setState(() {
-                    _currentCategoryIndex += 6;
-                  });
-                } : null,
+                onPressed:
+                    _currentCategoryIndex + 6 < _allCategories.length
+                        ? () {
+                          setState(() {
+                            _currentCategoryIndex += 6;
+                          });
+                        }
+                        : null,
               ),
             ],
           ),
@@ -358,23 +363,20 @@ class _ProjectsState extends State<Projects> {
         child: TextButton(
           onPressed: () {
             setState(() {
-              _selectedCategory = category;
+              _selectedCategory = category == 'All' ? null : category;
             });
             _handleSearch(_searchController.text);
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 40.sp),
-            textStyle: TextStyle(
-              fontSize: 20.sp, 
-              fontWeight: FontWeight.bold, 
-            ),
+            textStyle: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
           child: Text(
             category ?? 'All',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
               color: WebsiteColors.lightGreyColor,
-              fontSize: 20.sp, 
-              fontWeight: FontWeight.bold, 
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -389,93 +391,102 @@ class _ProjectsState extends State<Projects> {
           _isLoading && _projects.isEmpty
               ? Center(child: CircularProgressIndicator())
               : Column(
-                  children: List.generate(_projects.length, (index) {
-                    bool isEven = index % 2 == 0;
-                    return AnimatedOpacity(
-                      duration: Duration(milliseconds: 300),
-                      opacity: projectOpacities[index],
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 100.sp),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          onEnter: (_) {
+                children: List.generate(_projects.length, (index) {
+                  bool isEven = index % 2 == 0;
+                  return AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: projectOpacities[index],
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 100.sp),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        onEnter: (_) {
+                          setState(() {
+                            _isHovered[index] = true;
+                          });
+                        },
+                        onExit: (_) {
+                          setState(() {
+                            _isHovered[index] = false;
+                          });
+                        },
+                        child: InkWell(
+                          onTap: () {
                             setState(() {
-                              _isHovered[index] = true;
-                            });
-                          },
-                          onExit: (_) {
-                            setState(() {
-                              _isHovered[index] = false;
-                            });
-                          },
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _isSelected[index] = true;
-                                // Reset other selections
-                                for (int i = 0; i < _isSelected.length; i++) {
-                                  if (i != index) {
-                                    _isSelected[i] = false;
-                                  }
+                              _isSelected[index] = true;
+                              // Reset other selections
+                              for (int i = 0; i < _isSelected.length; i++) {
+                                if (i != index) {
+                                  _isSelected[i] = false;
                                 }
+                              }
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => ProjectDetailsPage(
+                                      project: _projects[index],
+                                    ),
+                              ),
+                            ).then((_) {
+                              // Reset selection state when navigating back
+                              setState(() {
+                                _isSelected[index] = false;
                               });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => ProjectDetailsPage(
-                                    project: _projects[index],
-                                  ),
-                                ),
-                              ).then((_) {
-                                // Reset selection state when navigating back
-                                setState(() {
-                                  _isSelected[index] = false;
-                                });
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.sp),
-                                color: Colors.white,
-                                boxShadow: _isSelected[index]
-                                    ? [
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.sp),
+                              color: Colors.white,
+                              boxShadow:
+                                  _isSelected[index]
+                                      ? [
                                         BoxShadow(
-                                          color: WebsiteColors.primaryBlueColor.withOpacity(0.5),
+                                          color: WebsiteColors.primaryBlueColor
+                                              .withOpacity(0.5),
                                           blurRadius: 15,
                                           spreadRadius: 15,
-                                        )
+                                        ),
                                       ]
-                                    : _isHovered[index]
-                                        ? [
-                                            BoxShadow(
-                                              color: WebsiteColors.primaryBlueColor.withOpacity(0.2),
-                                              blurRadius: 15,
-                                              spreadRadius: 15,
-                                            )
-                                          ]
-                                        : [],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(30.sp),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (isEven) _buildProjectImage(_projects[index]),
-                                    if (isEven) SizedBox(width: 60.sp),
-                                    Expanded(child: _buildProjectContent(_projects[index])),
-                                    if (!isEven) SizedBox(width: 60.sp),
-                                    if (!isEven) _buildProjectImage(_projects[index]),
-                                  ],
-                                ),
+                                      : _isHovered[index]
+                                      ? [
+                                        BoxShadow(
+                                          color: WebsiteColors.primaryBlueColor
+                                              .withOpacity(0.2),
+                                          blurRadius: 15,
+                                          spreadRadius: 15,
+                                        ),
+                                      ]
+                                      : [],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(30.sp),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (isEven)
+                                    _buildProjectImage(_projects[index]),
+                                  if (isEven) SizedBox(width: 60.sp),
+                                  Expanded(
+                                    child: _buildProjectContent(
+                                      _projects[index],
+                                    ),
+                                  ),
+                                  if (!isEven) SizedBox(width: 60.sp),
+                                  if (!isEven)
+                                    _buildProjectImage(_projects[index]),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
+              ),
     );
   }
 
@@ -518,27 +529,23 @@ class _ProjectsState extends State<Projects> {
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: WebsiteColors.primaryBlueColor,
               fontWeight: FontWeight.bold,
-              fontSize: 20.sp, 
+              fontSize: 20.sp,
             ),
           ),
           SizedBox(height: 20.sp),
           Text(
             project.description,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall!.copyWith(
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
               height: 1.5,
-              color: WebsiteColors.darkGreyColor, 
-              fontSize: 28.sp, 
+              color: WebsiteColors.darkGreyColor,
+              fontSize: 28.sp,
             ),
             overflow: TextOverflow.visible,
           ),
           SizedBox(height: 15.sp),
           Text(
             "Date: ${DateFormat('dd MMMM yyyy').format(project.date)}",
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: Colors.grey[700],
               fontSize: 20.sp,
             ),
@@ -582,7 +589,7 @@ class _ProjectsState extends State<Projects> {
           style: TextStyle(
             color: WebsiteColors.primaryYellowColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18.sp, 
+            fontSize: 18.sp,
           ),
         ),
       ),
@@ -623,7 +630,7 @@ class _ProjectsState extends State<Projects> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, 
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
