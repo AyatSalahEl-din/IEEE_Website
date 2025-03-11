@@ -11,8 +11,12 @@ import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/my_theme.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:ieee_website/Wall%20Of%20Honur/wallofhonur.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
