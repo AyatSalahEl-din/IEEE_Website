@@ -77,7 +77,7 @@ class OurTeamSection extends StatelessWidget {
     [
       TeamMember(
         imagePath: 'assets/images/ayat2.jpg',
-        name: "Ayat SalahEldin",
+        name: "Ayat Salah El-din",
         jobTitle: 'Head of Web Committee',
       ),
       TeamMember(
