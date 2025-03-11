@@ -87,7 +87,7 @@ class OurTeamSection extends StatelessWidget {
       ),
       TeamMember(
         imagePath: 'assets/images/menna.jpg',
-        name: "Menna Rabeia",
+        name: "Menna Allah Rabei",
         jobTitle: 'Web Developer',
       ),
       TeamMember(
