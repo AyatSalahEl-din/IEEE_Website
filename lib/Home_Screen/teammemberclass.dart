@@ -22,6 +22,11 @@ class OurTeamSection extends StatelessWidget {
         name: "Hozaifa Mostafa",
         jobTitle: 'Chairman',
       ),
+      TeamMember(
+        imagePath: 'assets/images/osama.jpg',
+        name: "Osama Magdy",
+        jobTitle: 'Officer Secretary',
+      ),
     ],
     [
       TeamMember(

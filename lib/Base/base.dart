@@ -9,7 +9,6 @@ import 'package:ieee_website/Our%20Work/Events/events.dart';
 import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
-import 'package:ieee_website/Wall%20Of%20Honur/wallofhonur.dart';
 
 class Base extends StatefulWidget {
   static const String routeName = 'base';
@@ -26,7 +25,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 8, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
   }
 
   @override
@@ -73,12 +72,11 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 labelStyle: Theme.of(context).textTheme.displaySmall,
                 tabs: const [
                   Tab(text: "Home"),
-                  Tab(text: "About"),
+                  Tab(text: "About Us"),
                   Tab(text: "Events"),
                   Tab(text: "Projects"),
-                  Tab(text: "Contact"),
+                  Tab(text: "Contact Us"),
                   Tab(text: "Tools"),
-                  Tab(text: "Wall Of Honur"),
                   Tab(text: "FAQ"),
                 ],
               ),
@@ -88,7 +86,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: WebsiteColors.whiteColor,
                   foregroundColor: WebsiteColors.primaryBlueColor,
-                  fixedSize: Size(170.sp, 50.sp),
+                  fixedSize: Size(190.sp, 50.sp),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -99,7 +97,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 child: Text(
                   'Join Us',
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontSize: 20.sp,
+                    fontSize: 25.sp,
                     color: WebsiteColors.primaryBlueColor,
                   ),
                 ),
@@ -121,7 +119,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
           Projects(tabController: _tabController),
           Contact(tabController: _tabController),
           Tools(tabController: _tabController),
-          WallofHonur(tabController: _tabController),
           FAQ(tabController: _tabController),
         ],
       ),
