@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:math' as Math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Widgets/footer.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'models/project_model.dart';
 import 'repositories/project_repository.dart';

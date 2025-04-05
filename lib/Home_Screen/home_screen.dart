@@ -4,15 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ieee_website/Home_Screen/teammemberclass.dart';
 import 'package:ieee_website/Join%20Us/join.dart';
-import 'package:ieee_website/Our%20Work/Events/events.dart';
-import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
-import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:ieee_website/Widgets/text_gradeint.dart';
 import 'package:ieee_website/widgets/card.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:ieee_website/widgets/storyslider.dart';
-import 'package:ieee_website/widgets/team_member.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'home_screen';
