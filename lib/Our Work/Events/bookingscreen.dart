@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ieee_website/widgets/bookingwidgets/customdropdown.dart';
+import 'package:ieee_website/widgets/bookingwidgets/customtextfield.dart';
+import 'package:ieee_website/widgets/bookingwidgets/sectiontitle.dart';
 import '../../Themes/website_colors.dart';
 
 class EventBookingPage extends StatefulWidget {
@@ -12,32 +15,57 @@ class EventBookingPage extends StatefulWidget {
 }
 
 class _EventBookingPageState extends State<EventBookingPage> {
-  final _formKey = GlobalKey<FormState>();
+final _formKey = GlobalKey<FormState>();
   String selectedEvent = 'IEEE Workshop';
   int numberOfTickets = 1;
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
+  bool busRequired = false; // Bus reservation status
+  double busFee = 100.0; // Fixed bus fee
+  String? selectedBusStop;
+  String? selectedBusTime;
 
-  final List<String> events = [
-    'IEEE Workshop',
-    'Tech Talk Session',
-    'IEEE Annual Conference',
-    'Networking Event',
-    'Coding Competition',
+  final List<String> busStops = [
+    'Stop 1 - Main Street',
+    'Stop 2 - High School',
+    'Stop 3 - Community Center',
   ];
+  
+  final List<String> busTimes = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM'];
+
+   final List<Event> events = [
+    Event('IEEE Workshop', '15/10/2023', '10:00 AM', 'Main Hall', 30.0),
+    Event('Tech Talk Session', '18/10/2023', '11:00 AM', 'Room A', 20.0),
+    Event('IEEE Annual Conference', '22/10/2023', '09:00 AM', 'Conference Center', 50.0),
+    Event('Networking Event', '25/10/2023', '12:00 PM', 'Open Area', 25.0),
+    Event('Coding Competition', '01/11/2023', '01:00 PM', 'Lab 3', 15.0),
+  ];
+
+  double getTotalPrice() {
+    return (events.firstWhere((event) => event.title == selectedEvent).price *
+            numberOfTickets) +
+        (busRequired ? busFee * numberOfTickets : 0.0);
+  } 
+
 
   @override
   Widget build(BuildContext context) {
+    final eventDetails = events.firstWhere((event) => event.title == selectedEvent);
+    // Calculate Total Price
+     double ticketPrice = eventDetails.price;
+
+    double totalPrice =
+        (ticketPrice * numberOfTickets) +
+        (busRequired ? busFee * numberOfTickets : 0.0);
+
     return Scaffold(
       backgroundColor: WebsiteColors.whiteColor,
       appBar: AppBar(
         backgroundColor: WebsiteColors.primaryBlueColor,
         elevation: 0,
         title: Text(
-          'Book Your Seat',
+          'Book Your Tickets',
           style: TextStyle(
             color: WebsiteColors.whiteColor,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
           ),
         ),
         leading: IconButton(
@@ -46,569 +74,337 @@ class _EventBookingPageState extends State<EventBookingPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header section
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              decoration: BoxDecoration(
-                color: WebsiteColors.primaryBlueColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SectionTitle(title: 'Personal Information'),
+                SizedBox(height: 15),
+                CustomTextField(
+                  label: 'Full Name',
+                  fontSize: 24,
+                  prefixIcon: Icons.person,
+                  validator: (value) => value!.isEmpty ? 'Please enter your name' : null,
                 ),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    'Reserve Your Spot Today',
-                    style: TextStyle(
-                      color: WebsiteColors.whiteColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Join IEEE PUA Student Branch events and expand your knowledge',
-                    style: TextStyle(
-                      color: WebsiteColors.whiteColor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
+                SizedBox(height: 15),
+                CustomTextField(
+                  label: 'Email Address',
+                  fontSize: 24,
+                  prefixIcon: Icons.email,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value!.isEmpty) return 'Please enter your email';
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 15),
+                CustomTextField(
+                  label: 'Phone Number',
+                  fontSize: 24,
+                  prefixIcon: Icons.phone,
+                  keyboardType: TextInputType.phone,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator:
+                      (value) =>
+                          value!.isEmpty
+                              ? 'Please enter your phone number'
+                              : null,
+                ),
+                SizedBox(height: 30),
+                SectionTitle(title: 'Event Information'),
+                SizedBox(height: 15),
 
-            // Booking form
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                
+                // Event Dropdown with full details
+
+                  CustomDropdown<Event>(
+                  hintText: 'Select Event',
+                  value: eventDetails,
+                  items: events.map((Event event) {
+                    return DropdownMenuItem<Event>(
+                      value: event,
+                      child: Text(
+                        '${event.title} - ${event.date} - ${event.time} - ${event.location} - \$${event.price}',
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (Event? newValue) {
+                    setState(() {
+                      selectedEvent = newValue!.title;
+                    });
+                  },
+                ),
+                // Display Event Details
+
+                 Text(
+                  'Date: ${eventDetails.date}\n'
+                  'Time: ${eventDetails.time}\n'
+                  'Location: ${eventDetails.location}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                ),
+                // Bus reservation checkbox
+                Row(
                   children: [
-                    SectionTitle(title: 'Personal Information'),
-                    SizedBox(height: 15),
-
-                    // Personal Information Fields
-                    CustomTextField(
-                      label: 'Full Name',
-                      fontSize: 24,
-                      prefixIcon: Icons.person,
-                      validator:
-                          (value) =>
-                              value!.isEmpty ? 'Please enter your name' : null,
-                    ),
-                    SizedBox(height: 15),
-
-                    CustomTextField(
-                      label: 'Email Address',
-                      fontSize: 24,
-                      prefixIcon: Icons.email,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value!.isEmpty) return 'Please enter your email';
-                        if (!RegExp(
-                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        ).hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
+                    Text("Include Bus Ticket?", style: TextStyle(
+                      fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: WebsiteColors.darkBlueColor,)),
+                    Checkbox(
+                      value: busRequired,
+                      checkColor: WebsiteColors.whiteColor,
+                      activeColor: WebsiteColors.primaryBlueColor,
+                      onChanged: (value) {
+                        setState(() {
+                          busRequired = value!;
+                          if (!busRequired) {
+                            selectedBusStop = null;
+                            selectedBusTime = null;
+                          } // Reset when bus reservation is unchecked
+                        });
                       },
                     ),
-                    SizedBox(height: 15),
+                    Text('Include Bus Ticket (\$${busFee.toStringAsFixed(2)})', style: TextStyle(fontWeight: FontWeight.normal)),
+                  ],
+                ),
 
-                    CustomTextField(
-                      label: 'Phone Number',
-                      fontSize: 24,
-                      prefixIcon: Icons.phone,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      validator:
-                          (value) =>
-                              value!.isEmpty
-                                  ? 'Please enter your phone number'
-                                  : null,
+                // Bus Stop Dropdown
+                if (busRequired) ...[
+                  SizedBox(height: 15),
+                  CustomDropdown<String>(
+                    hintText: "Select Nearest Bus Stop",
+                    value: selectedBusStop,
+                    items: busStops.map((String busStop) {
+                      return DropdownMenuItem<String>(
+                        value: busStop,
+                        child: Text(busStop),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedBusStop = newValue;
+                      });
+                    },
+                  ),
+                ],
+
+                // Bus Arrival Time Dropdown
+                if (busRequired) ...[
+                  SizedBox(height: 15),
+                  CustomDropdown<String>(
+                    hintText: "Select Arrival Time",
+                    value: selectedBusTime,
+                    items: busTimes.map((String time) {
+                      return DropdownMenuItem<String>(
+                        value: time,
+                        child: Text(time),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedBusTime = newValue;
+                      });
+                    },
+                  ),
+                ],
+
+                SizedBox(height: 15),
+                // Number of Tickets
+                Row(
+                  children: [
+                    Text(
+                      'Number of Tickets:     ',
+                      style: TextStyle(
+                        fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: WebsiteColors.darkBlueColor,
+                      ),
                     ),
-                    SizedBox(height: 30),
-
-                    // Event Information
-                    SectionTitle(title: 'Event Information'),
-                    SizedBox(height: 15),
-
-                    // Event Dropdown
+                    
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.grey[300]!),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          isExpanded: true,
-                          value: selectedEvent,
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: WebsiteColors.primaryBlueColor,
-                          ),
-                          dropdownColor:
-                              Colors
-                                  .white, // Set dropdown menu background to white
-                          items:
-                              events.map((String event) {
-                                return DropdownMenuItem<String>(
-                                  value: event,
-                                  child: Text(event),
-                                );
-                              }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedEvent = newValue!;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15),
-
-                    // Number of Tickets
-                    Row(
-                      children: [
-                        Text(
-                          'Number of Tickets:',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: WebsiteColors.darkBlueColor,
-                          ),
-                        ),
-                        Spacer(),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.grey[300]!),
-                          ),
-                          child: Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.remove,
-                                  color: WebsiteColors.primaryBlueColor,
-                                ),
-                                onPressed: () {
-                                  if (numberOfTickets > 1) {
-                                    setState(() {
-                                      numberOfTickets--;
-                                    });
-                                  }
-                                },
-                              ),
-                              Text(
-                                '$numberOfTickets',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: WebsiteColors.primaryBlueColor
-                                ),
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.add,
-                                  color: WebsiteColors.primaryBlueColor,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    numberOfTickets++;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-
-                    // Date & Time Pickers
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () async {
-                              final DateTime? picked = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate,
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2025),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: WebsiteColors.primaryBlueColor,
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-                              if (picked != null) {
-                                setState(() {
-                                  selectedDate = picked;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    color: WebsiteColors.primaryBlueColor,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color:
-                                          WebsiteColors
-                                              .darkGreyColor, // Changed to grey
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () async {
-                              final TimeOfDay? picked = await showTimePicker(
-                                context: context,
-                                initialTime: selectedTime,
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: WebsiteColors.primaryBlueColor,
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-                              if (picked != null) {
-                                setState(() {
-                                  selectedTime = picked;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.access_time,
-                                    color: WebsiteColors.primaryBlueColor,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    '${selectedTime.format(context)}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color:
-                                          WebsiteColors
-                                              .darkGreyColor, // Changed to grey
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-
-                    CustomTextField(
-                      label: 'Special Requests (Optional)',
-                      prefixIcon: Icons.note_alt,
-                      maxLines: 3,
-                      fontSize: 24,
-                    ),
-                    SizedBox(height: 30),
-
-                    // IEEE Member section
-                    Container(
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: WebsiteColors.gradeintBlueColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.info_outline,
-                            color: WebsiteColors.primaryBlueColor,
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Are you an IEEE Member?',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    color: WebsiteColors.darkBlueColor,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'IEEE members get priority seating and special discounts.',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        WebsiteColors
-                                            .darkGreyColor, // Changed to grey
-                                  ),
-                                ),
-                              ],
+                          IconButton(
+                            icon: Icon(
+                              Icons.remove,
+                              color: WebsiteColors.primaryBlueColor,
                             ),
+                            onPressed: () {
+                              if (numberOfTickets > 1) {
+                                setState(() {
+                                  numberOfTickets--;
+                                });
+                              }
+                            },
+                          ),
+                          Text(
+                            '$numberOfTickets',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color:WebsiteColors.primaryBlueColor
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: WebsiteColors.primaryBlueColor,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                numberOfTickets++;
+                              });
+                            },
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 15),
-
-                    CustomTextField(
-                      label: 'IEEE Membership ID (If applicable)',
-                      prefixIcon: Icons.card_membership,
-                      fontSize: 14,
-                    ),
-                    SizedBox(height: 40),
-
-                    // Submit Button
-                    Container(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: WebsiteColors.primaryYellowColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 5,
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Booking logic
-                            _showBookingConfirmation();
-                          }
-                        },
-                        child: Text(
-                          'Confirm Booking',
-                          style: TextStyle(
-                            color: WebsiteColors.darkBlueColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
                   ],
                 ),
-              ),
-            ),
-          ],
+                SizedBox(height: 15),
+
+                // Total Price Calculation
+                Text(
+                  'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize:24,
+                    fontWeight: FontWeight.bold,
+                    color: WebsiteColors.primaryBlueColor
+                  ),
+                ),
+                SizedBox(height: 30),
+
+                // Submit Button
+                Container(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: WebsiteColors.primaryYellowColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 5,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _showBookingConfirmation();
+                      }
+                    },
+                    child: Text(
+                      'Confirm Booking',
+                      style: TextStyle(
+                        color: WebsiteColors.darkBlueColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+          ]),),
         ),
       ),
     );
   }
-
-  void _showBookingConfirmation() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Column(
-            children: [
-              Icon(
-                Icons.check_circle,
-                color: WebsiteColors.primaryBlueColor,
-                size: 60,
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Booking Confirmed!',
-                style: TextStyle(
-                  color: WebsiteColors.darkBlueColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Thank you for booking with IEEE PUA Student Branch.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Event: $selectedEvent\nDate: ${selectedDate.day}/${selectedDate.month}/${selectedDate.year}\nTime: ${selectedTime.format(context)}\nTickets: $numberOfTickets',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: WebsiteColors.darkGreyColor,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'A confirmation email has been sent to your email address.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Close',
-                style: TextStyle(
-                  color: WebsiteColors.primaryBlueColor,
-                  fontWeight: FontWeight.bold,
-                ),
+void _showBookingConfirmation() {
+ double totalPrice = getTotalPrice();
+    final eventDetails = events.firstWhere((event) => event.title == selectedEvent);
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        backgroundColor: WebsiteColors.whiteColor,
+        title: Column(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: WebsiteColors.primaryBlueColor,
+              size: 60,
+            ),
+            SizedBox(height: 15),
+            Text(
+              'Booking Confirmed!',
+              style: TextStyle(
+                color: WebsiteColors.darkBlueColor,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
-        );
-      },
-    );
-  }
-}
-
-// Custom widgets for reusability
-class SectionTitle extends StatelessWidget {
-  final String title;
-
-  const SectionTitle({Key? key, required this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: WebsiteColors.darkBlueColor,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Thank you for booking with IEEE PUA Student Branch.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
             ),
-          ),
-          SizedBox(height: 5),
-          Container(
-            width: 60,
-            height: 3,
-            color: WebsiteColors.primaryYellowColor,
+            SizedBox(height: 10),
+            Text('Event: ${eventDetails.title}\n'
+                   'Date: ${eventDetails.date}\n'
+                   'Time: ${eventDetails.time}\n'
+                   'Location: ${eventDetails.location}\n'
+                   'Tickets: $numberOfTickets\n'
+                   'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                   style: TextStyle(fontSize: 14, color: WebsiteColors.darkGreyColor)),
+              if (busRequired) ...[
+              SizedBox(height: 10),
+              Text(
+                'Pickup Location: $selectedBusStop',
+                style: TextStyle(fontSize: 14, color: WebsiteColors.primaryBlueColor),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Pickup Time: $selectedBusTime',
+                style: TextStyle(fontSize: 14, color: WebsiteColors.primaryBlueColor),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Close',
+              style: TextStyle(
+                color: WebsiteColors.primaryBlueColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 }
 
-class CustomTextField extends StatelessWidget {
-  final String label;
-  final IconData prefixIcon;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-  final String? Function(String?)? validator;
-  final int maxLines;
+// Data model for the event
+class Event {
+  final String title;
+  final String date; // Using String for date, adjust to DateTime as needed
+  final String time; // Time as String for simplicity
+  final String location; // Location as String
+  final double price;
 
-  const CustomTextField({
-    Key? key,
-    required this.label,
-    required this.prefixIcon,
-    this.keyboardType = TextInputType.text,
-    this.inputFormatters,
-    this.validator,
-    this.maxLines = 1,
-    required int fontSize,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          color: WebsiteColors.lightGreyColor,
-          fontSize: 14, // Smaller font size
-          fontWeight: FontWeight.normal, // Normal font weight
-        ),
-        prefixIcon: Icon(prefixIcon, color: WebsiteColors.primaryBlueColor),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: WebsiteColors.primaryBlueColor,
-            width: 2,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 2),
-        ),
-        filled: true,
-        fillColor: Colors.grey[100],
-        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      ),
-      style: TextStyle(
-        fontSize: 14, // Smaller font size
-        fontWeight: FontWeight.normal, // Normal font weight
-      ),
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      maxLines: maxLines,
-    );
-  }
+  Event(this.title, this.date, this.time, this.location, this.price);
 }
