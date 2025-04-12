@@ -11,7 +11,6 @@ import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/my_theme.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ieee_website/widgets/admin_event_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
             JoinUs.routeName: (context) =>  JoinUs(),
             Base.routeName: (context) =>  Base(),
             FAQ.routeName: (context) => FAQ(),
-            AdminEventPage.routeName: (context) => AdminEventPage()
+
             // WallofHonur.routeName:(context) => WallofHonur()
           },
         );

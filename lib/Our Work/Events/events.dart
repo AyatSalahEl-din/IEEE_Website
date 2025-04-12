@@ -4,7 +4,6 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
-import '../../widgets/admin_event_page.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
@@ -244,22 +243,7 @@ class _EventsState extends State<Events> {
 
                       SizedBox(height: 30.sp),
 
-                      // 🔒 Admin Button
-                      Center(
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context,AdminEventPage.routeName);
-                          },
-                          child: Text(
-                            'Go to Admin Page',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: WebsiteColors.primaryBlueColor,
-                              fontSize: 24.sp,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
+
 
                       SizedBox(height: 20.sp),
                     ],
