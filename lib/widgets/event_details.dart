@@ -1,10 +1,14 @@
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:ieee_website/Themes/website_colors.dart';
+
+import '../Themes/website_colors.dart';
 import 'event_model.dart';
-import 'events_card.dart';
 import 'footer.dart';
 
 class EventDetailsScreen extends StatefulWidget {
@@ -21,18 +25,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   late Timer _timer;
-  late List<String> eventImages;
 
   @override
   void initState() {
     super.initState();
-    eventImages = EventsCard.eventImageMap[widget.event.name] ?? ["assets/images/default.jpg"];
     _startAutoScroll();
   }
 
   void _startAutoScroll() {
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (_currentPage < eventImages.length - 1) {
+      if (_currentPage < widget.event.imageUrls.length - 1) {
         _pageController.nextPage(
           duration: Duration(milliseconds: 500),
           curve: Curves.easeInOut,
@@ -76,7 +78,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🔷 Slideshow with Navigation Arrows
                   Center(
                     child: Container(
                       width: width * 0.8,
@@ -90,7 +91,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           Stack(
                             alignment: Alignment.center,
                             children: [
-                              // 🔹 Image Slideshow
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(20.sp),
                                 child: SizedBox(
@@ -98,23 +98,27 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                   height: width * 0.5,
                                   child: PageView.builder(
                                     controller: _pageController,
-                                    itemCount: eventImages.length,
+                                    itemCount: widget.event.imageUrls.length,
                                     onPageChanged: (index) => setState(() => _currentPage = index),
                                     itemBuilder: (context, index) {
-                                      return Image.asset(
-                                        eventImages[index],
+                                      // Network image for each URL in the list
+                                      return Image.network(
+                                        widget.event.imageUrls[index],
                                         fit: BoxFit.fill,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          // Fallback to a placeholder in case of error
+                                          return const Icon(Icons.error);
+                                        },
                                       );
                                     },
                                   ),
                                 ),
                               ),
-                              // 🔹 Left Arrow
+                              // Navigation Arrows and Other UI components
                               Positioned(
                                 left: 10.sp,
                                 child: _buildArrowButton(Icons.arrow_back_ios, isLeft: true),
                               ),
-                              // 🔹 Right Arrow
                               Positioned(
                                 right: 10.sp,
                                 child: _buildArrowButton(Icons.arrow_forward_ios, isLeft: false),
@@ -122,52 +126,48 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             ],
                           ),
                           SizedBox(height: 20.sp),
-                          // 🔹 Smooth Page Indicator
                           SmoothPageIndicator(
                             controller: _pageController,
-                            count: eventImages.length,
+                            count: widget.event.imageUrls.length,
                             effect: WormEffect(
-                              dotHeight: 10.sp,
+                              dotHeight: 10.sp
+                              ,
                               dotWidth: 10.sp,
                               activeDotColor: WebsiteColors.primaryBlueColor,
                             ),
                           ),
                           SizedBox(height: 30.sp),
-                          // 🔷 Event Time & Location & date
                           Center(child: _buildInfoRow(Icons.timelapse_outlined, "Time: ${widget.event.time ?? 'Not Available'}")),
                           SizedBox(height: 8.sp),
                           Center(child: _buildInfoRow(Icons.location_on, "Location: ${widget.event.location ?? 'Not Available'}")),
                           SizedBox(height: 8.sp),
-                          Center(child: _buildInfoRow(Icons.date_range, "Date: ${widget.event.date ?? 'Not Available'}")),
+                          Center(
+                            child: _buildInfoRow(
+                              Icons.date_range,
+                              "Date: ${widget.event.date!= null
+                                  ? DateFormat('dd-MM-yyyy').format((widget.event.date))
+                                  : 'Not Available'}",
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                   SizedBox(height: 70.sp),
-
-                  // 🔷 Event Details Section (Left-aligned)
                   _buildSectionTitle('Description'),
                   _buildSectionText(widget.event.details ?? "No details available"),
-                  SizedBox(height: 50.sp),
-
-                  // 🔷 Hosted By Section (Left-aligned)
-                  // _buildSectionTitle('Hosted By'),
-                  // _buildSectionText(widget.event.hostedBy ?? "No host information"),
-                  // SizedBox(height: 50.sp),
                 ],
               ),
             ),
           ),
-
           if (widget.tabController != null) Footer(tabController: widget.tabController!),
         ],
       ),
     );
   }
 
-  /// ✅ Arrow Button Builder with Background Color & Opacity
   Widget _buildArrowButton(IconData icon, {required bool isLeft}) {
-    bool isDisabled = isLeft ? _currentPage == 0 : _currentPage == eventImages.length - 1;
+    bool isDisabled = isLeft ? _currentPage == 0 : _currentPage == widget.event.imageUrls.length - 1;
     return GestureDetector(
       onTap: isDisabled
           ? null
@@ -177,7 +177,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-        } else if (!isLeft && _currentPage < eventImages.length - 1) {
+        } else if (!isLeft && _currentPage < widget.event.imageUrls.length - 1) {
           _pageController.nextPage(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -195,10 +195,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  /// ✅ Section Title Builder (Left-aligned)
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: EdgeInsets.only(left: 10.sp), // ⬅️ Added left padding
+      padding: EdgeInsets.only(left: 10.sp),
       child: Text(
         title,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -209,10 +208,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  /// ✅ Section Text Builder (Left-aligned)
   Widget _buildSectionText(String text) {
     return Padding(
-      padding: EdgeInsets.only(left: 10.sp), // ⬅️ Added left padding
+      padding: EdgeInsets.only(left: 10.sp),
       child: Text(
         text.isNotEmpty ? text : "No details available",
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -223,7 +221,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  /// ✅ Info Row Builder (Time, Location, etc.)
   Widget _buildInfoRow(IconData icon, String text) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
