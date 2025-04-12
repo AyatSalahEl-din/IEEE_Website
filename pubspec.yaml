@@ -44,6 +44,7 @@ dependencies:
   video_player: ^2.8.2
   intl: ^0.20.2
   firebase_core: ^3.12.1
+<<<<<<< HEAD
 
   cached_network_image: ^3.3.0
   google_sign_in: ^6.1.0  
@@ -54,6 +55,14 @@ dependencies:
   smooth_page_indicator: ^1.2.1
 
   
+=======
+  flutter_slidable: ^4.0.0
+  smooth_page_indicator: ^1.2.1
+  flutter_rounded_date_picker: ^3.0.4
+  firebase_storage: ^12.4.5
+  font_awesome_flutter: ^10.8.0
+
+>>>>>>> abb885c6e65f6aa6c7bfd0a743ec0a2e784f07d2
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
+import '../../widgets/admin_event_page.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
@@ -21,12 +22,14 @@ class _EventsState extends State<Events> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     void _launchURL() async {
       final Uri url = Uri.parse("https://www.linkedin.com/in/menna-allah-rabei-a3565131a/");
       if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
         throw Exception("Could not launch $url");
       }
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Expanded(
@@ -36,66 +39,63 @@ class _EventsState extends State<Events> {
               children: [
                 Stack(
                   children: [
-                    // Background Image
                     Container(
                       height: 1118.sp,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage("assets/images/Mask group.png",),
+                          image: AssetImage("assets/images/Mask group.png"),
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: Container(color: Colors.black.withOpacity(0.2)),
                     ),
-
-
-                    Expanded(
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 400.sp,
+                        right: 200.sp,
+                        top: 400.sp,
+                        bottom: 500.sp,
+                      ),
                       child: Container(
-                        margin: EdgeInsets.only(
-                          left: 400.sp,
-                          right: 200.sp,
-                          top: 400.sp,
-                          bottom: 500.sp,
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 20.sp),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.sp),
                           color: WebsiteColors.whiteColor,
-                        ),
-                        width:width.spMax, // Adjust width to fit design
-                        padding: EdgeInsets.all(15.sp),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween, // Even spacing
-                          children: [
-                            Icon(
-                              Icons.search,
-                              color: WebsiteColors.darkGreyColor,
-                              size: 25.sp,
-                            ),
-                            Text(
-                              "   Search Events, Categories, Location...",
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: WebsiteColors.lightGreyColor),
-                            ),
-                            Spacer(),
-                            ImageIcon(
-                              AssetImage("assets/images/location_icon.png"),
-                            ),
-                            Text(
-                              "  Location ",
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(color: WebsiteColors.darkGreyColor),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: WebsiteColors.darkGreyColor,
+                          borderRadius: BorderRadius.circular(50.sp),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10.sp,
+                              offset: Offset(0, 4),
                             ),
                           ],
                         ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Search Events, Categories, Location...",
+                            hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: WebsiteColors.lightGreyColor),
+                            prefixIcon: Icon(Icons.search, color: WebsiteColors.darkGreyColor, size: 25.sp),
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ImageIcon(
+                                  AssetImage("assets/images/location_icon.png"),
+                                  color: WebsiteColors.darkGreyColor,
+                                ),
+                                SizedBox(width: 5.sp),
+                                Text(
+                                  "Location",
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: WebsiteColors.darkGreyColor),
+                                ),
+                                Icon(Icons.arrow_drop_down, color: WebsiteColors.darkGreyColor),
+                                SizedBox(width: 10.sp),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-
                     ),
-                    // SizedBox(height: 700.sp,),
+
                     Padding(
                       padding: EdgeInsets.only(
                         left: 500.sp,
@@ -103,7 +103,6 @@ class _EventsState extends State<Events> {
                         top: 550.sp,
                         bottom: 500.sp,
                       ),
-
                       child: Text(
                         "Don't miss out! Explore our events.",
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -114,23 +113,21 @@ class _EventsState extends State<Events> {
 
                 SizedBox(height: 10.sp),
 
-                // Upcoming Events Section
+                // Upcoming Events
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 40.sp),
+                  padding: EdgeInsets.symmetric(horizontal: 40.sp),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //upcoming events
                       Text(
                         "Upcoming Events",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: WebsiteColors.primaryBlueColor,fontSize: 40.sp
+                          color: WebsiteColors.primaryBlueColor,
+                          fontSize: 40.sp,
                         ),
                       ),
                       SizedBox(height: 25.sp),
 
-                      // Filter Chips
-                      //All ,today, this week this months events
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -142,20 +139,18 @@ class _EventsState extends State<Events> {
                       ),
 
                       SizedBox(height: 30.sp),
-
-
-
                       EventsGrid(filterType: "upcoming"),
-
                       SizedBox(height: 45.sp),
+
+                      // Book Your Seat Section
                       Stack(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(20.sp), // Adjust circular border
+                            borderRadius: BorderRadius.circular(20.sp),
                             child: Container(
                               height: 430.sp,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.sp), // Ensures clipping
+                                borderRadius: BorderRadius.circular(20.sp),
                                 image: DecorationImage(
                                   image: AssetImage("assets/images/book_your_seat.png"),
                                   fit: BoxFit.cover,
@@ -164,7 +159,7 @@ class _EventsState extends State<Events> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.black.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20.sp), // Apply border to overlay
+                                  borderRadius: BorderRadius.circular(20.sp),
                                 ),
                               ),
                             ),
@@ -206,7 +201,7 @@ class _EventsState extends State<Events> {
                                     textStyle: const TextStyle(color: WebsiteColors.darkBlueColor),
                                     padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 6.sp),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.sp), // Rounded button
+                                      borderRadius: BorderRadius.circular(15.sp),
                                     ),
                                   ),
                                   child: Text(
@@ -220,21 +215,21 @@ class _EventsState extends State<Events> {
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
 
-
                       SizedBox(height: 20.sp),
-                      //previous events
+
+                      // Previous Events
                       Text(
                         "Previous Events",
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: WebsiteColors.primaryBlueColor,fontSize: 40.sp
+                          color: WebsiteColors.primaryBlueColor,
+                          fontSize: 40.sp,
                         ),
                       ),
                       SizedBox(height: 15.sp),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -245,14 +240,28 @@ class _EventsState extends State<Events> {
                         ],
                       ),
                       SizedBox(height: 30.sp),
-
                       EventsGrid(filterType: "previous"),
 
+                      SizedBox(height: 30.sp),
+
+                      // 🔒 Admin Button
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context,AdminEventPage.routeName);
+                          },
+                          child: Text(
+                            'Go to Admin Page',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: WebsiteColors.primaryBlueColor,
+                              fontSize: 24.sp,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ),
+
                       SizedBox(height: 20.sp),
-
-                      // Join Us Section
-
-                      // Footer
                     ],
                   ),
                 ),

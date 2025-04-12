@@ -11,11 +11,14 @@ import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/my_theme.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ieee_website/widgets/admin_event_page.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 
@@ -36,14 +39,19 @@ class MyApp extends StatelessWidget {
           initialRoute: Base.routeName,
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
-            AboutUs.routeName: (context) => AboutUs(),
-            Events.routeName: (context) => Events(),
-            Projects.routeName: (context) => Projects(),
+            AboutUs.routeName: (context) =>  AboutUs(),
+            Events.routeName: (context) =>  Events(),
+            Projects.routeName: (context) =>  Projects(),
             Contact.routeName: (context) => Contact(),
-            Tools.routeName: (context) => Tools(),
-            JoinUs.routeName: (context) => JoinUs(),
-            Base.routeName: (context) => Base(),
+            Tools.routeName: (context) =>  Tools(),
+            JoinUs.routeName: (context) =>  JoinUs(),
+            Base.routeName: (context) =>  Base(),
             FAQ.routeName: (context) => FAQ(),
+<<<<<<< HEAD
+=======
+            AdminEventPage.routeName: (context) => AdminEventPage()
+            // WallofHonur.routeName:(context) => WallofHonur()
+>>>>>>> abb885c6e65f6aa6c7bfd0a743ec0a2e784f07d2
           },
         );
       },

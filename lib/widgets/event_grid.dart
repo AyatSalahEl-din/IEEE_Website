@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_website/widgets/event_model.dart';
+import 'event_model.dart';
 import 'Glow_button.dart';
 import 'events_card.dart';
 
