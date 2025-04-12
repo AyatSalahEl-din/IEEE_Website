@@ -35,11 +35,27 @@ class TeamMemberCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12.sp),
-            child: Image.asset(
-              imagePath,
+            child: Image.network(
+              "$imagePath?timestamp=${DateTime.now().millisecondsSinceEpoch}", // Adds unique value to URL
               width: 430.sp,
               height: 400.sp,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value:
+                        loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                print("Image Load Error: $imagePath"); // Debugging
+                return Icon(Icons.error, color: Colors.red, size: 40);
+              },
             ),
           ),
           SizedBox(height: 10.sp),
@@ -50,6 +66,7 @@ class TeamMemberCard extends StatelessWidget {
               color: WebsiteColors.darkBlueColor,
             ),
           ),
+
           SizedBox(height: 10.sp),
           Text(
             jobTitle,

@@ -16,7 +16,9 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
 }
 
@@ -37,13 +39,13 @@ class MyApp extends StatelessWidget {
           initialRoute: Base.routeName,
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
-            AboutUs.routeName: (context) => AboutUs(),
-            Events.routeName: (context) => Events(),
-            Projects.routeName: (context) => Projects(),
+            AboutUs.routeName: (context) =>  AboutUs(),
+            Events.routeName: (context) =>  Events(),
+            Projects.routeName: (context) =>  Projects(),
             Contact.routeName: (context) => Contact(),
-            Tools.routeName: (context) => Tools(),
-            JoinUs.routeName: (context) => JoinUs(),
-            Base.routeName: (context) => Base(),
+            Tools.routeName: (context) =>  Tools(),
+            JoinUs.routeName: (context) =>  JoinUs(),
+            Base.routeName: (context) =>  Base(),
             FAQ.routeName: (context) => FAQ(),
             AdminEventPage.routeName: (context) => AdminEventPage()
             // WallofHonur.routeName:(context) => WallofHonur()
