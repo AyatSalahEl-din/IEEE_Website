@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
             JoinUs.routeName: (context) => JoinUs(),
             Base.routeName: (context) => Base(),
             FAQ.routeName: (context) => FAQ(),
-            // WallofHonur.routeName:(context) => WallofHonur()
           },
         );
       },
