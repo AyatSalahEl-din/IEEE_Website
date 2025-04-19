@@ -171,7 +171,7 @@ class _StorySlideshowState extends State<StorySlideshow> {
                           padding: EdgeInsets.all(16.sp),
                           child: Text(
                             sliderItems[currentIndex]['description']!,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.start,
                             style: Theme.of(
                               context,
                             ).textTheme.displaySmall?.copyWith(

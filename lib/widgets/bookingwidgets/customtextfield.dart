@@ -19,7 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.inputFormatters,
     this.validator,
-    this.maxLines = 1, required int fontSize,
+    this.maxLines = 1, required int fontSize, required Function(dynamic value) onChanged,
   }) : super(key: key);
 
   @override

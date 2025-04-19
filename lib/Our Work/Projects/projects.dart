@@ -125,7 +125,7 @@ class _ProjectsState extends State<Projects> {
         List<Project> results;
         if (query.isEmpty && _selectedCategory == null) {
           // Retrieve all projects in original order
-          _projects = List.from(_originalProjects);
+          results = List.from(_originalProjects);
         } else {
           results = await _projectRepository.searchProjects(query);
           if (_selectedCategory != null) {
@@ -136,15 +136,14 @@ class _ProjectsState extends State<Projects> {
                     )
                     .toList();
           }
-          setState(() {
-            _projects = results;
-            projectOpacities = List.generate(results.length, (index) => 1.0);
-            _isSelected = List.generate(results.length, (index) => false);
-            _isHovered = List.generate(results.length, (index) => false);
-          });
         }
+        setState(() {
+          _projects = results;
+          projectOpacities = List.generate(results.length, (index) => 1.0);
+          _isSelected = List.generate(results.length, (index) => false);
+          _isHovered = List.generate(results.length, (index) => false);
+        });
       } catch (e) {
-        // TODO: Handle error
         print('Error searching projects: $e');
       } finally {
         setState(() => _isLoading = false);
@@ -521,7 +520,25 @@ class _ProjectsState extends State<Projects> {
             spreadRadius: 2,
           ),
         ],
+        image:
+            project.imageUrls != null && project.imageUrls!.isNotEmpty
+                ? DecorationImage(
+                  image: NetworkImage(project.imageUrls!.first),
+                  fit: BoxFit.cover,
+                )
+                : null,
       ),
+      child:
+          project.imageUrls == null || project.imageUrls!.isEmpty
+              ? Center(
+                child: Text(
+                  "No Image Available",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: Colors.grey[600]),
+                ),
+              )
+              : null,
     );
   }
 
@@ -579,40 +596,38 @@ class _ProjectsState extends State<Projects> {
     );
   }
 
-  Widget _buildTag(String text, Project currentProject) {
-    return InkWell(
-      onTap: () {
-        // Filter projects with the same tag
-        final projectsWithTag =
-            _projects.where((project) => project.tags.contains(text)).toList();
+ Widget _buildTag(String text, Project currentProject) {
+  return InkWell(
+    onTap: () {
+      // Filter projects with the same tag
+      final projectsWithTag =
+          _projects.where((project) => project.tags.contains(text)).toList();
 
-        showDialog(
-          context: context,
-          builder:
-              (context) => CategoryProjectsDialog(
-                category: text,
-                projects: projectsWithTag,
-              ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
-        decoration: BoxDecoration(
-          color: WebsiteColors.primaryYellowColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(15.sp),
+      showDialog(
+        context: context,
+        builder: (context) => CategoryProjectsDialog(
+          category: text,
+          projects: projectsWithTag,
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 18.sp,
-            color: WebsiteColors.primaryYellowColor,
-            fontWeight: FontWeight.bold,
-          ),
+      );
+    },
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
+      decoration: BoxDecoration(
+        color: WebsiteColors.primaryYellowColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15.sp),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 18.sp,
+          color: WebsiteColors.primaryYellowColor,
+          fontWeight: FontWeight.bold,
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}
   Widget _buildLoadMoreButton() {
     return Padding(
       padding: EdgeInsets.only(bottom: 60.sp),
