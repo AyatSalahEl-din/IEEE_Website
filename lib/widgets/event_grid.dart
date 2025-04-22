@@ -8,7 +8,8 @@ class EventsGrid extends StatefulWidget {
   final TabController? tabController;
   final String filterType;
 
-  const EventsGrid({Key? key, this.tabController, required this.filterType}) : super(key: key);
+  const EventsGrid({Key? key, this.tabController, required this.filterType})
+    : super(key: key);
 
   @override
   _EventsGridState createState() => _EventsGridState();
@@ -29,16 +30,33 @@ class _EventsGridState extends State<EventsGrid> {
       Query query = FirebaseFirestore.instance.collection('events');
 
       if (widget.filterType == "upcoming") {
-        query = query.where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()));
+        query = query
+            .where(
+              'date',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()),
+            )
+            .orderBy('date', descending: false); // Fetch upcoming events
       } else if (widget.filterType == "previous") {
-        query = query.where('date', isLessThan: Timestamp.fromDate(DateTime.now()));
+        query = query
+            .where('date', isLessThan: Timestamp.fromDate(DateTime.now()))
+            .orderBy('date', descending: true); // Fetch previous events
       }
 
       QuerySnapshot snapshot = await query.get();
-      List<Event> events = snapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return Event.fromFirestore(data);
-      }).toList();
+      List<Event> events =
+          snapshot.docs
+              .map((doc) {
+                try {
+                  return Event.fromFirestore(
+                    doc,
+                  ); // Use Event model to parse data
+                } catch (e) {
+                  print("Error parsing event document: ${doc.id}, error: $e");
+                  return null;
+                }
+              })
+              .whereType<Event>()
+              .toList(); // Filter out null values
 
       setState(() {
         allEvents = events;
@@ -84,7 +102,10 @@ class _EventsGridState extends State<EventsGrid> {
             ),
             itemCount: visibleEvents.length,
             itemBuilder: (context, index) {
-              return EventsCard(event: visibleEvents[index], tabController: widget.tabController);
+              return EventsCard(
+                event: visibleEvents[index],
+                tabController: widget.tabController,
+              );
             },
           ),
         ),

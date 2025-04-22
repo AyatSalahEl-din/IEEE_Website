@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ieee_website/widgets/bookingwidgets/customdropdown.dart';
 import 'package:ieee_website/widgets/bookingwidgets/customtextfield.dart';
 import 'package:ieee_website/widgets/bookingwidgets/sectiontitle.dart';
+import 'package:ieee_website/widgets/event_model.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
 
 class EventBookingPage extends StatefulWidget {
-  final TabController? tabController;
-
-  const EventBookingPage({Key? key, this.tabController}) : super(key: key);
+  const EventBookingPage({Key? key, TabController? tabController})
+    : super(key: key);
 
   @override
   _EventBookingPageState createState() => _EventBookingPageState();
@@ -20,15 +22,12 @@ class _EventBookingPageState extends State<EventBookingPage> {
   String? selectedEventId;
   int numberOfTickets = 1;
   bool busRequired = false;
-  String? selectedBusStop;
-  String? selectedBusTime;
-
+  String? userType; // Student, Teacher, etc.
   String userName = '';
   String userEmail = '';
   String userPhone = '';
-
-  List<Event> upcomingEvents = [];
   bool isLoading = true;
+  List<Event> upcomingEvents = [];
 
   @override
   void initState() {
@@ -41,7 +40,10 @@ class _EventBookingPageState extends State<EventBookingPage> {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance
               .collection('events')
-              .where('isPastEvent', isEqualTo: false)
+              .where(
+                'date',
+                isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()),
+              )
               .orderBy('date')
               .get();
 
@@ -58,105 +60,210 @@ class _EventBookingPageState extends State<EventBookingPage> {
     }
   }
 
+  Future<void> fetchEventDetails(String eventId) async {
+    try {
+      DocumentSnapshot doc =
+          await FirebaseFirestore.instance
+              .collection('events')
+              .doc(eventId)
+              .get();
+
+      if (doc.exists) {
+        Event event = Event.fromFirestore(doc);
+        setState(() {
+          selectedEventId = event.id;
+          upcomingEvents = [event]; // Replace with the fetched event
+        });
+      } else {
+        print("Event not found.");
+      }
+    } catch (e) {
+      print("Error fetching event details: $e");
+    }
+  }
+
   double calculateTotalPrice(Event event) {
-    double total = event.baseTicketPrice * numberOfTickets;
+    double total = (event.baseTicketPrice ?? 0) * numberOfTickets;
     if (busRequired && event.busDetails != null) {
       total += event.busDetails!.busTicketPrice * numberOfTickets;
+    }
+    if (userType == event.discountFor) {
+      total -= event.discount ?? 0.0;
     }
     return total;
   }
 
-  void _showBookingConfirmation(Event event) {
-    double totalPrice = calculateTotalPrice(event);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          backgroundColor: WebsiteColors.whiteColor,
-          title: Column(
-            children: [
-              Icon(
-                Icons.check_circle,
-                color: WebsiteColors.primaryBlueColor,
-                size: 60,
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Booking Confirmed!',
-                style: TextStyle(
-                  color: WebsiteColors.darkBlueColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Thank you for booking with IEEE PUA Student Branch.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Event: ${event.name}\n'
-                'Date: ${event.date}\n'
-                'Location: ${event.location}\n'
-                'Tickets: $numberOfTickets\n'
-                'Total Price: \$${totalPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: WebsiteColors.darkGreyColor,
-                ),
-              ),
-              if (busRequired && event.busDetails != null) ...[
-                SizedBox(height: 10),
-                Text(
-                  'Bus Details:\n'
-                  'Departure Location: ${event.busDetails!.departureLocation}\n'
-                  'Arrival Location: ${event.busDetails!.arrivalLocation}\n'
-                  'Trip Program: ${event.busDetails!.tripProgram}\n'
-                  'Departure Time: ${event.busDetails!.departureTime}\n'
-                  'Seat Selection: ${event.busDetails!.enableSeatSelection ? "Available" : "Not Available"}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: WebsiteColors.primaryBlueColor,
+  Future<void> sendBookingRequest(Event event) async {
+    final requestData = {
+      'userName': userName,
+      'userEmail': userEmail,
+      'userPhone': userPhone,
+      'eventName': event.name,
+      'requestDate': Timestamp.now(),
+      'status': 'pending',
+      'busRequired': busRequired,
+      'numberOfTickets': numberOfTickets,
+      'userType': userType,
+    };
+
+    await FirebaseFirestore.instance.collection('requests').add(requestData);
+  }
+
+  void sendWhatsAppMessage(Event event) async {
+    final totalPrice = calculateTotalPrice(event);
+
+    final message = '''
+Hello, I would like to book tickets for the following event:
+
+Event Details:
+- Name: ${event.name}
+- Date: ${event.date}
+- Location: ${event.location}
+- Time: ${event.time}
+
+${event.getBusDetails()}
+${event.getOnlineEventDetails()}
+
+Booking Details:
+- Name: $userName
+- Email: $userEmail
+- Phone: $userPhone
+- Number of Tickets: $numberOfTickets
+- Total Price: \$${totalPrice.toStringAsFixed(2)}
+
+${event.getContactDetails()}
+
+Please let me know the preferred payment method to proceed.
+''';
+
+    final whatsappUrl = Uri.parse(
+      "https://wa.me/${event.contactNumber}?text=${Uri.encodeComponent(message)}",
+    );
+    if (await canLaunchUrl(whatsappUrl)) {
+      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not launch WhatsApp')),
+      );
+    }
+  }
+
+  void confirmBooking(Event event) async {
+    if (_formKey.currentState!.validate() && selectedEventId != null) {
+      final totalPrice = calculateTotalPrice(event);
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm Booking'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text(
+                    'Event Details:',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
-              SizedBox(height: 10),
-              Text(
-                'Contact Info:\n'
-                'Email: $userEmail\n'
-                'Phone: $userPhone',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: WebsiteColors.darkGreyColor,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Close',
-                style: TextStyle(
-                  color: WebsiteColors.primaryBlueColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                  Text('Name: ${event.name}'),
+                  Text(
+                    'Date: ${DateFormat('yyyy-MM-dd HH:mm').format(event.date)}',
+                  ),
+                  Text('Location: ${event.location}'),
+                  Text('Time: ${event.time}'),
+                  Text('Category: ${event.category}'),
+                  Text('Description: ${event.details}'),
+                  Text('Bus Included: ${busRequired ? "Yes" : "No"}'),
+                  Text('Total Price: \$${totalPrice.toStringAsFixed(2)}'),
+                  const SizedBox(height: 10),
+                  Text(
+                    'User Details:',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('Name: $userName'),
+                  Text('Email: $userEmail'),
+                  Text('Phone: $userPhone'),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Admin Contact:',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('Phone: ${event.contactNumber ?? "Not provided"}'),
+                  Text('Email: ${event.contactEmail ?? "Not provided"}'),
+                  const SizedBox(height: 10),
+                  if (event.busDetails != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Bus Details:',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Departure Location: ${event.busDetails!.departureLocation}',
+                        ),
+                        Text(
+                          'Arrival Location: ${event.busDetails!.arrivalLocation}',
+                        ),
+                        Text(
+                          'Departure Time: ${event.busDetails!.departureTime}',
+                        ),
+                        Text(
+                          'Ticket Price: \$${event.busDetails!.busTicketPrice}',
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Preferred Payment Method:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  DropdownButtonFormField<String>(
+                    items:
+                        ['Credit Card', 'PayPal', 'Bank Transfer']
+                            .map(
+                              (method) => DropdownMenuItem(
+                                value: method,
+                                child: Text(method),
+                              ),
+                            )
+                            .toList(),
+                    onChanged: (value) {
+                      // Handle preferred payment method selection
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Select Payment Method',
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        );
-      },
-    );
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await sendBookingRequest(event);
+                  sendWhatsAppMessage(event);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Booking request sent successfully!'),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: WebsiteColors.primaryBlueColor,
+                ),
+                child: const Text('Confirm'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -166,31 +273,28 @@ class _EventBookingPageState extends State<EventBookingPage> {
       appBar: AppBar(
         backgroundColor: WebsiteColors.primaryBlueColor,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Book Your Tickets',
-          style: TextStyle(
-            color: WebsiteColors.whiteColor,
-            fontWeight: FontWeight.normal,
-          ),
+          style: TextStyle(color: WebsiteColors.whiteColor),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: WebsiteColors.whiteColor),
+          icon: const Icon(Icons.arrow_back, color: WebsiteColors.whiteColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body:
           isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SectionTitle(title: 'Personal Information'),
-                        SizedBox(height: 15),
+                        const SectionTitle(title: 'Personal Information'),
+                        const SizedBox(height: 15),
                         CustomTextField(
                           label: 'Full Name',
                           fontSize: 24,
@@ -202,7 +306,7 @@ class _EventBookingPageState extends State<EventBookingPage> {
                                       : null,
                           onChanged: (value) => userName = value,
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         CustomTextField(
                           label: 'Email Address',
                           fontSize: 24,
@@ -220,7 +324,7 @@ class _EventBookingPageState extends State<EventBookingPage> {
                           },
                           onChanged: (value) => userEmail = value,
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         CustomTextField(
                           label: 'Phone Number',
                           fontSize: 24,
@@ -236,22 +340,15 @@ class _EventBookingPageState extends State<EventBookingPage> {
                                       : null,
                           onChanged: (value) => userPhone = value,
                         ),
-                        SizedBox(height: 30),
-                        SectionTitle(title: 'Event Information'),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 30),
+                        const SectionTitle(title: 'Event Information'),
+                        const SizedBox(height: 15),
                         CustomDropdown<Event>(
                           hintText: 'Select Event',
                           value:
                               selectedEventId != null
                                   ? upcomingEvents.firstWhere(
                                     (event) => event.id == selectedEventId,
-                                    orElse: () => Event(
-                                      id: '',
-                                      name: 'Unknown Event',
-                                      date: DateTime.now(),
-                                      location: 'Unknown Location',
-                                      baseTicketPrice: 0.0,
-                                    ),
                                   )
                                   : null,
                           items:
@@ -259,8 +356,8 @@ class _EventBookingPageState extends State<EventBookingPage> {
                                 return DropdownMenuItem<Event>(
                                   value: event,
                                   child: Text(
-                                    '${event.name} - ${event.date.toLocal()} - ${event.location} - \$${event.baseTicketPrice}',
-                                    style: TextStyle(
+                                    '${event.name} - ${DateFormat('yyyy-MM-dd').format(event.date)} - ${event.location} - \$${event.baseTicketPrice}',
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
@@ -275,24 +372,62 @@ class _EventBookingPageState extends State<EventBookingPage> {
                         if (selectedEventId != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              'Date: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).date.toLocal()}\n'
-                              'Location: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).location}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SectionTitle(title: 'Event Details'),
+                                const SizedBox(height: 10),
+                                Text(
+                                  '''
+Name: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).name}
+Date: ${DateFormat('yyyy-MM-dd HH:mm').format(upcomingEvents.firstWhere((event) => event.id == selectedEventId).date)}
+Location: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).location}
+Time: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).time}
+Category: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).category}
+Description: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).details}
+Discount: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).discount ?? 'None'}
+Eligible For Discount: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).discountFor ?? 'None'}
+Bus Available: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).busDetails != null ? 'Yes' : 'No'}
+Contact Number: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).contactNumber ?? 'Not provided'}
+Contact Email: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).contactEmail ?? 'Not provided'}
+''',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: WebsiteColors.darkBlueColor,
+                                  ),
+                                ),
+                                if (upcomingEvents
+                                        .firstWhere(
+                                          (event) =>
+                                              event.id == selectedEventId,
+                                        )
+                                        .busDetails !=
+                                    null)
+                                  Text(
+                                    '''
+Bus Details:
+- Departure Location: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).busDetails!.departureLocation}
+- Arrival Location: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).busDetails!.arrivalLocation}
+- Departure Time: ${upcomingEvents.firstWhere((event) => event.id == selectedEventId).busDetails!.departureTime}
+- Ticket Price: \$${upcomingEvents.firstWhere((event) => event.id == selectedEventId).busDetails!.busTicketPrice}
+''',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: WebsiteColors.darkBlueColor,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
-                            Text(
+                            const Text(
                               "Include Bus Ticket?",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: WebsiteColors.darkBlueColor,
+                                color: WebsiteColors.greyColor,
                               ),
                             ),
                             Checkbox(
@@ -307,18 +442,40 @@ class _EventBookingPageState extends State<EventBookingPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
+                        CustomDropdown<String>(
+                          hintText: 'Select User Type',
+                          value: userType,
+                          items:
+                              ['Student', 'Teacher', 'Other']
+                                  .map(
+                                    (type) => DropdownMenuItem<String>(
+                                      value: type,
+                                      child: Text(type),
+                                    ),
+                                  )
+                                  .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              userType = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate() &&
                                 selectedEventId != null) {
-                              Event selectedEvent = upcomingEvents.firstWhere(
+                              final selectedEvent = upcomingEvents.firstWhere(
                                 (event) => event.id == selectedEventId,
                               );
-                              _showBookingConfirmation(selectedEvent);
+                              confirmBooking(selectedEvent);
                             }
                           },
-                          child: Text('Confirm Booking'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: WebsiteColors.primaryBlueColor,
+                          ),
+                          child: const Text('Confirm Booking'),
                         ),
                       ],
                     ),
@@ -329,64 +486,177 @@ class _EventBookingPageState extends State<EventBookingPage> {
   }
 }
 
-class Event {
-  final String id;
-  final String name;
-  final DateTime date;
-  final String location;
-  final double baseTicketPrice;
-  final BusDetails? busDetails;
+class EventBookingScreen extends StatelessWidget {
+  final Event event;
 
-  Event({
-    required this.id,
-    required this.name,
-    required this.date,
-    required this.location,
-    required this.baseTicketPrice,
-    this.busDetails,
-  });
+  EventBookingScreen({required this.event});
 
-  factory Event.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return Event(
-      id: doc.id,
-      name: data['name'] ?? '',
-      date: (data['date'] as Timestamp).toDate(),
-      location: data['location'] ?? '',
-      baseTicketPrice: (data['baseTicketPrice'] ?? 0).toDouble(),
-      busDetails:
-          data['busDetails'] != null
-              ? BusDetails.fromMap(data['busDetails'])
-              : null,
-    );
-  }
-}
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(event.name),
+        backgroundColor: Colors.blue, // Custom app bar color
+      ),
+      body: ListView(
+        children: [
+          // Event Image
+          event.imageUrls.isNotEmpty
+              ? Image.network(event.imageUrls[0], fit: BoxFit.cover)
+              : Container(
+                height: 250,
+                color: Colors.grey,
+              ), // Default grey background if no image
 
-class BusDetails {
-  final String departureLocation;
-  final String arrivalLocation;
-  final String tripProgram;
-  final String departureTime;
-  final double busTicketPrice;
-  final bool enableSeatSelection;
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Event Details
+                Text(
+                  event.name,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "${event.location} - ${DateFormat('yyyy-MM-dd HH:mm').format(event.date)}",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "Category: ${event.category}",
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  event.details,
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                SizedBox(height: 16),
 
-  BusDetails({
-    required this.departureLocation,
-    required this.arrivalLocation,
-    required this.tripProgram,
-    required this.departureTime,
-    required this.busTicketPrice,
-    required this.enableSeatSelection,
-  });
+                // Ticket Information
+                if (event.isTicketAvailable ?? false) ...[
+                  event.isTicketLimited ?? false
+                      ? Text(
+                        "Limited Tickets Available: ${event.ticketLimit}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      )
+                      : Text(
+                        "Tickets Available",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
+                      ),
+                  SizedBox(height: 16),
+                  if (event.discount != null)
+                    Text(
+                      "Discount: ${event.discount}% for ${event.discountFor}",
+                      style: TextStyle(fontSize: 16, color: Colors.blue),
+                    ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Ticket Price: \$${event.baseTicketPrice}",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
 
-  factory BusDetails.fromMap(Map<String, dynamic> data) {
-    return BusDetails(
-      departureLocation: data['departureLocation'] ?? '',
-      arrivalLocation: data['arrivalLocation'] ?? '',
-      tripProgram: data['tripProgram'] ?? '',
-      departureTime: data['departureTime'] ?? '',
-      busTicketPrice: (data['busTicketPrice'] ?? 0).toDouble(),
-      enableSeatSelection: data['enableSeatSelection'] ?? false,
+                // Online Event Section
+                if (event.isOnlineEvent)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Text(
+                        "Online Event Details",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "App: ${event.appName ?? 'Not provided'}",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "URL: ${event.appUrl ?? 'Not provided'}",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "Time: ${event.appTime ?? 'Not provided'}",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+
+                // Bus Service Details
+                if (event.hasBusService ?? false)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Text(
+                        "Bus Service Available",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        event.getBusDetails(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+
+                // Contact Details
+                if (event.contactNumber != null || event.contactEmail != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Text(
+                        "Contact Details",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        event.getContactDetails(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+
+                // Booking Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Navigate to the booking confirmation screen
+                      // Or show a dialog to confirm ticket booking
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: WebsiteColors.primaryBlueColor,
+                    ),
+                    child: Text(
+                      "Book Tickets Now",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

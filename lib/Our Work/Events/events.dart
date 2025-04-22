@@ -114,7 +114,6 @@ class _EventsState extends State<Events> {
                     ),
                     SizedBox(height: 25.sp),
                     // Filter Chips
-                    // All, today, this week, this month's events
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -125,7 +124,9 @@ class _EventsState extends State<Events> {
                       ],
                     ),
                     SizedBox(height: 30.sp),
-                    EventsGrid(filterType: "upcoming"),
+                    EventsGrid(
+                      filterType: "upcoming",
+                    ), // Fetch and display upcoming events
                     SizedBox(height: 45.sp),
                     Stack(
                       children: [
@@ -254,7 +255,9 @@ class _EventsState extends State<Events> {
                       ],
                     ),
                     SizedBox(height: 30.sp),
-                    EventsGrid(filterType: "previous"),
+                    EventsGrid(
+                      filterType: "previous",
+                    ), // Fetch and display previous events
                     SizedBox(height: 20.sp),
                     // Join Us Section
                     // Footer
