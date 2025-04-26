@@ -12,7 +12,7 @@ class CustomDropdown<T> extends StatelessWidget {
     required this.hintText,
     required this.value,
     required this.items,
-    required this.onChanged,
+    required this.onChanged, required String? Function(dynamic value) validator,
   }) : super(key: key);
 
   @override

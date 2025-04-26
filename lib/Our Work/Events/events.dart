@@ -201,7 +201,6 @@ class _EventsState extends State<Events> {
                                     MaterialPageRoute(
                                       builder:
                                           (context) => EventBookingPage(
-                                            tabController: widget.tabController,
                                           ),
                                     ),
                                   );

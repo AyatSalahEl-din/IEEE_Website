@@ -4,7 +4,7 @@ import 'package:ieee_website/Themes/website_colors.dart';
 class SectionTitle extends StatelessWidget {
   final String title;
 
-  const SectionTitle({Key? key, required this.title}) : super(key: key);
+  const SectionTitle({Key? key, required this.title, required int fontSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
