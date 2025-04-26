@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ieee_website/Our%20Work/Events/bookingscreen.dart';
 import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,19 +22,8 @@ class _EventsState extends State<Events> {
   String selectedFilter = 'All'; // State for selected filter
   bool isHovered = false;
 
-  // form link
-  void _launchURL() async {
-    final Uri url = Uri.parse(
-      "https://www.linkedin.com/in/menna-allah-rabei-a3565131a/",
-    );
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception("Could not launch $url");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -270,7 +260,15 @@ class _EventsState extends State<Events> {
                                 ),
                                 SizedBox(height: 20.sp),
                                 ElevatedButton(
-                                  onPressed: _launchURL,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                const EventBookingPage(),
+                                      ),
+                                    ); // Navigate to booking screen
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         WebsiteColors.primaryYellowColor,
@@ -288,7 +286,7 @@ class _EventsState extends State<Events> {
                                     ),
                                   ),
                                   child: Text(
-                                    "Book Your Seat",
+                                    "Book Your Ticket", // Button text
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodyMedium?.copyWith(
