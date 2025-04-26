@@ -20,6 +20,15 @@ class _EventScreenState extends State<EventScreen> {
   DateTime? _selectedDate;
   bool _isOnlineEvent = false;
 
+  List<Map<String, dynamic>> _events = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchEvents();
+  }
+
   @override
   void dispose() {
     _eventNameController.dispose();
@@ -31,6 +40,41 @@ class _EventScreenState extends State<EventScreen> {
     _numberOfBusesController.dispose();
     _seatsPerBusController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchEvents() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('events')
+              .orderBy('date')
+              .get();
+
+      setState(() {
+        _events =
+            snapshot.docs.map((doc) {
+              final data =
+                  doc.data()
+                      as Map<
+                        String,
+                        dynamic
+                      >; // Explicitly cast to Map<String, dynamic>
+              return {
+                'id': doc.id,
+                'name': data['name'] ?? 'Unnamed Event',
+                'date': (data['date'] as Timestamp).toDate(),
+                'location': data['location'] ?? 'No location provided',
+                'time': data['time'] ?? 'No time provided',
+                'isOnlineEvent': data['isOnlineEvent'] ?? false,
+              };
+            }).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      _showError('Failed to fetch events: $e');
+      print('Debug: Error fetching events - $e');
+      setState(() => _isLoading = false);
+    }
   }
 
   Future<void> _addEvent() async {
@@ -98,116 +142,39 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Event Management')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: _eventNameController,
-                decoration: InputDecoration(labelText: 'Event Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter event name';
-                  }
-                  return null;
+      body:
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: _events.length,
+                itemBuilder: (context, index) {
+                  final event = _events[index];
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 16.0),
+                    child: ListTile(
+                      title: Text(event['name']),
+                      subtitle: Text(
+                        '${DateFormat('yyyy-MM-dd').format(event['date'])} at ${event['time']}',
+                      ),
+                      trailing:
+                          event['isOnlineEvent']
+                              ? const Icon(Icons.wifi, color: Colors.green)
+                              : const Icon(
+                                Icons.location_on,
+                                color: Colors.blue,
+                              ),
+                    ),
+                  );
                 },
               ),
-              TextFormField(
-                controller: _eventLocationController,
-                decoration: InputDecoration(labelText: 'Event Location'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter event location';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _eventTimeController,
-                decoration: InputDecoration(labelText: 'Event Time'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter event time';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _ticketLimitController,
-                decoration: InputDecoration(labelText: 'Ticket Limit'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter ticket limit';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _discountController,
-                decoration: InputDecoration(labelText: 'Discount (%)'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter discount';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _discountForController,
-                decoration: InputDecoration(labelText: 'Discount For'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter discount for';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _numberOfBusesController,
-                decoration: InputDecoration(labelText: 'Number of Buses'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter number of buses';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _seatsPerBusController,
-                decoration: InputDecoration(labelText: 'Seats per Bus'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter seats per bus';
-                  }
-                  return null;
-                },
-              ),
-              SwitchListTile(
-                title: Text('Is Online Event'),
-                value: _isOnlineEvent,
-                onChanged: (value) {
-                  setState(() {
-                    _isOnlineEvent = value;
-                  });
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _addEvent();
-                  }
-                },
-                child: Text('Add Event'),
-              ),
-            ],
-          ),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            _addEvent();
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

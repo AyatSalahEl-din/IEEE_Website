@@ -55,7 +55,7 @@ class Event {
   });
 
   factory Event.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>; // Ensure proper casting
     return Event(
       id: doc.id,
       name: data['name'] ?? '',

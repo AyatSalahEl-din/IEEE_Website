@@ -55,6 +55,13 @@ class _EventBookingPageState extends State<EventBookingPage> {
               .orderBy('date')
               .get();
 
+      if (snapshot.docs.isEmpty) {
+        _showError('No upcoming events found.');
+        print('Debug: No documents found in the "events" collection.');
+      } else {
+        print('Debug: Fetched ${snapshot.docs.length} events.');
+      }
+
       setState(() {
         _upcomingEvents =
             snapshot.docs.map((doc) => Event.fromFirestore(doc)).toList();
@@ -62,6 +69,7 @@ class _EventBookingPageState extends State<EventBookingPage> {
       });
     } catch (e) {
       _showError('Failed to load events: $e');
+      print('Debug: Error fetching events - $e');
       setState(() => _isLoading = false);
     }
   }
