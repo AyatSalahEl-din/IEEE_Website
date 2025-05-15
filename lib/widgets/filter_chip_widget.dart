@@ -5,7 +5,7 @@ import 'package:ieee_website/Themes/website_colors.dart';
 class FilterChipWidget extends StatelessWidget {
   final String label;
   final bool isSelected;
-  final VoidCallback onSelected; // Callback function for onSelected
+  final VoidCallback onSelected;
 
   const FilterChipWidget({
     super.key,
@@ -16,33 +16,48 @@ class FilterChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = ScreenUtil().screenWidth; // Get screen width
-
     return Padding(
-      padding: EdgeInsets.only(right: screenWidth < 400 ? 4.sp : 8.sp), // Adjust right padding
-      child: FilterChip(
-        label: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth < 400 ? 1 : 6.sp, // Adjust padding for better fit
-            vertical: screenWidth < 400 ? .5 : 2.sp,
+      padding: EdgeInsets.only(right: 10.sp),
+      child: GestureDetector(
+        onTap: onSelected,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 20.sp),
+          decoration: BoxDecoration(
+            gradient:
+                isSelected
+                    ? LinearGradient(
+                      colors: [
+                         
+                        WebsiteColors.primaryYellowColor,const Color.fromARGB(255, 255, 230, 190),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                    : LinearGradient(colors: [Colors.white, Colors.white]),
+            borderRadius: BorderRadius.circular(30.sp),
+            boxShadow: [
+              if (isSelected)
+                BoxShadow(
+                  color: WebsiteColors.greyColor.withOpacity(0.1),
+                  blurRadius: 2,
+                  spreadRadius: 0.5,
+                ),
+            ],
+            
           ),
           child: Text(
             label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isSelected ? WebsiteColors.whiteColor : WebsiteColors.blackColor, // Change text color based on selection
-              fontSize: screenWidth < 400 ? 20.sp : 20.sp, // Scale text size
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color:
+                  isSelected
+                      ? WebsiteColors.whiteColor
+                      : WebsiteColors.greyColor,
             ),
           ),
         ),
-        backgroundColor: isSelected ? WebsiteColors.primaryBlueColor : Colors.white, // Change background color when selected
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: WebsiteColors.primaryBlueColor,
-            width: screenWidth < 400 ? 1.sp : 2.sp, // Reduce border thickness
-          ),
-        ),
-        selected: isSelected, // Pass selected state
-        onSelected: (_) => onSelected(), // Call the onSelected callback when clicked
       ),
     );
   }

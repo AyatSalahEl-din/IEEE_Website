@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ieee_website/widgets/coming_soon_widget.dart';
 import 'package:ieee_website/widgets/event_model.dart';
 import '../Themes/website_colors.dart';
 import 'Glow_button.dart';
@@ -17,7 +18,7 @@ class EventsGrid extends StatefulWidget {
     this.tabController,
     required this.filterType,
     required this.searchText,
-    required this.selectedFilter,
+    required this.selectedFilter, required ComingSoonWidget Function() onEmpty,
   }) : super(key: key);
 
   @override

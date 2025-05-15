@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Widgets/footer.dart';
+import 'package:ieee_website/widgets/coming_soon_widget.dart';
+import 'package:ieee_website/widgets/filter_chip_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'models/project_model.dart';
 import 'repositories/project_repository.dart';
@@ -77,7 +79,6 @@ class _ProjectsState extends State<Projects> {
             projects.expand((project) => project.tags).toSet().toList()..sort();
       });
     } catch (e) {
-      // TODO: Handle error
       print('Error loading projects: $e');
     } finally {
       setState(() => _isLoading = false);
@@ -176,7 +177,6 @@ class _ProjectsState extends State<Projects> {
         });
       }
     } catch (e) {
-      // TODO: Handle error
       print('Error loading more projects: $e');
     } finally {
       setState(() => _isLoading = false);
@@ -346,65 +346,38 @@ class _ProjectsState extends State<Projects> {
   }
 
   Widget _buildGradientButton(String? category) {
-    return Padding(
-      padding: EdgeInsets.only(right: 10.sp),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              WebsiteColors.primaryYellowColor.withOpacity(0.1),
-              Colors.white,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(20.sp),
-        ),
-        child: TextButton(
-          onPressed: () {
-            setState(() {
-              _selectedCategory = category == 'All' ? null : category;
-              _searchController.clear();
-              if (category == 'All') {
-                _projects = List.from(
-                  _originalProjects,
-                ); // Reset to original projects
-                projectOpacities = List.generate(
-                  _projects.length,
-                  (index) => 1.0,
-                );
-                _isSelected = List.generate(_projects.length, (index) => false);
-                _isHovered = List.generate(_projects.length, (index) => false);
-              }
-            });
-            _handleSearch('');
-          },
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 40.sp),
-            textStyle: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              color: WebsiteColors.lightGreyColor,
-            ),
-          ),
-          child: Text(
-            category ?? 'All',
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              color: WebsiteColors.lightGreyColor,
-            ),
-          ),
-        ),
-      ),
+    return FilterChipWidget(
+      label: category ?? 'All',
+      isSelected:
+          _selectedCategory == category ||
+          (category == 'All' && _selectedCategory == null),
+      onSelected: () {
+        setState(() {
+          _selectedCategory = category == 'All' ? null : category;
+          _searchController.clear();
+          if (category == 'All') {
+            _projects = List.from(
+              _originalProjects,
+            ); // Reset to original projects
+            projectOpacities = List.generate(_projects.length, (index) => 1.0);
+            _isSelected = List.generate(_projects.length, (index) => false);
+            _isHovered = List.generate(_projects.length, (index) => false);
+          }
+        });
+        _handleSearch('');
+      },
     );
   }
 
   Widget _buildProjectsSection() {
+    if (_projects.isEmpty && !_isLoading) {
+      return ComingSoonWidget(message: "No projects found!");
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 120.sp, vertical: 100.sp),
       child:
-          _isLoading && _projects.isEmpty
+          _isLoading
               ? Center(child: CircularProgressIndicator())
               : Column(
                 children: List.generate(_projects.length, (index) {
@@ -596,65 +569,72 @@ class _ProjectsState extends State<Projects> {
     );
   }
 
- Widget _buildTag(String text, Project currentProject) {
-  return InkWell(
-    onTap: () {
-      // Filter projects with the same tag
-      final projectsWithTag =
-          _projects.where((project) => project.tags.contains(text)).toList();
+  Widget _buildTag(String text, Project currentProject) {
+    return InkWell(
+      onTap: () {
+        // Filter projects with the same tag
+        final projectsWithTag =
+            _projects.where((project) => project.tags.contains(text)).toList();
 
-      showDialog(
-        context: context,
-        builder: (context) => CategoryProjectsDialog(
-          category: text,
-          projects: projectsWithTag,
+        showDialog(
+          context: context,
+          builder:
+              (context) => CategoryProjectsDialog(
+                category: text,
+                projects: projectsWithTag,
+              ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
+        decoration: BoxDecoration(
+          color: WebsiteColors.primaryYellowColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(15.sp),
         ),
-      );
-    },
-    child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
-      decoration: BoxDecoration(
-        color: WebsiteColors.primaryYellowColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15.sp),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 18.sp,
-          color: WebsiteColors.primaryYellowColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
-  Widget _buildLoadMoreButton() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 60.sp),
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : loadMoreProjects,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: WebsiteColors.primaryBlueColor,
-          padding: EdgeInsets.symmetric(horizontal: 40.sp, vertical: 20.sp),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.sp),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 18.sp,
+            color: WebsiteColors.primaryYellowColor,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        child:
-            _isLoading
-                ? SizedBox(
-                  width: 20.sp,
-                  height: 20.sp,
-                  child: CircularProgressIndicator(
-                    color: WebsiteColors.whiteColor,
+      ),
+    );
+  }
+
+  Widget _buildLoadMoreButton() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 40.sp),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: _isLoading ? null : loadMoreProjects,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: WebsiteColors.primaryBlueColor,
+            padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 40.sp),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.sp),
+            ),
+            elevation: 3,
+          ),
+          child:
+              _isLoading
+                  ? SizedBox(
+                    width: 25.sp,
+                    height: 25.sp,
+                    child: CircularProgressIndicator(
+                      color: WebsiteColors.whiteColor,
+                    ),
+                  )
+                  : Text(
+                    "Load More Projects",
+                    style: TextStyle(
+                      color: WebsiteColors.whiteColor,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                )
-                : Text(
-                  "Load More Projects",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: WebsiteColors.whiteColor,
-                  ),
-                ),
+        ),
       ),
     );
   }
