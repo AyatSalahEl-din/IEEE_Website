@@ -59,6 +59,7 @@ class _EventsGridState extends State<EventsGrid> {
             ); // Pass the DocumentSnapshot directly
           }).toList();
 
+
       setState(() {
         allEvents = events;
       });
@@ -85,6 +86,7 @@ class _EventsGridState extends State<EventsGrid> {
       if (widget.selectedFilter == "Today") {
         matchesFilter =
             event.date.year == now.year &&
+
             event.date.month == now.month &&
             event.date.day == now.day;
       } else if (widget.selectedFilter == "This Week") {
@@ -107,6 +109,7 @@ class _EventsGridState extends State<EventsGrid> {
             widget.searchText.toLowerCase(),
           );
 
+
       return matchesFilter && matchesSearch;
     }).toList();
   }
@@ -124,6 +127,7 @@ class _EventsGridState extends State<EventsGrid> {
     return Column(
       children: [
         SizedBox(height: 10.sp),
+
         ...groupedByYear.entries.map((entry) {
           int year = entry.key;
           List<Event> events = entry.value;
@@ -134,6 +138,7 @@ class _EventsGridState extends State<EventsGrid> {
               // Modern Year Header
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.sp),
+
                 child: Row(
                   children: [
                     const Expanded(
@@ -149,6 +154,7 @@ class _EventsGridState extends State<EventsGrid> {
                         horizontal: 16.sp,
                         vertical: 8.sp,
                       ),
+
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Colors.blueAccent, Colors.greenAccent],
@@ -171,6 +177,7 @@ class _EventsGridState extends State<EventsGrid> {
                           color: WebsiteColors.whiteColor,
                           fontSize: 30.sp,
                         ),
+
                       ),
                     ),
                     const Expanded(

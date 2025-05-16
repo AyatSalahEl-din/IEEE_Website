@@ -5,6 +5,7 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
+import '../../chatbot/chatbot_home_screen.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
@@ -18,9 +19,29 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-  String searchText = ''; // State for search text
-  String selectedFilter = 'All'; // State for selected filter
+
+  
   bool isHovered = false;
+
+  String searchText = '';
+  String selectedFilter = 'All';
+  bool isChatOpen = false;
+
+  void _launchURL() async {
+    final Uri url = Uri.parse(
+      "https://www.linkedin.com/in/menna-allah-rabei-a3565131a/",
+    );
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception("Could not launch $url");
+    }
+  }
+
+  // Function to toggle chat visibility
+  void _toggleChat() {
+    setState(() {
+      isChatOpen = !isChatOpen;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +49,14 @@ class _EventsState extends State<Events> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Expanded(
-        child: ListView(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ListView(
               children: [
-                Stack(
+                Column(
                   children: [
+
                     // Background Image
                     Container(
                       height: 1118.sp,
@@ -99,13 +121,58 @@ class _EventsState extends State<Events> {
                               ).textTheme.bodySmall?.copyWith(
                                 color: WebsiteColors.darkGreyColor,
                               ),
+
+                   
                             ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: WebsiteColors.darkGreyColor,
+                            width: width.spMax,
+                            padding: EdgeInsets.all(15.sp),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: WebsiteColors.darkGreyColor,
+                                  size: 30.sp,
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        searchText = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText:
+                                      "Search Events, Categories, Location...",
+                                      hintStyle: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.copyWith(
+                                        color: WebsiteColors.lightGreyColor,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                                ImageIcon(
+                                  AssetImage("assets/images/location_icon.png"),
+                                ),
+                                Text(
+                                  "  Location ",
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.bodySmall?.copyWith(
+                                    color: WebsiteColors.darkGreyColor,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: WebsiteColors.darkGreyColor,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
+
                       ),
                     ),
 
@@ -120,9 +187,9 @@ class _EventsState extends State<Events> {
                         "Don't miss out! Explore our events.",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
+
                     ),
-                  ],
-                ),
+
 
                 SizedBox(height: 10.sp),
 
@@ -220,9 +287,29 @@ class _EventsState extends State<Events> {
                                     20.sp,
                                   ), // Apply border to overlay
                                 ),
+
                               ),
-                            ),
+                              FilterChipWidget(
+                                label: "This Week",
+                                isSelected: selectedFilter == "This Week",
+                                onSelected: () {
+                                  setState(() {
+                                    selectedFilter = "This Week";
+                                  });
+                                },
+                              ),
+                              FilterChipWidget(
+                                label: "This Month",
+                                isSelected: selectedFilter == "This Month",
+                                onSelected: () {
+                                  setState(() {
+                                    selectedFilter = "This Month";
+                                  });
+                                },
+                              ),
+                            ],
                           ),
+
                           Padding(
                             padding: EdgeInsets.all(80.sp),
                             child: Column(
@@ -293,12 +380,67 @@ class _EventsState extends State<Events> {
                                       color: WebsiteColors.darkBlueColor,
                                       fontSize: 25.sp,
                                       fontWeight: FontWeight.bold,
+
                                     ),
-                                  ),
+                                    SizedBox(height: 5.sp),
+                                    Text(
+                                      "Seamless Booking for Every Event!",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.copyWith(
+                                        color: WebsiteColors.whiteColor,
+                                        fontSize: 36.sp,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20.sp),
+                                    ElevatedButton(
+                                      onPressed: _launchURL,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                        WebsiteColors.primaryYellowColor,
+                                        textStyle: const TextStyle(
+                                          color: WebsiteColors.darkBlueColor,
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20.sp,
+                                          vertical: 6.sp,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            15.sp,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Book Your Seat",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.copyWith(
+                                          color: WebsiteColors.darkBlueColor,
+                                          fontSize: 25.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 20.sp),
+
+                          // Previous Events Section
+                          Text(
+                            "Previous Events",
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyLarge?.copyWith(
+                              color: WebsiteColors.primaryBlueColor,
+                              fontSize: 40.sp,
                             ),
                           ),
+
                         ],
                       ),
 
@@ -367,13 +509,11 @@ class _EventsState extends State<Events> {
                       SizedBox(height: 20.sp),
                     ],
                   ),
+
                 ),
-              ],
+              ),
             ),
-            if (widget.tabController != null)
-              Footer(tabController: widget.tabController!),
-          ],
-        ),
+        ],
       ),
     );
   }

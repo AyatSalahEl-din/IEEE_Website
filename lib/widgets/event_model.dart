@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class Event {
-  final String id;
   final String name;
   final String location;
   final String time;
   final List<String> imageUrls;
+
   final String month;
   final DateTime date;
   final String category;
+  // final String hostName;
+  // final String hostedBy;
   final String details;
   final double? discount; // Discount amount
   final String? discountFor; // Group eligible for discount
@@ -255,7 +257,36 @@ class TicketRequest {
       rejectReason: data['rejectReason'],
       notes: data['notes'],
       eventDate: data['eventDate'],
+
     );
+  }
+
+  /// ✅ Format date to a readable format
+  String formatDate() {
+    return DateFormat('yyyy-MM-dd HH:mm').format(date);
+  }
+}
+
+/// ✅ Fetch events from Firestore
+Future<List<Event>> fetchEventsFromFirestore() async {
+  try {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('events').get();
+
+    if (snapshot.docs.isEmpty) {
+      print("No events found in Firestore.");
+    }
+
+    List<Event> events = snapshot.docs.map((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      print("Fetched Event: $data"); // Debugging
+      return Event.fromFirestore(data);
+    }).toList();
+
+    print("Total Events: ${events.length}");
+    return events;
+  } catch (e) {
+    print("Error fetching events: $e");
+    return [];
   }
 }
 
