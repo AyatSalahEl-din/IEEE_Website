@@ -152,7 +152,7 @@ class _EventsGridState extends State<EventsGrid> {
                       ),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blueAccent, Colors.greenAccent],
+                          colors: [const Color.fromARGB(255, 35, 65, 117), const Color.fromARGB(255, 145, 186, 227)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
