@@ -39,16 +39,26 @@ class _EventsGridState extends State<EventsGrid> {
       Query query = FirebaseFirestore.instance.collection('events');
 
       if (widget.filterType == "upcoming") {
-        query = query.where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()));
+        query = query.where(
+          'date',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()),
+        );
       } else if (widget.filterType == "previous") {
-        query = query.where('date', isLessThan: Timestamp.fromDate(DateTime.now()));
+        query = query.where(
+          'date',
+          isLessThan: Timestamp.fromDate(DateTime.now()),
+        );
       }
 
-      QuerySnapshot snapshot = await query.orderBy('date', descending: true).get();
-      List<Event> events = snapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        return Event.fromFirestore(data);
-      }).toList();
+      QuerySnapshot snapshot =
+          await query.orderBy('date', descending: true).get();
+      List<Event> events =
+          snapshot.docs.map((doc) {
+            return Event.fromFirestore(
+              doc,
+            ); // Pass the DocumentSnapshot directly
+          }).toList();
+
 
       setState(() {
         allEvents = events;
@@ -74,21 +84,31 @@ class _EventsGridState extends State<EventsGrid> {
       bool matchesFilter = true;
 
       if (widget.selectedFilter == "Today") {
-        matchesFilter = event.date.year == now.year &&
+        matchesFilter =
+            event.date.year == now.year &&
+
             event.date.month == now.month &&
             event.date.day == now.day;
       } else if (widget.selectedFilter == "This Week") {
         DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
         DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-        matchesFilter = event.date.isAfter(startOfWeek.subtract(Duration(seconds: 1))) &&
+        matchesFilter =
+            event.date.isAfter(startOfWeek.subtract(Duration(seconds: 1))) &&
             event.date.isBefore(endOfWeek.add(Duration(days: 1)));
       } else if (widget.selectedFilter == "This Month") {
-        matchesFilter = event.date.year == now.year && event.date.month == now.month;
+        matchesFilter =
+            event.date.year == now.year && event.date.month == now.month;
       }
 
-      bool matchesSearch = event.name.toLowerCase().contains(widget.searchText.toLowerCase()) ||
-          event.category.toLowerCase().contains(widget.searchText.toLowerCase()) ||
-          event.location.toLowerCase().contains(widget.searchText.toLowerCase());
+      bool matchesSearch =
+          event.name.toLowerCase().contains(widget.searchText.toLowerCase()) ||
+          event.category.toLowerCase().contains(
+            widget.searchText.toLowerCase(),
+          ) ||
+          event.location.toLowerCase().contains(
+            widget.searchText.toLowerCase(),
+          );
+
 
       return matchesFilter && matchesSearch;
     }).toList();
@@ -106,7 +126,8 @@ class _EventsGridState extends State<EventsGrid> {
 
     return Column(
       children: [
-         SizedBox(height: 10.sp),
+        SizedBox(height: 10.sp),
+
         ...groupedByYear.entries.map((entry) {
           int year = entry.key;
           List<Event> events = entry.value;
@@ -116,7 +137,8 @@ class _EventsGridState extends State<EventsGrid> {
             children: [
               // Modern Year Header
               Padding(
-                padding:  EdgeInsets.symmetric(vertical: 20.sp),
+                padding: EdgeInsets.symmetric(vertical: 20.sp),
+
                 child: Row(
                   children: [
                     const Expanded(
@@ -128,7 +150,11 @@ class _EventsGridState extends State<EventsGrid> {
                       ),
                     ),
                     Container(
-                      padding:  EdgeInsets.symmetric(horizontal: 16.sp, vertical: 8.sp),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.sp,
+                        vertical: 8.sp,
+                      ),
+
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [Colors.blueAccent, Colors.greenAccent],
@@ -147,7 +173,11 @@ class _EventsGridState extends State<EventsGrid> {
                       ),
                       child: Text(
                         "$year",
-                        style:Theme.of(context).textTheme.bodyMedium?.copyWith(color: WebsiteColors.whiteColor,fontSize: 30.sp)
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: WebsiteColors.whiteColor,
+                          fontSize: 30.sp,
+                        ),
+
                       ),
                     ),
                     const Expanded(
