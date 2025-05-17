@@ -162,7 +162,19 @@ class _ProjectsState extends State<Projects> {
 
       if (newProjects.isNotEmpty) {
         setState(() {
-          _projects.addAll(newProjects);
+          if (_selectedCategory == null) {
+            // No filter applied, load all projects
+            _projects.addAll(newProjects);
+          } else {
+            // Filter projects based on the selected category
+            final filteredProjects =
+                newProjects
+                    .where(
+                      (project) => project.tags.contains(_selectedCategory),
+                    )
+                    .toList();
+            _projects.addAll(filteredProjects);
+          }
           _lastProjectId = newProjects.last.id;
           projectOpacities.addAll(
             List.generate(newProjects.length, (index) => 0.0),
@@ -345,53 +357,67 @@ class _ProjectsState extends State<Projects> {
   }
 
   Widget _buildGradientButton(String? category) {
+    bool isSelected =
+        _selectedCategory == category ||
+        (category == 'All' && _selectedCategory == null);
     return Padding(
       padding: EdgeInsets.only(right: 10.sp),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              WebsiteColors.primaryYellowColor.withOpacity(0.1),
-              Colors.white,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _selectedCategory = category == 'All' ? null : category;
+            _searchController.clear();
+            if (_selectedCategory == null) {
+              _projects = List.from(
+                _originalProjects,
+              ); // Reset to original projects
+            } else {
+              _projects =
+                  _originalProjects
+                      .where(
+                        (project) => project.tags.contains(_selectedCategory),
+                      )
+                      .toList();
+            }
+            projectOpacities = List.generate(_projects.length, (index) => 1.0);
+            _isSelected = List.generate(_projects.length, (index) => false);
+            _isHovered = List.generate(_projects.length, (index) => false);
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 20.sp),
+          decoration: BoxDecoration(
+            gradient:
+                isSelected
+                    ? LinearGradient(
+                      colors: [
+                        WebsiteColors.primaryYellowColor,
+                        const Color.fromARGB(255, 255, 230, 190),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                    : LinearGradient(colors: [Colors.white, Colors.white]),
+            borderRadius: BorderRadius.circular(30.sp),
+            boxShadow: [
+              if (isSelected)
+                BoxShadow(
+                  color: WebsiteColors.greyColor.withOpacity(0.1),
+                  blurRadius: 2,
+                  spreadRadius: 0.5,
+                ),
             ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(20.sp),
-        ),
-        child: TextButton(
-          onPressed: () {
-            setState(() {
-              _selectedCategory = category == 'All' ? null : category;
-              _searchController.clear();
-              if (category == 'All') {
-                _projects = List.from(
-                  _originalProjects,
-                ); // Reset to original projects
-                projectOpacities = List.generate(
-                  _projects.length,
-                  (index) => 1.0,
-                );
-                _isSelected = List.generate(_projects.length, (index) => false);
-                _isHovered = List.generate(_projects.length, (index) => false);
-              }
-            });
-            _handleSearch('');
-          },
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 40.sp),
-            textStyle: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              color: WebsiteColors.lightGreyColor,
-            ),
           ),
           child: Text(
             category ?? 'All',
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
-              color: WebsiteColors.lightGreyColor,
+              color:
+                  isSelected
+                      ? WebsiteColors.whiteColor
+                      : WebsiteColors.greyColor,
             ),
           ),
         ),
@@ -601,9 +627,7 @@ class _ProjectsState extends State<Projects> {
                   fit: BoxFit.cover,
                 )
                 : DecorationImage(
-                  image: AssetImage(
-                    'assets/images/n.png',
-                  ), // Static image
+                  image: AssetImage('assets/images/n.png'), // Static image
                   fit: BoxFit.cover,
                 ),
       ),
