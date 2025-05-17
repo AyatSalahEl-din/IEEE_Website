@@ -4,6 +4,7 @@ import 'package:ieee_website/About%20Us/about.dart';
 import 'package:ieee_website/Contact%20Us/contact.dart';
 import 'package:ieee_website/FAQ/faq.dart';
 import 'package:ieee_website/Home_Screen/home_screen.dart';
+import 'package:ieee_website/Home_Screen/url_helper.dart';
 import 'package:ieee_website/Join%20Us/join.dart';
 import 'package:ieee_website/Our%20Work/Events/events.dart';
 import 'package:ieee_website/Our%20Work/Projects/projects.dart';
@@ -89,10 +90,11 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   fixedSize: Size(190.sp, 50.sp),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => JoinUs()),
-                  );
+                  /* Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => JoinUs()),
+                            );*/
+                  UrlHelper.fetchAndLaunchURL('joinUs');
                 },
                 child: Text(
                   'Join Us',

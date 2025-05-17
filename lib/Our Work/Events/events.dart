@@ -6,6 +6,7 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
+import '../../chatbot/chatbot_home_screen.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
@@ -19,8 +20,8 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-  String searchText = ''; // State for search text
-  String selectedFilter = 'All'; // State for selected filter
+
+  
   bool isHovered = false;
 
   void _launchURL() async {
@@ -38,13 +39,14 @@ class _EventsState extends State<Events> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Expanded(
-        child: ListView(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ListView(
               children: [
-                Stack(
+                Column(
                   children: [
+
                     // Background Image
                     Container(
                       width: double.infinity,
@@ -79,9 +81,9 @@ class _EventsState extends State<Events> {
                           _buildSearchBar(),
                         ],
                       ),
+
                     ),
-                  ],
-                ),
+
 
                 SizedBox(height: 10.sp),
 
@@ -183,9 +185,29 @@ class _EventsState extends State<Events> {
                                     20.sp,
                                   ), // Apply border to overlay
                                 ),
+
                               ),
-                            ),
+                              FilterChipWidget(
+                                label: "This Week",
+                                isSelected: selectedFilter == "This Week",
+                                onSelected: () {
+                                  setState(() {
+                                    selectedFilter = "This Week";
+                                  });
+                                },
+                              ),
+                              FilterChipWidget(
+                                label: "This Month",
+                                isSelected: selectedFilter == "This Month",
+                                onSelected: () {
+                                  setState(() {
+                                    selectedFilter = "This Month";
+                                  });
+                                },
+                              ),
+                            ],
                           ),
+
                           Padding(
                             padding: EdgeInsets.all(80.sp),
                             child: Column(
@@ -360,8 +382,9 @@ class _EventsState extends State<Events> {
                       SizedBox(height: 20.sp),
                     ],
                   ),
+
                 ),
-              ],
+              ),
             ),
             if (widget.tabController != null)
               Footer(tabController: widget.tabController!),

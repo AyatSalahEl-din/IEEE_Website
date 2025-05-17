@@ -23,7 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
-      maxLines: isMultiline ? null : 1,
+      maxLines: isMultiline ? null : 1, 
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: TextStyle(
@@ -31,7 +31,7 @@ class CustomTextFormField extends StatelessWidget {
           fontWeight: FontWeight.bold,
           fontSize: 16.sp,
         ),
-        prefixIcon: Icon(icon, color: WebsiteColors.primaryBlueColor),
+        prefixIcon: Icon(icon, color: WebsiteColors.primaryBlueColor), 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.sp),
           borderSide: BorderSide(
