@@ -11,8 +11,7 @@ import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/my_theme.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ieee_website/provider/chat_provider.dart';
-import 'chatbot/chatbot_home_screen.dart';
+
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,16 +25,10 @@ void main() async {
   );
 
   await Hive.initFlutter(); // Use hive_flutter for web compatibility
-  await ChatProvider.initHive(); // Make sure this is clean!
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+const MyApp(),
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -64,7 +57,6 @@ class MyApp extends StatelessWidget {
             Base.routeName: (context) =>  Base(),
             FAQ.routeName: (context) => FAQ(),
 
-            ChatbotHomeScreen.routeName: (context) => ChatbotHomeScreen(),
           },
         );
       },
