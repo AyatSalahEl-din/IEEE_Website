@@ -1,4 +1,5 @@
-import '../models/project_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ieee_website/Our%20Work/Projects/models/project_model.dart';
 
 abstract class ProjectRepository {
   Future<List<Project>> getProjects({int limit = 6, String? lastProjectId});
@@ -8,57 +9,41 @@ abstract class ProjectRepository {
 }
 
 class FirebaseProjectRepository implements ProjectRepository {
-  // TODO: Add Firebase initialization and configuration
-  
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
-  Future<List<Project>> getProjects({int limit = 6, String? lastProjectId}) async {
-    // TODO: Implement Firebase Firestore query with proper pagination
-    // Example implementation:
-    /*
-    Query query = FirebaseFirestore.instance
+  Future<List<Project>> getProjects({
+    int limit = 6,
+    String? lastProjectId,
+  }) async {
+    Query query = _firestore
         .collection('projects')
         .orderBy('date', descending: true)
         .limit(limit);
 
     if (lastProjectId != null) {
-      final lastDoc = await FirebaseFirestore.instance
-          .collection('projects')
-          .doc(lastProjectId)
-          .get();
-      query = query.startAfterDocument(lastDoc);
+      final lastDoc =
+          await _firestore.collection('projects').doc(lastProjectId).get();
+      if (lastDoc.exists) {
+        query = query.startAfterDocument(lastDoc);
+      }
     }
 
     final QuerySnapshot snapshot = await query.get();
     return snapshot.docs
-        .map((doc) => Project.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    */
-    
-    // Temporary mock data with multiple categories
-    return List.generate(
-      limit,
-      (index) => Project(
-        id: 'project-$index',
-        title: 'Project ${index + 1}',
-        description: 'This is a sample project description for project ${index + 1}',
-        madeBy: 'IEEE Members',
-        date: DateTime.now().subtract(Duration(days: index)),
-        tags: [
-          ['AI', 'Machine Learning', 'Data Science'],
-          ['Robotics', 'IoT', 'Hardware'],
-          ['Web Development', 'Mobile Apps', 'UI/UX'],
-          ['Embedded Systems', 'IoT', 'Hardware'],
-          ['Cloud Computing', 'Web Development', 'Backend'],
-          ['Computer Vision', 'AI', 'Image Processing'],
-        ][index % 6],
-        imageUrl: 'assets/project_placeholder.jpg',
-        additionalDetails: {
-          'status': 'Completed',
-          'team_size': '5 members',
-          'duration': '3 months',
-        },
-      ),
-    );
+        .map((doc) {
+          try {
+            return Project.fromFirestore(
+              doc.data() as Map<String, dynamic>, // Extract data as Map
+              doc.id, // Pass document ID
+            );
+          } catch (e) {
+            print('Error parsing project document: ${doc.id}, error: $e');
+            return null;
+          }
+        })
+        .whereType<Project>()
+        .toList(); // Filter out null values
   }
 
   @override
@@ -67,58 +52,77 @@ class FirebaseProjectRepository implements ProjectRepository {
       return getProjects();
     }
 
-    // TODO: Implement Firebase search query
-    // For optimal performance, consider using a search service like Algolia
-    // Example implementation:
-    /*
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .where('searchTokens', arrayContains: query.toLowerCase())
-        .get();
+    final lowerCaseQuery = query.toLowerCase();
+
+    final QuerySnapshot snapshot =
+        await _firestore
+            .collection('projects')
+            .get(); // Fetch all projects to filter locally
 
     return snapshot.docs
-        .map((doc) => Project.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    */
+        .map((doc) {
+          try {
+            final project = Project.fromFirestore(
+              doc.data() as Map<String, dynamic>, // Extract data as Map
+              doc.id, // Pass document ID
+            );
 
-    // For now, fetch all projects and filter in memory
-    final allProjects = await getProjects(limit: 50);
-    return allProjects.where((project) => project.matchesSearch(query)).toList();
+            // Check if the query matches the name, category, or description
+            if (project.title.toLowerCase().contains(lowerCaseQuery) ||
+                project.description.toLowerCase().contains(lowerCaseQuery) ||
+                project.tags.any(
+                  (tag) => tag.toLowerCase().contains(lowerCaseQuery),
+                )) {
+              return project;
+            }
+            return null;
+          } catch (e) {
+            print('Error parsing project document: ${doc.id}, error: $e');
+            return null;
+          }
+        })
+        .whereType<Project>()
+        .toList();
   }
 
   @override
   Future<List<Project>> getProjectsByTag(String tag) async {
-    // TODO: Implement Firebase tag query
-    // Example implementation:
-    /*
-    final QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('projects')
-        .where('tags', arrayContains: tag)
-        .get();
+    final QuerySnapshot snapshot =
+        await _firestore
+            .collection('projects')
+            .where('tags', arrayContains: tag)
+            .get();
 
     return snapshot.docs
-        .map((doc) => Project.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
-    */
-
-    // For now, fetch all projects and filter by tag
-    final allProjects = await getProjects(limit: 50);
-    return allProjects.where((project) => project.tags.contains(tag)).toList();
+        .map((doc) {
+          try {
+            return Project.fromFirestore(
+              doc.data() as Map<String, dynamic>, // Extract data as Map
+              doc.id, // Pass document ID
+            );
+          } catch (e) {
+            print('Error parsing project document: ${doc.id}, error: $e');
+            return null;
+          }
+        })
+        .whereType<Project>()
+        .toList(); // Filter out null values
   }
 
   @override
   Future<Project?> getProjectById(String id) async {
-    // TODO: Implement Firebase get by ID
-    // Example implementation:
-    /*
-    final DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('projects')
-        .doc(id)
-        .get();
-
-    if (!doc.exists) return null;
-    return Project.fromJson(doc.data() as Map<String, dynamic>);
-    */
+    final DocumentSnapshot doc =
+        await _firestore.collection('projects').doc(id).get();
+    if (doc.exists) {
+      try {
+        return Project.fromFirestore(
+          doc.data() as Map<String, dynamic>, // Extract data as Map
+          doc.id, // Pass document ID
+        );
+      } catch (e) {
+        print('Error parsing project document: ${doc.id}, error: $e');
+      }
+    }
     return null;
   }
 }
