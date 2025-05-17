@@ -77,7 +77,8 @@ class _FAQState extends State<FAQ> {
                 child: buildTitleSection(),
               ),
             ),
-// Content section with curved top
+
+            // Content section with curved top
             Stack(
               clipBehavior: Clip.none,
               children: [
@@ -185,6 +186,7 @@ class _FAQState extends State<FAQ> {
     );
   }
 }
+
 // ✅ Cleaned and correct CurvePainter class
 class CurvePainter extends CustomPainter {
   @override

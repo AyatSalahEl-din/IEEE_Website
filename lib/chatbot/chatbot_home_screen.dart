@@ -1,67 +1,130 @@
 import 'package:flutter/material.dart';
-import 'package:ieee_website/Themes/website_colors.dart';
-import 'package:ieee_website/chatbot/profile_screen.dart';
-import 'package:ieee_website/chatbot/chat_history_screen.dart';
-import 'package:ieee_website/chatbot/chat_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../provider/chat_provider.dart';
+import 'constants.dart';
+import 'chat_screen.dart';
 
 class ChatbotHomeScreen extends StatefulWidget {
-  const ChatbotHomeScreen({super.key});
-  static const String routeName = 'chatbot_home';
+  static const String routeName = 'Chatbothomescreen';
+  final TabController? tabController;
+  const ChatbotHomeScreen({Key? key, this.tabController}) : super(key: key);
 
   @override
-  ChatbotHomeScreenState createState() => ChatbotHomeScreenState();
+  State<ChatbotHomeScreen> createState() => _ChatbotHomeScreenState();
 }
 
-class ChatbotHomeScreenState extends State<ChatbotHomeScreen> {
-  // Page controller for the PageView
-  final PageController _pageController = PageController();
+class _ChatbotHomeScreenState extends State<ChatbotHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
 
-  // List of screens (pages)
-  final List<Widget> _screens = [
-    const ChatHistoryScreen(),
-    const ChatScreen(),
-    const ProfileScreen(),
-  ];
-
-  // Currently selected bottom nav index
-  int _currentIndex = 0;
+  Future<void> _initializeApp() async {
+    await ChatProvider.initHive();
+    // Any other initialization can go here
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Get current screen dimensions
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        children: _screens,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      appBar: AppBar(
+        backgroundColor: Color(0xFF2196F3),
+        title: const Text('Chatbot'),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        elevation: 0,
-        selectedItemColor: WebsiteColors.primaryBlueColor,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          _pageController.jumpToPage(index);
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Chat History',
+      // Use SingleChildScrollView to enable scrolling if content exceeds screen size
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: SizedBox(
+            // Set minimum height to fill the screen properly
+            height: screenSize.height -
+                AppBar().preferredSize.height -
+                MediaQuery.of(context).padding.top,
+            child: Column(
+              children: [
+                // Use Spacer to push content down slightly
+                const Spacer(flex: 1),
+
+                // Logo image with relative size based on screen dimensions
+                SizedBox(
+                  height: screenSize.height * 0.15,
+                  child: Image.asset(
+                    'assets/images/chat_logo.png',
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.chat,
+                        size: 80,
+                        color: Colors.blue,
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Welcome text
+                Text(
+                  'Welcome to Your AI Assistant',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 10),
+
+                // Brief description
+                Text(
+                  'Ask me anything or upload images for analysis.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // Start new chat button
+                ElevatedButton(
+                  onPressed: () {
+                    final newChatId = DateTime.now().millisecondsSinceEpoch.toString();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(chatId: newChatId),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'Start New Chat',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+
+                // Use Spacer at the end to distribute remaining space
+                const Spacer(flex: 2),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
   }
