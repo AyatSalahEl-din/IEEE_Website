@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../hive/boxes.dart';
 import '../hive/settings.dart';
 

@@ -14,7 +14,6 @@ packages:
     description:
       name: _flutterfire_internals
       sha256: de9ecbb3ddafd446095f7e833c853aff2fa1682b017921fe63a833f9d6f0e422
-
       url: "https://pub.dev"
     source: hosted
     version: "1.3.54"
@@ -23,6 +22,14 @@ packages:
     description: dart
     source: sdk
     version: "0.3.3"
+  analytics:
+    dependency: "direct main"
+    description:
+      name: analytics
+      sha256: "4041b8abe7f4aa00a2bdb0d53bd6c21e7ea06dc6c642ddababc3f5b9485f5875"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   analyzer:
     dependency: transitive
     description:
@@ -199,7 +206,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-
   convert:
     dependency: transitive
     description:
@@ -264,7 +270,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-
   file:
     dependency: transitive
     description:
@@ -305,7 +310,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+4"
-
+  firebase_analytics:
+    dependency: "direct main"
+    description:
+      name: firebase_analytics
+      sha256: "2416b9d864412ab7b571dafded801bbcc7e29b5824623c055002d4d0819bea2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.4.5"
+  firebase_analytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_analytics_platform_interface
+      sha256: "3ccf5c876a8bea186016de4bcf53fc1bc6fa01236d740fb501d7ef9be356c58e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.5"
+  firebase_analytics_web:
+    dependency: transitive
+    description:
+      name: firebase_analytics_web
+      sha256: "5e4e3f001b67c2034b76cb2a42a0eed330fb3a8fb41ad13eceb04e8d9a74f662"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.10+11"
   firebase_core:
     dependency: "direct main"
     description:
@@ -335,7 +363,6 @@ packages:
     description:
       name: firebase_storage
       sha256: b66435730252985c49aabe83e0490bcfab2e7b3f2192bf421ca596fa490de14a
-
       url: "https://pub.dev"
     source: hosted
     version: "12.4.5"
@@ -392,7 +419,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
-
   flutter_markdown:
     dependency: "direct main"
     description:
@@ -405,7 +431,6 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-
       sha256: f948e346c12f8d5480d2825e03de228d0eb8c3a737e4cdaa122267b89c022b5e
       url: "https://pub.dev"
     source: hosted
@@ -434,7 +459,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -461,7 +485,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.8.0"
-
   frontend_server_client:
     dependency: transitive
     description:
@@ -494,6 +517,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
+  google_generative_ai:
+    dependency: "direct main"
+    description:
+      name: google_generative_ai
+      sha256: f666a8c09225630a9ab366296407b38c6dab87ba7b1bce15a7db35e9411c17d3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.3"
   graphs:
     dependency: transitive
     description:
@@ -686,7 +717,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
-
+  loading_overlay:
+    dependency: "direct main"
+    description:
+      name: loading_overlay
+      sha256: c51341550b297e048ac95549bd7ecbe746754130102ea1e36da2a5fdb09f5fab
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.2"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "7ad7215c15420a102ec687bb320a7312afd449bac63bfb1c60d9787c27b9767f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   logging:
     dependency: transitive
     description:
@@ -711,7 +757,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.3.0"
-
   matcher:
     dependency: transitive
     description:
@@ -736,7 +781,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
-
   mime:
     dependency: transitive
     description:
@@ -745,7 +789,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-
   nested:
     dependency: transitive
     description:
@@ -754,7 +797,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-
   package_config:
     dependency: transitive
     description:
@@ -763,7 +805,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
-
   path:
     dependency: transitive
     description:
@@ -836,7 +877,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-
   pool:
     dependency: transitive
     description:
@@ -845,7 +885,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-
   provider:
     dependency: "direct main"
     description:
@@ -854,7 +893,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
-
   pub_semver:
     dependency: transitive
     description:
@@ -887,7 +925,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-
   sky_engine:
     dependency: transitive
     description: flutter
@@ -901,7 +938,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
-
   source_gen:
     dependency: transitive
     description:
@@ -918,7 +954,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.5"
-
   source_span:
     dependency: transitive
     description:
@@ -1142,7 +1177,6 @@ packages:
       sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.dev"
     source: hosted
-
     version: "1.1.1"
   web_socket:
     dependency: transitive
@@ -1160,7 +1194,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-
   xdg_directories:
     dependency: transitive
     description:

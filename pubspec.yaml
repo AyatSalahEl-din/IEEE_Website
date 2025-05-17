@@ -49,7 +49,6 @@ dependencies:
   flutter_rounded_date_picker: ^3.0.4
   firebase_storage: ^12.4.5
   font_awesome_flutter: ^10.8.0
-
   firebase_analytics: ^11.4.5
   analytics: ^2.0.3
   loading_overlay: ^0.4.2
@@ -66,6 +65,7 @@ dependencies:
   image_picker: ^1.1.2
   flutter_dotenv: ^5.2.1
   generative_ai_dart: ^0.1.2
+  google_generative_ai: ^0.2.1
 
 
 
