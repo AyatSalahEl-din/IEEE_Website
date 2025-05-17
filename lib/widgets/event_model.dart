@@ -2,32 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class Event {
+  final String id;
   final String name;
   final String location;
   final String time;
   final List<String> imageUrls;
-
   final String month;
   final DateTime date;
   final String category;
-  // final String hostName;
-  // final String hostedBy;
   final String details;
-  final double? discount; // Discount amount
-  final String? discountFor; // Group eligible for discount
-  final double? baseTicketPrice; // Base ticket price
-  final bool isOnlineEvent; // Whether the event is online
-  final String? appName; // Online event app name
-  final String? appUrl; // Online event URL
-  final String? appTime; // Online event time
-  final BusDetails? busDetails; // Bus details for the event
-  final String? contactNumber; // Admin-provided contact number
-  final String? contactEmail; // Admin-provided contact email
-  final bool? isTicketAvailable; // Whether tickets are available
-  final bool? isTicketLimited; // Whether tickets are limited
-  final int? ticketLimit; // Ticket limit if applicable
-  final bool? hasBusService; // Whether the event has bus service
-  final bool? isSeatBookingAvailable; // Whether seat booking is available
+  final double? discount;
+  final String? discountFor;
+  final double? baseTicketPrice;
+  final bool isOnlineEvent;
+  final String? appName;
+  final String? appUrl;
+  final String? appTime;
+  final BusDetails? busDetails;
+  final String? contactNumber;
+  final String? contactEmail;
+  final bool? isTicketAvailable;
+  final bool? isTicketLimited;
+  final int? ticketLimit;
+  final bool? hasBusService;
+  final bool? isSeatBookingAvailable;
 
   Event({
     required this.id,
@@ -57,16 +55,15 @@ class Event {
   });
 
   factory Event.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>; // Ensure proper casting
+    final data = doc.data() as Map<String, dynamic>;
     return Event(
       id: doc.id,
       name: data['name'] ?? '',
       location: data['location'] ?? '',
       time: data['time'] ?? '',
-      imageUrls:
-          (data['imageUrls'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
+      imageUrls: (data['imageUrls'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList() ??
           [],
       month: data['month'] ?? '',
       date: (data['date'] as Timestamp).toDate(),
@@ -79,10 +76,9 @@ class Event {
       appName: data['appName'],
       appUrl: data['appUrl'],
       appTime: data['appTime'],
-      busDetails:
-          data['busDetails'] != null
-              ? BusDetails.fromMap(data['busDetails'])
-              : null,
+      busDetails: data['busDetails'] != null
+          ? BusDetails.fromMap(data['busDetails'])
+          : null,
       contactNumber: data['contact']?['number'],
       contactEmail: data['contact']?['email'],
       isTicketAvailable: data['isTicketAvailable'],
@@ -137,7 +133,6 @@ class Event {
     return DateFormat('yyyy-MM-dd HH:mm').format(date);
   }
 
-  /// Generate Bus Details as a formatted string
   String getBusDetails() {
     if (busDetails == null) return '';
     return '''
@@ -148,7 +143,6 @@ Bus Details:
 ''';
   }
 
-  /// Generate Online Event Details as a formatted string
   String getOnlineEventDetails() {
     if (!isOnlineEvent) return '';
     return '''
@@ -159,7 +153,6 @@ Online Event Details:
 ''';
   }
 
-  /// Generate Contact Details as a formatted string
   String getContactDetails() {
     return '''
 Contact Details:
@@ -250,36 +243,32 @@ class TicketRequest {
       ticketType: data['ticketType'],
       ticketQuantity: data['ticketQuantity'],
       busService: data['busService'],
-      busDetails:
-          data['busDetails'] != null
-              ? Map<String, dynamic>.from(data['busDetails'])
-              : null,
+      busDetails: data['busDetails'] != null
+          ? Map<String, dynamic>.from(data['busDetails'])
+          : null,
       rejectReason: data['rejectReason'],
       notes: data['notes'],
       eventDate: data['eventDate'],
-
     );
   }
 
-  /// ✅ Format date to a readable format
   String formatDate() {
-    return DateFormat('yyyy-MM-dd HH:mm').format(date);
+    return DateFormat('yyyy-MM-dd HH:mm').format(requestDate.toDate());
   }
 }
 
-/// ✅ Fetch events from Firestore
 Future<List<Event>> fetchEventsFromFirestore() async {
   try {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('events').get();
+    QuerySnapshot snapshot =
+    await FirebaseFirestore.instance.collection('events').get();
 
     if (snapshot.docs.isEmpty) {
       print("No events found in Firestore.");
     }
 
     List<Event> events = snapshot.docs.map((doc) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      print("Fetched Event: $data"); // Debugging
-      return Event.fromFirestore(data);
+      print("Fetched Event: ${doc.data()}");
+      return Event.fromFirestore(doc);
     }).toList();
 
     print("Total Events: ${events.length}");
@@ -335,29 +324,5 @@ class Proposal {
       baseTicketPrice: (data['baseTicketPrice'] ?? 0).toDouble(),
       submittedAt: data['submittedAt'] ?? Timestamp.now(),
     );
-  }
-}
-
-Future<List<Event>> fetchEventsFromFirestore() async {
-  try {
-    QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('events').get();
-
-    if (snapshot.docs.isEmpty) {
-      print("No events found in Firestore.");
-    }
-
-    List<Event> events =
-        snapshot.docs.map((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          print("Fetched Event: $data"); // Debugging
-          return Event.fromFirestore(doc);
-        }).toList();
-
-    print("Total Events: ${events.length}");
-    return events;
-  } catch (e) {
-    print("Error fetching events: $e");
-    return [];
   }
 }
