@@ -6,7 +6,6 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
-import '../../chatbot/chatbot_home_screen.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
