@@ -59,9 +59,7 @@ class Footer extends StatelessWidget {
               // Newsletter Subscription
               Text(
                 "Fuel your passion. Expand your network. Make an impact.",
-                "Fuel your passion. Expand your network. Make an impact.",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
                   fontWeight: FontWeight.bold,
                   fontSize: 26.sp,
                   color: WebsiteColors.primaryBlueColor,
@@ -74,15 +72,7 @@ class Footer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 26.sp,
                   color: WebsiteColors.primaryBlueColor,
-                ),
-              Text(
-                "Join Us Now!",
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26.sp,
-                  color: WebsiteColors.primaryBlueColor,
-                ),
-              ),
+                ),),
 
               SizedBox(height: 20.sp),
 
@@ -110,7 +100,7 @@ class Footer extends StatelessWidget {
                   context,
                 ).textTheme.displayMedium?.copyWith(fontSize: 22.sp),
               ),
-            ],
+          ],
           ),
         ),
       ],
