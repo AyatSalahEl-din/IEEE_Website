@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ieee_website/Home_Screen/url_helper.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Join%20Us/join.dart'; // ✅ Import JoinUs page
 
@@ -58,13 +59,22 @@ class Footer extends StatelessWidget {
               // Newsletter Subscription
               Text(
                 "Fuel your passion. Expand your network. Make an impact.",
+                "Fuel your passion. Expand your network. Make an impact.",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                   fontWeight: FontWeight.bold,
                   fontSize: 26.sp,
                   color: WebsiteColors.primaryBlueColor,
                 ),
               ),
               SizedBox(height: 10.sp),
+              Text(
+                "Join Us Now!",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26.sp,
+                  color: WebsiteColors.primaryBlueColor,
+                ),
               Text(
                 "Join Us Now!",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(

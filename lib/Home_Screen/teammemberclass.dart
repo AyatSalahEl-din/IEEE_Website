@@ -1,108 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ieee_website/Home_Screen/layout_config.dart';
 import 'package:ieee_website/widgets/team_member.dart';
 
 class TeamMember {
-  final String imagePath;
+  final String pic;
   final String name;
-  final String jobTitle;
+  final String position;
+  final int number;
 
   TeamMember({
-    required this.imagePath,
+    required this.pic,
     required this.name,
-    required this.jobTitle,
+    required this.position,
+    required this.number,
   });
+
+  // Convert Firestore document to TeamMember object
+  factory TeamMember.fromFirestore(DocumentSnapshot doc) {
+    var data = doc.data() as Map<String, dynamic>;
+
+    String picUrl = data['pic'] ?? '';
+
+    print("Fetched Image URL: $picUrl");
+
+    return TeamMember(
+      pic: picUrl,
+      name: data['name'] ?? 'Unknown',
+      position: data['position'] ?? 'Member',
+      number: (data['number'] ?? 9999).toInt(),
+    );
+  }
 }
 
 class OurTeamSection extends StatelessWidget {
-  final List<List<TeamMember>> teamGroups = [
-    [
-      TeamMember(
-        imagePath: 'assets/images/hozaifa.png',
-        name: "Hozaifa Mostafa",
-        jobTitle: 'Chairman',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/osama.jpg',
-        name: "Osama Magdy",
-        jobTitle: 'Officer Secretary',
-      ),
-    ],
-    [
-      TeamMember(
-        imagePath: 'assets/images/aosama.png',
-        name: "Ahmed Osama",
-        jobTitle: 'Vice',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/tarek.png',
-        name: "Mohamed Tarek",
-        jobTitle: 'Treasure',
-      ),
-    ],
-    [
-      TeamMember(
-        imagePath: 'assets/images/hana.png',
-        name: "Hana Amin",
-        jobTitle: 'Head of HR',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/mariam.png',
-        name: "Mariem Essam",
-        jobTitle: 'Head of PR',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/zyad.png',
-        name: "Zyad Elattar",
-        jobTitle: 'Head of Publicity',
-      ),
-    ],
-    [
-      TeamMember(
-        imagePath: 'assets/images/omani.png',
-        name: "Mohamed Hossam",
-        jobTitle: 'Head of Technical Section',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/hamshary.png',
-        name: "Esraa Hamshary",
-        jobTitle: 'Head of Robotics Committee',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/esmail.png',
-        name: "Esmail Mohamed",
-        jobTitle: 'Vice of Robotics Committee',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/marchelino.jpg',
-        name: "Marchelino Joseph",
-        jobTitle: 'Head of Security Committee',
-      ),
-    ],
-    [
-      TeamMember(
-        imagePath: 'assets/images/ayat2.jpg',
-        name: "Ayat Salah El-din",
-        jobTitle: 'Head of Web Committee',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/nadia.jpg',
-        name: "Nadia Hossny",
-        jobTitle: 'Vice of Web Committee',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/menna.jpg',
-        name: "Menna Allah Rabei",
-        jobTitle: 'Web Developer',
-      ),
-      TeamMember(
-        imagePath: 'assets/images/shahd.jpg',
-        name: "Shahd Dbian",
-        jobTitle: 'Web Developer',
-      ),
-    ],
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -110,28 +42,80 @@ class OurTeamSection extends StatelessWidget {
         SizedBox(height: 200.sp),
         Text("Meet Our Team", style: Theme.of(context).textTheme.bodyLarge),
         SizedBox(height: 40.sp),
-        ...teamGroups.map(
-          (group) => Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:
-                    group
-                        .map(
-                          (member) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                            child: TeamMemberCard(
-                              imagePath: member.imagePath,
-                              name: member.name,
-                              jobTitle: member.jobTitle,
+
+        // Fetch members from Firestore in real-time, ordered by number (ascending)
+        StreamBuilder(
+          stream:
+              FirebaseFirestore.instance
+                  .collection('teamLayoutConfig')
+                  .doc('rowSizes')
+                  .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> layoutSnapshot) {
+            if (!layoutSnapshot.hasData) {
+              return CircularProgressIndicator();
+            }
+
+            LayoutConfig config = LayoutConfig.fromFirestore(
+              layoutSnapshot.data!,
+            );
+
+            // Now fetch members
+            return StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance
+                      .collection('Members')
+                      .orderBy('number', descending: false)
+                      .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> memberSnapshot) {
+                if (!memberSnapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
+
+                List<TeamMember> members =
+                    memberSnapshot.data!.docs
+                        .map((doc) => TeamMember.fromFirestore(doc))
+                        .toList();
+
+                // Triangle layout with dynamic rows
+                List<List<TeamMember>> pyramidRows = [];
+                int startIndex = 0;
+                for (int size in config.rowSizes) {
+                  if (startIndex >= members.length) break;
+                  int endIndex =
+                      (startIndex + size > members.length)
+                          ? members.length
+                          : startIndex + size;
+                  pyramidRows.add(members.sublist(startIndex, endIndex));
+                  startIndex = endIndex;
+                }
+
+                return Column(
+                  children:
+                      pyramidRows.map((group) {
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children:
+                                  group.map((member) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(10.sp),
+                                      child: TeamMemberCard(
+                                        imagePath: member.pic,
+                                        name: member.name,
+                                        jobTitle: member.position,
+                                      ),
+                                    );
+                                  }).toList(),
                             ),
-                          ),
-                        )
-                        .toList(),
-              ),
-              SizedBox(height: 40.sp),
-            ],
-          ),
+                            SizedBox(height: 20.sp),
+                          ],
+                        );
+                      }).toList(),
+                );
+              },
+            );
+          },
         ),
       ],
     );
