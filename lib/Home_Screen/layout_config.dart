@@ -10,4 +10,6 @@ class LayoutConfig {
     final sizes = List<int>.from(data['sizes']);
     return LayoutConfig(rowSizes: sizes);
   }
+
 }
+

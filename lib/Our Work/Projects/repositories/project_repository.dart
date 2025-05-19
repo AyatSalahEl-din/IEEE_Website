@@ -13,7 +13,7 @@ class FirebaseProjectRepository implements ProjectRepository {
 
   @override
   Future<List<Project>> getProjects({
-    int limit = 6,
+    int limit = 4,
     String? lastProjectId,
   }) async {
     Query query = _firestore
