@@ -62,7 +62,6 @@ class _AboutUsState extends State<AboutUs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WebsiteColors.whiteColor,
       body: _isLoading
           ? Center(
         child: CircularProgressIndicator(
