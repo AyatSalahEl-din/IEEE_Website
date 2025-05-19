@@ -57,56 +57,21 @@ class Footer extends StatelessWidget {
 
               // Newsletter Subscription
               Text(
-                "Subscribe to get our Newsletter",
+                "Fuel your passion. Expand your network. Make an impact.",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                   fontSize: 26.sp,
                   color: WebsiteColors.primaryBlueColor,
                 ),
               ),
               SizedBox(height: 10.sp),
-
-              // ✅ Email Input & Subscribe Button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 400.sp,
-                    height: 100.sp,
-                    padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: WebsiteColors.darkBlueColor),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Your Email',
-                        hintStyle: Theme.of(context).textTheme.displayMedium
-                            ?.copyWith(color: WebsiteColors.primaryBlueColor),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10.sp),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: WebsiteColors.primaryBlueColor,
-                      foregroundColor: WebsiteColors.whiteColor,
-                      fixedSize: Size(190.sp, 50.sp),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 25.sp,
-                        vertical: 15.sp,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.sp),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Handle subscription logic
-                    },
-                    child: Text("Subscribe"),
-                  ),
-                ],
+              Text(
+                "Join Us Now!",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26.sp,
+                  color: WebsiteColors.primaryBlueColor,
+                ),
               ),
 
               SizedBox(height: 20.sp),
@@ -150,10 +115,10 @@ class Footer extends StatelessWidget {
         onTap: () {
           if (text == "Join Us") {
             // ✅ Navigate to Join Us Page Instead of Switching Tabs
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => JoinUs()),
-            );
+            /* Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => JoinUs()),
+                            );*/
           } else if (tabIndex != null) {
             // ✅ Switch Tab Normally
             tabController.animateTo(tabIndex);
