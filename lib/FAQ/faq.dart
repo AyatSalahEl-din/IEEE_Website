@@ -26,6 +26,7 @@ class _FAQState extends State<FAQ> {
     fetchFAQData();
   }
 
+
   Future<void> fetchFAQData() async {
     try {
       QuerySnapshot querySnapshot =
@@ -143,7 +144,7 @@ class _FAQState extends State<FAQ> {
                   ),
                 ),
 
-                // Curve painter positioned at the top
+                // Fixed: Removed const due to non-const painter
                 Positioned(
                   top: 0,
                   left: 0,
@@ -222,3 +223,4 @@ class CurvePainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
+

@@ -11,6 +11,8 @@ import 'package:ieee_website/Our%20Work/Projects/projects.dart';
 import 'package:ieee_website/Themes/my_theme.dart';
 import 'package:ieee_website/Tools&Features/tools.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ieee_website/provider/chat_provider.dart';
+//import 'chatbot/chatbot_home_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
             JoinUs.routeName: (context) =>  JoinUs(),
             Base.routeName: (context) =>  Base(),
             FAQ.routeName: (context) => FAQ(),
-            // WallofHonur.routeName:(context) => WallofHonur()
+            //ChatbotHomeScreen.routeName: (context) => ChatbotHomeScreen(),
           },
         );
       },

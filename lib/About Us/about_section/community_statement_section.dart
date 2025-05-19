@@ -6,7 +6,6 @@ class CommunityStatementSection extends StatelessWidget {
   final AboutDataModel? aboutData;
 
   const CommunityStatementSection({Key? key, this.aboutData}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
