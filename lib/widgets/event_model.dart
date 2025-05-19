@@ -27,7 +27,9 @@ class Event {
   final bool? isTicketLimited; // Whether tickets are limited
   final int? ticketLimit; // Ticket limit if applicable
   final bool? hasBusService; // Whether the event has bus service
-  final bool? isSeatBookingAvailable; // Whether seat booking is available
+  final bool? isSeatBookingAvailable;
+  
+  var id; // Whether seat booking is available
 
   Event({
     required this.id,
@@ -260,15 +262,17 @@ class TicketRequest {
 
     );
   }
+  
+  DateTime? get date => null;
 
   /// ✅ Format date to a readable format
   String formatDate() {
-    return DateFormat('yyyy-MM-dd HH:mm').format(date);
+    return DateFormat('yyyy-MM-dd HH:mm').format(date!);
   }
 }
 
 /// ✅ Fetch events from Firestore
-Future<List<Event>> fetchEventsFromFirestore() async {
+Future<List<Event>> fetchAllEventsFromFirestore() async {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('events').get();
 
@@ -279,7 +283,7 @@ Future<List<Event>> fetchEventsFromFirestore() async {
     List<Event> events = snapshot.docs.map((doc) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       print("Fetched Event: $data"); // Debugging
-      return Event.fromFirestore(data);
+      return Event.fromFirestore(data as DocumentSnapshot<Object?>);
     }).toList();
 
     print("Total Events: ${events.length}");

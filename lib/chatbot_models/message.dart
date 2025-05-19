@@ -2,7 +2,7 @@ class Message {
   String messageId;
   String chatId;
   Role role;
-  String message;
+  StringBuffer message;
   List<String> imagesUrls;
   DateTime timeSent;
 
@@ -22,7 +22,7 @@ class Message {
       'messageId': messageId,
       'chatId': chatId,
       'role': role.index,
-      'message': message,
+      'message': message.toString(),
       'imagesUrls': imagesUrls,
       'timeSent': timeSent.toIso8601String(),
     };
@@ -34,7 +34,7 @@ class Message {
       messageId: map['messageId'],
       chatId: map['chatId'],
       role: Role.values[map['role']],
-      message: map['message'],
+      message: StringBuffer(map['message']),
       imagesUrls: List<String>.from(map['imagesUrls']),
       timeSent: DateTime.parse(map['timeSent']),
     );
@@ -45,7 +45,7 @@ class Message {
     String? messageId,
     String? chatId,
     Role? role,
-    String? message,
+    StringBuffer? message,
     List<String>? imagesUrls,
     DateTime? timeSent,
   }) {

@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+
 part 'chat_history.g.dart';
 
 @HiveType(typeId: 0)

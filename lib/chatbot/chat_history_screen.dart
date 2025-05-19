@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
+
 import '../chatbot_widgets/chat_history_widget.dart';
 import '../chatbot_widgets/empty_history_widget.dart';
 import '../hive/boxes.dart';

@@ -121,7 +121,11 @@ class _EventBookingPageState extends State<EventBookingPage> {
     }
 
     try {
+      // Generate a unique order number
+      final orderNumber = DateTime.now().millisecondsSinceEpoch.toString();
+
       final bookingData = {
+        'orderNumber': orderNumber, // Add order number to the request
         'userName': _userNameController.text.trim(),
         'userEmail': _userEmailController.text.trim(),
         'userPhone': _userPhoneController.text.trim(),
@@ -138,14 +142,24 @@ class _EventBookingPageState extends State<EventBookingPage> {
       await FirebaseFirestore.instance.collection('requests').add(bookingData);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Booking request sent successfully!')),
+        SnackBar(
+          content: Text(
+            'Booking request sent successfully! Order Number: $orderNumber',
+          ),
+        ),
       );
+
+      // Show confirmation dialog with order number
+      _showOrderConfirmationDialog(orderNumber);
+
+      // Send WhatsApp message with order number
+      _sendWhatsAppMessage(_selectedEvent!, orderNumber);
     } catch (e) {
       _showError('Failed to send booking request: $e');
     }
   }
 
-  Future<void> _sendWhatsAppMessage(Event event) async {
+  Future<void> _sendWhatsAppMessage(Event event, String orderNumber) async {
     final message = '''
 Hello, I would like to confirm my booking for the following event:
 
@@ -156,6 +170,7 @@ Event Details:
 - Time: ${event.time}
 
 Booking Details:
+- Order Number: $orderNumber
 - Name: ${_userNameController.text}
 - Email: ${_userEmailController.text}
 - Phone: ${_userPhoneController.text}
@@ -181,6 +196,45 @@ Please let me know the next steps for payment.
     }
   }
 
+  void _showOrderConfirmationDialog(String orderNumber) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            title: const Text(
+              'Booking Confirmed',
+              style: TextStyle(
+                color: WebsiteColors.primaryBlueColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              'Your booking request has been successfully submitted.\n\nOrder Number: $orderNumber\n\nPlease save this order number for future reference.',
+              style: TextStyle(
+                color: WebsiteColors.darkBlueColor,
+                fontSize: 16,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                style: TextButton.styleFrom(
+                  foregroundColor: WebsiteColors.primaryBlueColor,
+                ),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+
   void _confirmBooking() {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedEvent == null) {
@@ -201,24 +255,50 @@ Please let me know the next steps for payment.
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Confirm Attendance'),
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            title: const Text(
+              'Confirm Attendance',
+              style: TextStyle(
+                color: WebsiteColors.primaryBlueColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             content: Text(
               'You are about to confirm your attendance for the online event "${event.name}".\n\n'
               'App: ${event.appName ?? "Not provided"}\n'
               'URL: ${event.appUrl ?? "Not provided"}\n'
               'Time: ${event.appTime ?? "Not provided"}',
+              style: TextStyle(
+                color: WebsiteColors.darkBlueColor,
+                fontSize: 16,
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
+                style: TextButton.styleFrom(
+                  foregroundColor: WebsiteColors.primaryBlueColor,
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   _sendAttendanceConfirmation(event);
                 },
-                child: const Text('Confirm'),
+                style: TextButton.styleFrom(
+                  foregroundColor: WebsiteColors.primaryBlueColor,
+                ),
+                child: const Text(
+                  'Confirm',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -241,6 +321,8 @@ Please let me know the next steps for payment.
       );
       return;
     }
+
+    final orderNumber = DateTime.now().millisecondsSinceEpoch.toString();
 
     showDialog(
       context: context,
@@ -328,6 +410,12 @@ Please let me know the next steps for payment.
                     ),
                   ),
                   Text(
+                    'Order Number: $orderNumber',
+                    style: defaultTextStyle.copyWith(
+                      color: WebsiteColors.primaryBlueColor,
+                    ),
+                  ),
+                  Text(
                     'Number of Tickets: $_numberOfTickets',
                     style: defaultTextStyle.copyWith(
                       color: WebsiteColors.primaryBlueColor,
@@ -388,7 +476,6 @@ Please let me know the next steps for payment.
                 onPressed: () {
                   Navigator.of(context).pop();
                   _sendBookingRequest();
-                  _launchWhatsApp(event);
                 },
                 style: TextButton.styleFrom(
                   foregroundColor: WebsiteColors.primaryBlueColor,
@@ -464,6 +551,34 @@ Please confirm the payment method and next steps.
       );
     } catch (e) {
       _showError('Failed to confirm attendance: $e');
+    }
+  }
+
+  Future<void> _showDatePicker(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: WebsiteColors.primaryBlueColor,
+            colorScheme: ColorScheme.light(
+              primary: WebsiteColors.primaryBlueColor,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: WebsiteColors.darkBlueColor,
+            ),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (selectedDate != null) {
+      // Handle the selected date
     }
   }
 

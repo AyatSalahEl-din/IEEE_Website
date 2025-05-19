@@ -5,6 +5,7 @@ import 'package:ieee_website/Widgets/footer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class Contact extends StatefulWidget {
   static const String routeName = 'contact';
   final TabController? tabController;
@@ -12,6 +13,7 @@ class Contact extends StatefulWidget {
 
   @override
   State<Contact> createState() => _ContactState();
+
 }
 
 class _ContactState extends State<Contact> {
@@ -21,46 +23,18 @@ class _ContactState extends State<Contact> {
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
 
-  Map<String, dynamic>? contactData;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchContactData();
-  }
-
-  Future<void> _fetchContactData() async {
-    final doc = await FirebaseFirestore.instance.collection('contact_page').doc('content').get();
-    if (doc.exists) {
-      setState(() {
-        contactData = doc.data();
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     bool isSmallScreen = screenWidth < 800;
 
-    if (contactData == null) {
-      return Scaffold(
-        backgroundColor: WebsiteColors.whiteColor,
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    List<dynamic> emails = contactData?['emails'] ?? [];
-    Map<String, dynamic> socialLinks = Map<String, dynamic>.from(contactData?['socialLinks'] ?? {});
-    String address = contactData?['address'] ?? '';
-    String headerTitle = contactData?['headerTitle'] ?? '';
-    String headerDescription = contactData?['headerDescription'] ?? '';
-
     return Scaffold(
       backgroundColor: WebsiteColors.whiteColor,
+      // Wrap the main Column with SingleChildScrollView to make it scrollable
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // 1. Header section directly under navbar
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 80),
@@ -71,7 +45,7 @@ class _ContactState extends State<Contact> {
                 child: Column(
                   children: [
                     Text(
-                      headerTitle,
+                      "Contact Us",
                       style: TextStyle(
                         color: WebsiteColors.whiteColor,
                         fontSize: 28,
@@ -82,7 +56,7 @@ class _ContactState extends State<Contact> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5),
                       child: Text(
-                        headerDescription,
+                        "Fill up the form and our Team will get back to you",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: WebsiteColors.whiteColor,
@@ -94,8 +68,7 @@ class _ContactState extends State<Contact> {
                 ),
               ),
             ),
-
-            // Contact Form
+            // Contact Form - Reduced size
             Container(
               constraints: BoxConstraints(maxWidth: 800),
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -115,8 +88,14 @@ class _ContactState extends State<Contact> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    isSmallScreen ? _buildMobileFormFields() : _buildDesktopFormFields(),
+                    // Form fields
+                    isSmallScreen
+                        ? _buildMobileFormFields()
+                        : _buildDesktopFormFields(),
+
                     SizedBox(height: 25),
+
+                    // Send button
                     SizedBox(
                       width: double.infinity,
                       height: 45,
@@ -131,7 +110,10 @@ class _ContactState extends State<Contact> {
                         onPressed: () => _handleMessageSubmit(),
                         child: Text(
                           "Send Message",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -140,7 +122,7 @@ class _ContactState extends State<Contact> {
               ),
             ),
 
-            // Contact Info
+            // Contact Information Section
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
@@ -150,20 +132,25 @@ class _ContactState extends State<Contact> {
                   constraints: BoxConstraints(maxWidth: 800),
                   child: Column(
                     children: [
+                      // Address
                       Row(
                         children: [
                           Icon(Icons.location_on, color: WebsiteColors.primaryBlueColor),
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              address,
-                              style: TextStyle(fontSize: 16, color: Colors.black87),
+                              "Pharos University in Alexandria (PUA)",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 15),
 
+                      // Emails with clickable links
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -173,26 +160,37 @@ class _ContactState extends State<Contact> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Email:", style: TextStyle(fontSize: 16, color: Colors.black87)),
+                                Text(
+                                  "Email:",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                                 SizedBox(height: 5),
-                                ...emails.asMap().entries.map((entry) {
-                                  int index = entry.key;
-                                  String email = entry.value;
-                                  return Padding(
-                                    padding: EdgeInsets.only(bottom: 3),
-                                    child: InkWell(
-                                      onTap: () => _launchEmail(email),
-                                      child: Text(
-                                        "${index + 1}. $email",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: WebsiteColors.primaryBlueColor,
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                      ),
+                                InkWell(
+                                  onTap: () => _launchEmail("pua-ieee-sb@pua.edu.eg"),
+                                  child: Text(
+                                    "1. pua-ieee-sb@pua.edu.eg",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: WebsiteColors.primaryBlueColor,
+                                      decoration: TextDecoration.underline,
                                     ),
-                                  );
-                                }).toList(),
+                                  ),
+                                ),
+                                SizedBox(height: 3),
+                                InkWell(
+                                  onTap: () => _launchEmail("ieee.pua.sb.pr@gmail.com"),
+                                  child: Text(
+                                    "2. ieee.pua.sb.pr@gmail.com",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: WebsiteColors.primaryBlueColor,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -200,6 +198,7 @@ class _ContactState extends State<Contact> {
                       ),
                       SizedBox(height: 15),
 
+                      // Social Media - Now showing icons instead of links
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -209,15 +208,22 @@ class _ContactState extends State<Contact> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Social Media:", style: TextStyle(fontSize: 16, color: Colors.black87)),
+                                Text(
+                                  "Social Media:",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                ),
                                 SizedBox(height: 8),
+                                // Social media icons in a row
                                 Row(
                                   children: [
-                                    _buildSocialIcon(socialLinks['facebook']),
+                                    _buildSocialIcon(0, FontAwesomeIcons.facebook),
                                     SizedBox(width: 15),
-                                    _buildSocialIcon(socialLinks['linkedin']),
+                                    _buildSocialIcon(1, FontAwesomeIcons.linkedin),
                                     SizedBox(width: 15),
-                                    _buildSocialIcon(socialLinks['instagram']),
+                                    _buildSocialIcon(2, FontAwesomeIcons.instagram),
                                   ],
                                 ),
                               ],
@@ -231,6 +237,7 @@ class _ContactState extends State<Contact> {
               ),
             ),
 
+            // Footer
             if (widget.tabController != null)
               Container(
                 width: double.infinity,
@@ -280,14 +287,30 @@ class _ContactState extends State<Contact> {
     return TextField(
       controller: controller,
       maxLines: maxLines,
-      style: TextStyle(fontSize: 14, color: Colors.black87),
+      style: TextStyle(
+        fontSize: 14,
+        color: Colors.black87,
+      ),
       decoration: InputDecoration(
         hintText: placeholder,
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+        hintStyle: TextStyle(
+          color: Colors.grey.shade400,
+          fontSize: 14,
+        ),
         filled: true,
         fillColor: Colors.grey.shade100,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: maxLines > 1 ? 16 : 12),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: maxLines > 1 ? 16 : 12,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: WebsiteColors.primaryBlueColor, width: 1),
@@ -295,35 +318,49 @@ class _ContactState extends State<Contact> {
       ),
     );
   }
-
-  Widget _buildSocialIcon(String? url) {
-    if (url == null || url.isEmpty) return SizedBox();
-    IconData icon;
-    if (url.contains('facebook')) {
-      icon = FontAwesomeIcons.facebook;
-    } else if (url.contains('linkedin')) {
-      icon = FontAwesomeIcons.linkedin;
-    } else if (url.contains('instagram')) {
-      icon = FontAwesomeIcons.instagram;
-    } else {
-      icon = FontAwesomeIcons.globe;
-    }
-
+  // Simple social icon button
+  Widget _buildSocialIcon(int index, IconData icon) {
     return InkWell(
-      onTap: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+      onTap: () => _launchSocialMedia(index),
       child: Container(
         padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(color: WebsiteColors.primaryBlueColor, shape: BoxShape.circle),
-        child: FaIcon(icon, color: WebsiteColors.whiteColor, size: 18),
+        decoration: BoxDecoration(
+          color: WebsiteColors.primaryBlueColor,
+          shape: BoxShape.circle,
+        ),
+        child: FaIcon(
+          icon,
+          color: WebsiteColors.whiteColor,
+          size: 18,
+        ),
       ),
     );
   }
 
+  void _launchSocialMedia(int index) async {
+    final urls = [
+      'https://www.facebook.com/share/1YKyPBgRVK',
+      'https://www.linkedin.com/company/ieee-pua-student-branch/',
+      'https://www.instagram.com/ieeepua?igsh=MWVla2RzbmJkNTZ5MQ==',
+    ];
+
+    if (index >= 0 && index < urls.length) {
+      final url = Uri.parse(urls[index]);
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  // Email launching function
   void _launchEmail(String email) async {
-    final Uri emailUri = Uri(scheme: 'mailto', path: email);
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: email,
+    );
+
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);
     } else {
+      // Handle case where email app can't be launched
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Could not launch email app'),
@@ -332,7 +369,6 @@ class _ContactState extends State<Contact> {
       );
     }
   }
-
   void _handleMessageSubmit() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
@@ -358,6 +394,7 @@ class _ContactState extends State<Contact> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
+      // Clear fields
       _nameController.clear();
       _emailController.clear();
       _subjectController.clear();
