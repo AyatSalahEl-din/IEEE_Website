@@ -6,6 +6,7 @@ import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
+import '../../chatbot/chatbot_home_screen.dart';
 import '../../widgets/filter_chip_widget.dart';
 
 class Events extends StatefulWidget {
@@ -19,9 +20,13 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-  String searchText = ''; // State for search text
-  String selectedFilter = 'All'; // State for selected filter
+
+  
   bool isHovered = false;
+
+  String searchText = '';
+  String selectedFilter = 'All';
+  bool isChatOpen = false;
 
   void _launchURL() async {
     final Uri url = Uri.parse(
@@ -31,6 +36,15 @@ class _EventsState extends State<Events> {
       throw Exception("Could not launch $url");
     }
   }
+
+  // Function to toggle chat visibility
+  void _toggleChat() {
+    setState(() {
+      isChatOpen = !isChatOpen;
+    });
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
