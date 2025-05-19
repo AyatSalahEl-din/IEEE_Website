@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_website/Themes/website_colors.dart';
-import 'package:ieee_website/Widgets/footer.dart';
 import '../FAQ/faq_item_widget.dart';
 import '../FAQ/faq_item_model.dart';
+import 'package:ieee_website/Themes/website_colors.dart';
+import 'package:ieee_website/Widgets/footer.dart';
 
 class FAQ extends StatefulWidget {
   static const String routeName = 'faq';
   final TabController? tabController;
-
   const FAQ({Key? key, this.tabController}) : super(key: key);
 
   @override
@@ -26,17 +25,20 @@ class _FAQState extends State<FAQ> {
     fetchFAQData();
   }
 
-
   Future<void> fetchFAQData() async {
     try {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('faq').get();
 
+      print("Number of FAQs: ${querySnapshot.docs.length}");
+
       setState(() {
-        faqItems = querySnapshot.docs.map((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          return FAQItemModel.fromFirestore(data);
-        }).toList();
+        faqItems =
+            querySnapshot.docs.map((doc) {
+              Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+              print("Fetching FAQ data: $data");
+              return FAQItemModel.fromFirestore(data);
+            }).toList();
         isLoading = false;
       });
     } catch (e) {
@@ -92,59 +94,63 @@ class _FAQState extends State<FAQ> {
                           horizontal: 24,
                           vertical: 24,
                         ),
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : hasError
+                        child:
+                            isLoading
                                 ? const Center(
-                                    child: Text(
-                                      "An error occurred while loading data",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 16,
-                                      ),
+                                  child: CircularProgressIndicator(),
+                                )
+                                : hasError
+                                ? const Center(
+                                  child: Text(
+                                    "An error occurred while loading data",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 16,
                                     ),
-                                  )
+                                  ),
+                                )
                                 : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ...faqItems.map(
-                                        (item) => Container(
-                                          margin: const EdgeInsets.only(
-                                            bottom: 16,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ...faqItems.map(
+                                      (item) => Container(
+                                        margin: const EdgeInsets.only(
+                                          bottom: 16,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withOpacity(0.05),
-                                                blurRadius: 10,
-                                                offset: const Offset(0, 2),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(
+                                                0.05,
                                               ),
-                                            ],
-                                          ),
-                                          child: FAQItemWidget(
-                                            item: item,
-                                            onExpansionChanged: (expanded) {
-                                              setState(() {
-                                                item.isExpanded = expanded;
-                                              });
-                                            },
-                                          ),
+                                              blurRadius: 10,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: FAQItemWidget(
+                                          item: item,
+                                          onExpansionChanged: (expanded) {
+                                            setState(() {
+                                              item.isExpanded = expanded;
+                                            });
+                                          },
                                         ),
                                       ),
-                                      const SizedBox(height: 36),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(height: 36),
+                                  ],
+                                ),
                       ),
                     ),
                   ),
                 ),
 
-                // Fixed: Removed const due to non-const painter
+                // Curve painter positioned at the top
                 Positioned(
                   top: 0,
                   left: 0,
@@ -169,13 +175,13 @@ class _FAQState extends State<FAQ> {
       children: [
         RichText(
           textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(
+          text: TextSpan(
+            style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
-            children: [TextSpan(text: "FAQ")],
+            children: [const TextSpan(text: "FAQ")],
           ),
         ),
         const SizedBox(height: 12),
@@ -223,4 +229,3 @@ class CurvePainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
-

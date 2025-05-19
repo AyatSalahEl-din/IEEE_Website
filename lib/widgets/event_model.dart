@@ -7,12 +7,9 @@ class Event {
   final String time;
   final List<String> imageUrls;
 
-
   final String month;
   final DateTime date;
   final String category;
-  // final String hostName;
-  // final String hostedBy;
   // final String hostName;
   // final String hostedBy;
   final String details;
@@ -262,7 +259,6 @@ class TicketRequest {
       rejectReason: data['rejectReason'],
       notes: data['notes'],
       eventDate: data['eventDate'],
-
 
     );
   }

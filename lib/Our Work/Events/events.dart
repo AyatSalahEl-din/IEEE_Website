@@ -19,13 +19,9 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-
-  
+  String searchText = ''; // State for search text
+  String selectedFilter = 'All'; // State for selected filter
   bool isHovered = false;
-
-  String searchText = '';
-  String selectedFilter = 'All';
-  bool isChatOpen = false;
 
   void _launchURL() async {
     final Uri url = Uri.parse(
@@ -35,15 +31,6 @@ class _EventsState extends State<Events> {
       throw Exception("Could not launch $url");
     }
   }
-
-  // Function to toggle chat visibility
-  void _toggleChat() {
-    setState(() {
-      isChatOpen = !isChatOpen;
-    });
-  }
-
-  
 
   @override
   Widget build(BuildContext context) {
