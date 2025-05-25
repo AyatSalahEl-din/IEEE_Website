@@ -7,6 +7,10 @@ import Foundation
 
 import cloud_firestore
 import file_selector_macos
+<<<<<<< HEAD
+=======
+import firebase_analytics
+>>>>>>> 0b4e29e2b3ddc6cff32b8e0e77640c11c8ad41fd
 import firebase_core
 import firebase_storage
 import google_sign_in_ios
@@ -18,6 +22,10 @@ import video_player_avfoundation
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
   FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
+<<<<<<< HEAD
+=======
+  FLTFirebaseAnalyticsPlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseAnalyticsPlugin"))
+>>>>>>> 0b4e29e2b3ddc6cff32b8e0e77640c11c8ad41fd
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
   FLTFirebaseStoragePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseStoragePlugin"))
   FLTGoogleSignInPlugin.register(with: registry.registrar(forPlugin: "FLTGoogleSignInPlugin"))

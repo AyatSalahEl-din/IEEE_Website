@@ -15,10 +15,7 @@ class ProjectDetailsPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            _buildHeader(context),
-            _buildContent(context),
-          ],
+          children: [_buildHeader(context), _buildContent(context)],
         ),
       ),
     );
@@ -40,33 +37,30 @@ class ProjectDetailsPage extends StatelessWidget {
             SizedBox(height: 20.sp),
             Text(
               project.title,
-              style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                color: Colors.white,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.displaySmall!.copyWith(color: Colors.white),
             ),
             SizedBox(height: 20.sp),
-            Row(
-              children: [
-                Text(
-                  "Made By: ${project.madeBy}",
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Colors.white.withOpacity(0.9),
-                  ),
-                ),
-                SizedBox(width: 40.sp),
-                Text(
-                  DateFormat('dd MMMM yyyy').format(project.date),
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ],
+            Text(
+              "Made By: ${project.madeBy}",
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.white.withOpacity(0.9),
+              ),
+            ),
+            SizedBox(height: 10.sp),
+            Text(
+              DateFormat('dd MMMM yyyy').format(project.date),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.white.withOpacity(0.8),
+              ),
             ),
             SizedBox(height: 20.sp),
             Wrap(
               spacing: 10.sp,
               runSpacing: 10.sp,
-              children: project.tags.map((tag) => _buildTag(context, tag)).toList(),
+              children:
+                  project.tags.map((tag) => _buildTag(context, tag)).toList(),
             ),
           ],
         ),
@@ -84,22 +78,75 @@ class ProjectDetailsPage extends StatelessWidget {
           Text(
             "Project Description",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: WebsiteColors.primaryBlueColor,fontSize: 40.sp
+              color: WebsiteColors.primaryBlueColor,
+              fontSize: 40.sp,
             ),
           ),
           SizedBox(height: 20.sp),
           Text(
             project.description,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 24.sp,color: WebsiteColors.darkBlueColor,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              fontSize: 24.sp,
+              color: WebsiteColors.darkBlueColor,
               height: 1.8,
             ),
           ),
-          if (project.additionalDetails != null) ...[
+          if (project.imageUrls != null && project.imageUrls!.isNotEmpty) ...[
+            SizedBox(height: 40.sp),
+            Text(
+              "Images",
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: WebsiteColors.primaryBlueColor,
+                fontSize: 40.sp,
+              ),
+            ),
+            SizedBox(height: 20.sp),
+            SizedBox(
+              height: 400.sp,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: project.imageUrls!.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 20.sp),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => Dialog(
+                                child: InteractiveViewer(
+                                  child: Image.network(
+                                    project.imageUrls![index],
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.sp),
+                        child: Image.network(
+                          project.imageUrls![index],
+                          fit: BoxFit.cover,
+                          width: 400.sp,
+                          height: 400.sp,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+          if (project.additionalDetails != null &&
+              project.additionalDetails!.isNotEmpty) ...[
             SizedBox(height: 40.sp),
             Text(
               "Additional Details",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: WebsiteColors.primaryBlueColor,fontSize: 40.sp
+                color: WebsiteColors.primaryBlueColor,
+                fontSize: 40.sp,
               ),
             ),
             SizedBox(height: 20.sp),
@@ -123,23 +170,6 @@ class ProjectDetailsPage extends StatelessWidget {
               ),
             ),
           ],
-          SizedBox(height: 40.sp),
-          Container(
-            width: double.infinity,
-            height: 400.sp,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(20.sp),
-            ),
-            child: Center(
-              child: Text(
-                "Project Images Coming Soon",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Colors.grey[600],
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -154,9 +184,9 @@ class ProjectDetailsPage extends StatelessWidget {
       ),
       child: Text(
         tag,
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          color: Colors.white,fontSize: 18.sp
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.bodyMedium!.copyWith(color: Colors.white, fontSize: 18.sp),
       ),
     );
   }

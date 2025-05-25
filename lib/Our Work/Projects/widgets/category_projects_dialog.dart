@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ieee_website/Our Work/Projects/pages/project_details_page.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import '../models/project_model.dart';
-import '../pages/project_details_page.dart';
 
-class CategoryProjectsDialog extends StatelessWidget {
+class CategoryProjectsDialog extends StatefulWidget {
   final String category;
   final List<Project> projects;
 
@@ -13,6 +13,14 @@ class CategoryProjectsDialog extends StatelessWidget {
     required this.category,
     required this.projects,
   }) : super(key: key);
+
+  @override
+  State<CategoryProjectsDialog> createState() => _CategoryProjectsDialogState();
+}
+
+class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
+  int? _hoveredIndex;
+  int? _clickedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +40,13 @@ class CategoryProjectsDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '$category Projects',
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+              "Projects in ${widget.category}",
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,fontSize: 40.sp
                   ),
-                ),
-                IconButton(
+            ),
+            IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: Icon(Icons.close),
                 ),
@@ -51,63 +59,139 @@ class CategoryProjectsDialog extends StatelessWidget {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: projects.length,
+                itemCount: widget.projects.length,
                 itemBuilder: (context, index) {
-                  final project = projects[index];
-                  return InkWell(
-                    onTap: () {
-                      Navigator.pop(context); // Close dialog
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProjectDetailsPage(
-                            project: project,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 20.sp),
-                      padding: EdgeInsets.all(20.sp),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(10.sp),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 100.sp,
-                            height: 100.sp,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10.sp),
+                  final project = widget.projects[index];
+                  final isHovered = _hoveredIndex == index;
+                  final isClicked = _clickedIndex == index;
+
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 20.sp),
+                    child: MouseRegion(
+                      onEnter: (_) {
+                        setState(() {
+                          _hoveredIndex = index;
+                        });
+                      },
+                      onExit: (_) {
+                        setState(() {
+                          _hoveredIndex = null;
+                        });
+                      },
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _clickedIndex = index;
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProjectDetailsPage(
+                                project: project,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 20.sp),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  project.title,
-                                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color:WebsiteColors.darkBlueColor,
-                                    fontWeight: FontWeight.bold,fontSize:36.sp
-                                  ),
+                          ).then((_) {
+                            setState(() {
+                              _clickedIndex = null;
+                            });
+                          });
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp),
+                            boxShadow: [
+                              if (isHovered || isClicked)
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.5),
+                                  blurRadius: 15,
+                                  spreadRadius: 5,
                                 ),
-                                SizedBox(height: 10.sp),
-                                Text(
-                                  project.description,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color:WebsiteColors.darkGreyColor,
-                                    fontSize: 25.sp,fontWeight:FontWeight.normal
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10,
+                                offset: Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(15.sp),
+                            child: Row(
+                              children: [
+                                if (project.imageUrls != null &&
+                                    project.imageUrls!.isNotEmpty)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.sp),
+                                    child: Image.network(
+                                      project.imageUrls!.first,
+                                      width: 100.sp,
+                                      height: 100.sp,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                else
+                                  Container(
+                                    width: 100.sp,
+                                    height: 100.sp,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(10.sp),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "No Image",
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 14.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                SizedBox(width: 15.sp),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        project.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                      ),
+                                      SizedBox(height: 5.sp),
+                                      Text(
+                                        project.description,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Colors.grey[700],
+                                            ),
+                                      ),
+                                      SizedBox(height: 5.sp),
+                                      Text(
+                                        "Date: ${project.date.toLocal()}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Colors.grey[600],
+                                            ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios, size: 16.sp),
-                        ],
+                        ),
                       ),
                     ),
                   );

@@ -176,3 +176,4 @@ class _EventsCardState extends State<EventsCard> {
         : Icon(Icons.broken_image, size: 50.sp, color: Colors.grey);
   }
 }
+
