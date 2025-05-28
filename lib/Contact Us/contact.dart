@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Widgets/footer.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class Contact extends StatefulWidget {
   static const String routeName = 'contact';
@@ -13,7 +12,6 @@ class Contact extends StatefulWidget {
 
   @override
   State<Contact> createState() => _ContactState();
-
 }
 
 class _ContactState extends State<Contact> {
@@ -135,7 +133,8 @@ class _ContactState extends State<Contact> {
                       // Address
                       Row(
                         children: [
-                          Icon(Icons.location_on, color: WebsiteColors.primaryBlueColor),
+                          Icon(Icons.location_on,
+                              color: WebsiteColors.primaryBlueColor),
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
@@ -154,7 +153,8 @@ class _ContactState extends State<Contact> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.email, color: WebsiteColors.primaryBlueColor),
+                          Icon(Icons.email,
+                              color: WebsiteColors.primaryBlueColor),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -169,7 +169,8 @@ class _ContactState extends State<Contact> {
                                 ),
                                 SizedBox(height: 5),
                                 InkWell(
-                                  onTap: () => _launchEmail("pua-ieee-sb@pua.edu.eg"),
+                                  onTap: () =>
+                                      _launchEmail("pua-ieee-sb@pua.edu.eg"),
                                   child: Text(
                                     "1. pua-ieee-sb@pua.edu.eg",
                                     style: TextStyle(
@@ -181,7 +182,8 @@ class _ContactState extends State<Contact> {
                                 ),
                                 SizedBox(height: 3),
                                 InkWell(
-                                  onTap: () => _launchEmail("ieee.pua.sb.pr@gmail.com"),
+                                  onTap: () =>
+                                      _launchEmail("ieee.pua.sb.pr@gmail.com"),
                                   child: Text(
                                     "2. ieee.pua.sb.pr@gmail.com",
                                     style: TextStyle(
@@ -202,7 +204,8 @@ class _ContactState extends State<Contact> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.public, color: WebsiteColors.primaryBlueColor),
+                          Icon(Icons.public,
+                              color: WebsiteColors.primaryBlueColor),
                           SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -219,11 +222,14 @@ class _ContactState extends State<Contact> {
                                 // Social media icons in a row
                                 Row(
                                   children: [
-                                    _buildSocialIcon(0, FontAwesomeIcons.facebook),
+                                    _buildSocialIcon(
+                                        0, FontAwesomeIcons.facebook),
                                     SizedBox(width: 15),
-                                    _buildSocialIcon(1, FontAwesomeIcons.linkedin),
+                                    _buildSocialIcon(
+                                        1, FontAwesomeIcons.linkedin),
                                     SizedBox(width: 15),
-                                    _buildSocialIcon(2, FontAwesomeIcons.instagram),
+                                    _buildSocialIcon(
+                                        2, FontAwesomeIcons.instagram),
                                   ],
                                 ),
                               ],
@@ -272,7 +278,8 @@ class _ContactState extends State<Contact> {
           children: [
             Expanded(child: _buildInputField("Full Name", _nameController)),
             SizedBox(width: 15),
-            Expanded(child: _buildInputField("Email Address", _emailController)),
+            Expanded(
+                child: _buildInputField("Email Address", _emailController)),
           ],
         ),
         SizedBox(height: 15),
@@ -283,7 +290,8 @@ class _ContactState extends State<Contact> {
     );
   }
 
-  Widget _buildInputField(String placeholder, TextEditingController controller, {int maxLines = 1}) {
+  Widget _buildInputField(String placeholder, TextEditingController controller,
+      {int maxLines = 1}) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
@@ -313,11 +321,13 @@ class _ContactState extends State<Contact> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: WebsiteColors.primaryBlueColor, width: 1),
+          borderSide:
+              BorderSide(color: WebsiteColors.primaryBlueColor, width: 1),
         ),
       ),
     );
   }
+
   // Simple social icon button
   Widget _buildSocialIcon(int index, IconData icon) {
     return InkWell(
@@ -369,6 +379,7 @@ class _ContactState extends State<Contact> {
       );
     }
   }
+
   void _handleMessageSubmit() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
