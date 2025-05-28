@@ -13,17 +13,22 @@ class EventProposalScreen extends StatefulWidget {
 class _EventProposalScreenState extends State<EventProposalScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _eventNameController = TextEditingController();
-  final TextEditingController _organizerNameController = TextEditingController();
+  final TextEditingController _organizerNameController =
+      TextEditingController();
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _eventDescriptionController = TextEditingController();
-  final TextEditingController _expectedAttendeesController = TextEditingController();
+  final TextEditingController _eventDescriptionController =
+      TextEditingController();
+  final TextEditingController _expectedAttendeesController =
+      TextEditingController();
   final TextEditingController _proposedDateController = TextEditingController();
-  final TextEditingController _proposedLocationController = TextEditingController();
+  final TextEditingController _proposedLocationController =
+      TextEditingController();
   final TextEditingController _ieeeBenefitsController = TextEditingController();
-  final TextEditingController _additionalNotesController = TextEditingController();
-  
+  final TextEditingController _additionalNotesController =
+      TextEditingController();
+
   bool _isLoading = false;
 
   @override
@@ -45,16 +50,16 @@ class _EventProposalScreenState extends State<EventProposalScreen> {
   Future<void> _submitProposal() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      
+
       // Here you would typically send the proposal to your backend
       try {
         // Simulate API call
         await Future.delayed(const Duration(seconds: 2));
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Proposal submitted successfully!')),
         );
-        
+
         // Clear form after submission
         _formKey.currentState!.reset();
       } catch (e) {
@@ -93,3 +98,5 @@ class _EventProposalScreenState extends State<EventProposalScreen> {
     );
   }
 }
+
+// Ensure all sizes have .sp applied

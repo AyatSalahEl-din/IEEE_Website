@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Tools&Features/proposal.dart'; // Import the Event Proposal page
-import 'package:ieee_website/Tools&Features/ai.dart';
 import 'package:ieee_website/widgets/coming_soon_widget.dart'; // Import the AI Tool page
+import 'package:ieee_website/widgets/footer.dart';
 
 class Tools extends StatelessWidget {
   static const String routeName = 'tools';
@@ -21,7 +21,10 @@ class Tools extends StatelessWidget {
           'Our Tools & Features',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 24.sp,
+            fontSize:
+                MediaQuery.of(context).size.width > 600
+                    ? 24.sp
+                    : 18.sp, // Responsive font size
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -30,15 +33,27 @@ class Tools extends StatelessWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20.sp, horizontal: 16.sp),
-        child: _buildToolsContent(context), // Pass context here
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical:
+                    MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+                horizontal:
+                    MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+              ),
+              child: _buildToolsContent(context),
+            ),
+            if (tabController != null)
+              Footer(tabController: tabController!), // Footer at the bottom
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildToolsContent(BuildContext context) {
-    // Replace with actual logic to check availability
-    bool noToolsAvailable = _checkToolsAvailability();
+    bool noToolsAvailable = _checkToolsAvailability(context);
 
     if (noToolsAvailable) {
       return ComingSoonWidget(message: "No tools or features available yet!");
@@ -51,23 +66,36 @@ class Tools extends StatelessWidget {
           child: Text(
             'Explore Our Tools',
             style: TextStyle(
-              fontSize: 28.sp,
+              fontSize:
+                  MediaQuery.of(context).size.width > 600
+                      ? 28.sp
+                      : 20.sp, // Responsive font size
               fontWeight: FontWeight.bold,
               color: WebsiteColors.darkBlueColor,
             ),
           ),
         ),
-        SizedBox(height: 20.sp),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+        ),
         Text(
           'Discover the tools and features we offer to enhance your experience. Stay tuned for more exciting updates!',
-          style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
+          style: TextStyle(
+            fontSize:
+                MediaQuery.of(context).size.width > 600
+                    ? 16.sp
+                    : 12.sp, // Responsive font size
+            color: Colors.grey[600],
+          ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 30.sp),
-
-        // Tools Section
-        _buildSectionTitle('Available Tools'),
-        SizedBox(height: 16.sp),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 30.sp : 15.sp,
+        ),
+        _buildSectionTitle(context, 'Available Tools'),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+        ),
         _buildToolCard(
           context: context,
           icon: FontAwesomeIcons.calendarCheck,
@@ -101,24 +129,11 @@ class Tools extends StatelessWidget {
             );
           },
         ),
-        _buildToolCard(
-          context: context,
-          icon: FontAwesomeIcons.robot,
-          title: 'AI Tool',
-          description: 'Leverage AI to enhance your productivity.',
-          color: Colors.green,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AIToolPage()),
-            );
-          },
-        ),
-        SizedBox(height: 30.sp),
 
-        // Upcoming Features Section
-        _buildSectionTitle('Upcoming Features'),
-        SizedBox(height: 16.sp),
+        _buildSectionTitle(context, 'Upcoming Features'),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+        ),
         _buildToolCard(
           context: context,
           icon: FontAwesomeIcons.mobileAlt,
@@ -132,6 +147,24 @@ class Tools extends StatelessWidget {
                 builder:
                     (context) => const ComingSoonWidget(
                       message: "Mobile App is coming soon!",
+                    ),
+              ),
+            );
+          },
+        ),
+        _buildToolCard(
+          context: context,
+          icon: FontAwesomeIcons.comments,
+          title: 'Chatbot',
+          description: 'Get instant assistance with our chatbot.',
+          color: Colors.blue,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => const ComingSoonWidget(
+                      message: "Chatbot is coming soon!",
                     ),
               ),
             );
@@ -155,13 +188,17 @@ class Tools extends StatelessWidget {
             );
           },
         ),
-        SizedBox(height: 30.sp),
-
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 30.sp : 15.sp,
+        ),
         Center(
           child: Text(
             'Stay tuned for more updates!',
             style: TextStyle(
-              fontSize: 18.sp,
+              fontSize:
+                  MediaQuery.of(context).size.width > 600
+                      ? 18.sp
+                      : 14.sp, // Responsive font size
               fontWeight: FontWeight.bold,
               color: WebsiteColors.primaryBlueColor,
             ),
@@ -171,21 +208,19 @@ class Tools extends StatelessWidget {
     );
   }
 
-  bool _checkToolsAvailability() {
-    // Replace this with actual logic to determine if tools are available
-    // For example, check if a list of tools is empty
-    List<String> availableTools = [
-      "Event Proposal",
-      "AI Tool",
-    ]; // Example tools
+  bool _checkToolsAvailability(BuildContext context) {
+    List<String> availableTools = ["Event Proposal"];
     return availableTools.isEmpty;
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 22.sp,
+        fontSize:
+            MediaQuery.of(context).size.width > 600
+                ? 22.sp
+                : 18.sp, // Responsive font size
         fontWeight: FontWeight.bold,
         color: WebsiteColors.darkBlueColor,
       ),
@@ -202,25 +237,46 @@ class Tools extends StatelessWidget {
   }) {
     return Card(
       elevation: 6,
-      color: Colors.white, // Set card background to white
-      margin: EdgeInsets.only(bottom: 20.sp),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.sp)),
+      color: Colors.white,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12.sp),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+        ),
         child: Padding(
-          padding: EdgeInsets.all(16.sp),
+          padding: EdgeInsets.all(
+            MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+          ),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(12.sp),
+                padding: EdgeInsets.all(
+                  MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+                ),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(icon, size: 28.sp, color: color),
+                child: FaIcon(
+                  icon,
+                  size:
+                      MediaQuery.of(context).size.width > 600
+                          ? 28.sp
+                          : 20.sp, // Responsive icon size
+                  color: color,
+                ),
               ),
-              SizedBox(width: 16.sp),
+              SizedBox(
+                width: MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,16 +284,25 @@ class Tools extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 600
+                                ? 18.sp
+                                : 14.sp, // Responsive font size
                         fontWeight: FontWeight.bold,
                         color: WebsiteColors.darkBlueColor,
                       ),
                     ),
-                    SizedBox(height: 8.sp),
+                    SizedBox(
+                      height:
+                          MediaQuery.of(context).size.width > 600 ? 8.sp : 4.sp,
+                    ),
                     Text(
                       description,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 600
+                                ? 14.sp
+                                : 12.sp, // Responsive font size
                         color: Colors.grey[600],
                       ),
                     ),

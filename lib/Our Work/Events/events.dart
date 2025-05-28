@@ -4,7 +4,6 @@ import 'package:ieee_website/Our%20Work/Events/bookingscreen.dart';
 import 'package:ieee_website/widgets/coming_soon_widget.dart';
 import 'package:ieee_website/widgets/event_grid.dart';
 import 'package:ieee_website/widgets/footer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../Themes/website_colors.dart';
 import '../../widgets/filter_chip_widget.dart';
 
@@ -20,60 +19,19 @@ class Events extends StatefulWidget {
 
 class _EventsState extends State<Events> {
   String searchText = ''; // State for search text
-  String selectedFilter = 'All'; // State for selected filter
+  String upcomingSelectedFilter = 'All'; // Separate state for upcoming filter
+  String previousSelectedFilter = 'All'; // Separate state for previous filter
   bool isHovered = false;
-
-  void _launchURL() async {
-    final Uri url = Uri.parse(
-      "https://www.linkedin.com/in/menna-allah-rabei-a3565131a/",
-    );
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception("Could not launch $url");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
         children: [
           Column(
             children: [
-              Stack(
-                children: [
-                  // Background Image
-                  Container(
-                    height: 500.sp,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/Mask group.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Container(color: Colors.black.withOpacity(0.2)),
-                  ),
-                  Positioned(
-                    top: 200.sp,
-                    left: 100.sp,
-                    right: 100.sp,
-                    child: Column(
-                      children: [
-                        Text(
-                          "Don't miss out! Explore our events.",
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(color: WebsiteColors.whiteColor),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20.sp),
-                        _buildSearchBar(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              _buildHeroSection(),
               SizedBox(height: 10.sp),
 
               // Upcoming Events Section
@@ -85,62 +43,24 @@ class _EventsState extends State<Events> {
                     Text(
                       "Upcoming Events",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: WebsiteColors.primaryBlueColor,
-                        fontSize: 40.sp,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 600
+                                ? 40.sp
+                                : 24.sp,
                       ),
                     ),
                     SizedBox(height: 25.sp),
 
-                    // Filter Chips
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FilterChipWidget(
-                          label: "All",
-                          isSelected: selectedFilter == "All",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "All";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "Today",
-                          isSelected: selectedFilter == "Today",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "Today";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "This Week",
-                          isSelected: selectedFilter == "This Week",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "This Week";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "This Month",
-                          isSelected: selectedFilter == "This Month",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "This Month";
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    // Upcoming Events Filter Chips
+                    _buildUpcomingFilter(),
 
                     SizedBox(height: 30.sp),
 
-                    // Pass searchText and selectedFilter to EventsGrid
+                    // Pass searchText and upcomingSelectedFilter to EventsGrid
                     EventsGrid(
                       filterType: "upcoming",
                       searchText: searchText,
-                      selectedFilter: selectedFilter,
+                      selectedFilter: upcomingSelectedFilter,
                       onEmpty: () => ComingSoonWidget(),
                     ),
 
@@ -208,8 +128,14 @@ class _EventsState extends State<Events> {
                           ),
                         ),
                         Positioned(
-                          bottom: 0, // Align to the bottom
-                          left: 0, // Align to the left
+                          bottom:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 20.sp
+                                  : 10.sp,
+                          right:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 20.sp
+                                  : 10.sp,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).push(
@@ -222,16 +148,11 @@ class _EventsState extends State<Events> {
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.zero, // Remove padding
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20.sp),
-                                  bottomRight: Radius.circular(0),
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(20.sp),
-                                ),
+                                borderRadius: BorderRadius.circular(20.sp),
                               ),
                               elevation: 5,
                               backgroundColor: Colors.transparent,
-                              shadowColor: Colors.black.withOpacity(0.2),
+                              shadowColor: Colors.black.withOpacity(0),
                             ),
                             child: Ink(
                               decoration: BoxDecoration(
@@ -243,18 +164,19 @@ class _EventsState extends State<Events> {
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20.sp),
-                                  bottomRight: Radius.circular(0),
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(20.sp),
-                                ),
+                                borderRadius: BorderRadius.circular(20.sp),
                               ),
                               child: Container(
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(
-                                  vertical: 30.sp,
-                                  horizontal: 40.sp,
+                                  vertical:
+                                      MediaQuery.of(context).size.width > 600
+                                          ? 20.sp
+                                          : 15.sp,
+                                  horizontal:
+                                      MediaQuery.of(context).size.width > 600
+                                          ? 30.sp
+                                          : 20.sp,
                                 ),
                                 child: Text(
                                   "Book Your Ticket", // Button text
@@ -262,7 +184,10 @@ class _EventsState extends State<Events> {
                                     context,
                                   ).textTheme.bodyMedium?.copyWith(
                                     color: WebsiteColors.darkBlueColor,
-                                    fontSize: 30.sp,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width > 600
+                                            ? 24.sp
+                                            : 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -285,54 +210,16 @@ class _EventsState extends State<Events> {
                     ),
                     SizedBox(height: 15.sp),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FilterChipWidget(
-                          label: "All",
-                          isSelected: selectedFilter == "All",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "All";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "Today",
-                          isSelected: selectedFilter == "Today",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "Today";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "This Week",
-                          isSelected: selectedFilter == "This Week",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "This Week";
-                            });
-                          },
-                        ),
-                        FilterChipWidget(
-                          label: "This Month",
-                          isSelected: selectedFilter == "This Month",
-                          onSelected: () {
-                            setState(() {
-                              selectedFilter = "This Month";
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    // Previous Events Filter Chips
+                    _buildPreviousFilter(),
+
                     SizedBox(height: 30.sp),
 
-                    // Pass searchText and selectedFilter to EventsGrid
+                    // Pass searchText and previousSelectedFilter to EventsGrid
                     EventsGrid(
                       filterType: "previous",
                       searchText: searchText,
-                      selectedFilter: selectedFilter,
+                      selectedFilter: previousSelectedFilter,
                       onEmpty: () => ComingSoonWidget(),
                     ),
 
@@ -349,56 +236,200 @@ class _EventsState extends State<Events> {
     );
   }
 
+  Widget _buildHeroSection() {
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.width > 600 ? 500.sp : 300.sp,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/Mask group.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(color: Colors.black.withOpacity(0.2)),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).size.width > 600 ? 200.sp : 100.sp,
+          left: MediaQuery.of(context).size.width > 600 ? 100.sp : 50.sp,
+          right: MediaQuery.of(context).size.width > 600 ? 100.sp : 50.sp,
+          child: Column(
+            children: [
+              Text(
+                "Don't miss out! Explore our events.",
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: WebsiteColors.whiteColor,
+                  fontSize:
+                      MediaQuery.of(context).size.width > 600 ? 28.sp : 18.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              ),
+              _buildSearchBar(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildSearchBar() {
-    return Container(
-      width: 600.sp,
-      decoration: BoxDecoration(
-        color: WebsiteColors.whiteColor,
-        borderRadius: BorderRadius.circular(30.sp),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            spreadRadius: 5,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double searchBarWidth =
+            constraints.maxWidth > 800.sp ? 600.sp : constraints.maxWidth * 0.8;
+
+        return Container(
+          width: searchBarWidth,
+          height: 50.sp,
+          decoration: BoxDecoration(
+            color: WebsiteColors.whiteColor,
+            borderRadius: BorderRadius.circular(25.sp),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 5,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: TextField(
-        onChanged: (value) {
-          setState(() {
-            searchText = value;
-          });
-        },
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontWeight: FontWeight.normal,
-          fontSize: 20.sp,
+          child: Center(
+            child: TextField(
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.start,
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                });
+              },
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 16.sp,
+                color: WebsiteColors.primaryBlueColor,
+              ),
+              decoration: InputDecoration(
+                hintText: "Search Events, Categories, Location...",
+                hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 16.sp,
+                  color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  size: 20.sp,
+                  color: WebsiteColors.primaryBlueColor,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.sp),
+                  borderSide: BorderSide(color: WebsiteColors.primaryBlueColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.sp),
+                  borderSide: BorderSide(
+                    color: WebsiteColors.primaryBlueColor,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.sp,
+                  horizontal: 10.sp,
+                ),
+                isCollapsed: true,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildUpcomingFilter() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        FilterChipWidget(
+          label: "All",
+          isSelected: upcomingSelectedFilter == "All",
+          onSelected: () {
+            setState(() {
+              upcomingSelectedFilter = "All";
+            });
+          },
         ),
-        decoration: InputDecoration(
-          hintText: "Search Events, Categories, Location...",
-          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.grey,
-            fontWeight: FontWeight.normal,
-            fontSize: 20.sp,
-          ),
-          prefixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 25.sp,
-            vertical: 15.sp,
-          ),
-          suffixIcon:
-              searchText.isNotEmpty
-                  ? IconButton(
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      setState(() {
-                        searchText = '';
-                      });
-                    },
-                  )
-                  : null,
+        FilterChipWidget(
+          label: "Today",
+          isSelected: upcomingSelectedFilter == "Today",
+          onSelected: () {
+            setState(() {
+              upcomingSelectedFilter = "Today";
+            });
+          },
         ),
-      ),
+        FilterChipWidget(
+          label: "This Week",
+          isSelected: upcomingSelectedFilter == "This Week",
+          onSelected: () {
+            setState(() {
+              upcomingSelectedFilter = "This Week";
+            });
+          },
+        ),
+        FilterChipWidget(
+          label: "This Month",
+          isSelected: upcomingSelectedFilter == "This Month",
+          onSelected: () {
+            setState(() {
+              upcomingSelectedFilter = "This Month";
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPreviousFilter() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        FilterChipWidget(
+          label: "All",
+          isSelected: previousSelectedFilter == "All",
+          onSelected: () {
+            setState(() {
+              previousSelectedFilter = "All";
+            });
+          },
+        ),
+        FilterChipWidget(
+          label: "Last Month",
+          isSelected: previousSelectedFilter == "Last Month",
+          onSelected: () {
+            setState(() {
+              previousSelectedFilter = "Last Month";
+            });
+          },
+        ),
+        FilterChipWidget(
+          label: "This Year",
+          isSelected: previousSelectedFilter == "This Year",
+          onSelected: () {
+            setState(() {
+              previousSelectedFilter = "This Year";
+            });
+          },
+        ),
+        FilterChipWidget(
+          label: "Last Year",
+          isSelected: previousSelectedFilter == "Last Year",
+          onSelected: () {
+            setState(() {
+              previousSelectedFilter = "Last Year";
+            });
+          },
+        ),
+      ],
     );
   }
 }

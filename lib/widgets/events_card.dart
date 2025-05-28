@@ -14,13 +14,13 @@ class EventsCard extends StatefulWidget {
     // "FOCUS": ["assets/images/FOCUS.jpg","assets/images/focus1.png","assets/images/focus2.png"],
     // "Introduction to Robotics Line Tracking": ["assets/images/2020 2.jpg","assets/images/2016.jpg","assets/images/2024.jpg"],
     //"Orientation Day": ["assets/images/OD1.jpg","assets/images/OD2.jpg","assets/images/OD7.jpg"
-      //,"assets/images/OD3.jpg","assets/images/OD4.jpg","assets/images/OD5.jpg","assets/images/OD6.jpg",
+    //,"assets/images/OD3.jpg","assets/images/OD4.jpg","assets/images/OD5.jpg","assets/images/OD6.jpg",
     //],
     // "Recruitment 2016-2017(18-10-2016)":["assets/images/rec.jpg",
     //   "assets/images/recruitment1.jpg","assets/images/recruitment2.jpg",
     //   "assets/images/recruitment3.jpg","assets/images/recruitment4.jpg"
     // ],
-   // "recruitment (19-4-2016)":["assets/images/rec2.jpg"],
+    // "recruitment (19-4-2016)":["assets/images/rec2.jpg"],
     //"surrender the ME for the WE":["assets/images/surrender.jpg","assets/images/sur1.jpg","assets/images/sur2.jpg"],
     // "Photoshop workshop from zero to hero":["assets/images/workshop.jpg","assets/images/workshop1.jpg","assets/images/workshop2.jpg",
     //   "assets/images/workshop3.jpg","assets/images/workshop4.jpg","assets/images/workshop5.jpg",
@@ -66,12 +66,10 @@ class EventsCard extends StatefulWidget {
     // ,"Leading Your Career 2019":["assets/images/leadingurcareer.jpg"]
 
     // "IBM Digital Nation Africa Innovation Tour":["assets/images/IBM3.jpg","assets/images/IBM2.jpg","assets/images/IBM1.jpg"],
-
-
-
   };
 
-  const EventsCard({Key? key, required this.event, this.tabController}) : super(key: key);
+  const EventsCard({Key? key, required this.event, this.tabController})
+    : super(key: key);
 
   @override
   _EventsCardState createState() => _EventsCardState();
@@ -92,10 +90,11 @@ class _EventsCardState extends State<EventsCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EventDetailsScreen(
-                event: widget.event,
-                tabController: widget.tabController,
-              ),
+              builder:
+                  (context) => EventDetailsScreen(
+                    event: widget.event,
+                    tabController: widget.tabController,
+                  ),
             ),
           );
         });
@@ -104,12 +103,15 @@ class _EventsCardState extends State<EventsCard> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.fastOutSlowIn,
-        transform: isClicked ? (Matrix4.identity()..scale(1.04)) : Matrix4.identity(),
+        transform:
+            isClicked ? (Matrix4.identity()..scale(1.04)) : Matrix4.identity(),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
             color: WebsiteColors.lightGreyColor,
-            borderRadius: BorderRadius.circular(10.sp),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -117,25 +119,66 @@ class _EventsCardState extends State<EventsCard> {
               Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(10.sp),
+                    borderRadius: BorderRadius.circular(
+                      MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+                    ),
                     child: AspectRatio(
                       aspectRatio: 3 / 2,
                       child: _buildEventCardImage(),
                     ),
                   ),
                   Positioned(
-                    bottom: 10.sp,
-                    left: 10.sp,
+                    bottom:
+                        MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+                    left:
+                        MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            MediaQuery.of(context).size.width > 600
+                                ? 8.sp
+                                : 6.sp,
+                        vertical:
+                            MediaQuery.of(context).size.width > 600
+                                ? 4.sp
+                                : 3.sp,
+                      ),
                       decoration: BoxDecoration(
                         color: WebsiteColors.primaryYellowColor,
-                        borderRadius: BorderRadius.circular(5.sp),
+                        borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.width > 600 ? 5.sp : 4.sp,
+                        ),
                       ),
                       child: Text(
-                        widget.event.category.isNotEmpty ? widget.event.category : "No Category",
-                        style: TextStyle(color: WebsiteColors.blackColor, fontSize: 18.sp),
+                        widget.event.category.isNotEmpty
+                            ? widget.event.category
+                            : "No Category",
+                        style: TextStyle(
+                          color: WebsiteColors.blackColor,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 18.sp
+                                  : 14.sp,
+                        ),
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+                    right:
+                        MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+                    child: Icon(
+                      widget.event.isOnlineEvent
+                          ? Icons.wifi
+                          : Icons.location_on,
+                      color:
+                          widget.event.isOnlineEvent
+                              ? Colors.green
+                              : Colors.blue,
+                      size:
+                          MediaQuery.of(context).size.width > 600
+                              ? 24.sp
+                              : 20.sp,
                     ),
                   ),
                 ],
@@ -161,19 +204,15 @@ class _EventsCardState extends State<EventsCard> {
 
     return firstImage != null
         ? firstImage.startsWith("http")
-        ? Image.network(
-      firstImage,
-      width: double.infinity,
-      fit: BoxFit.fill,
-      errorBuilder: (context, error, stackTrace) =>
-          Icon(Icons.broken_image, size: 50.sp, color: Colors.grey),
-    )
-        : Image.asset(
-      firstImage,
-      width: double.infinity,
-      fit: BoxFit.fill,
-    )
+            ? Image.network(
+              firstImage,
+              width: double.infinity,
+              fit: BoxFit.fill,
+              errorBuilder:
+                  (context, error, stackTrace) =>
+                      Icon(Icons.broken_image, size: 50.sp, color: Colors.grey),
+            )
+            : Image.asset(firstImage, width: double.infinity, fit: BoxFit.fill)
         : Icon(Icons.broken_image, size: 50.sp, color: Colors.grey);
   }
 }
-

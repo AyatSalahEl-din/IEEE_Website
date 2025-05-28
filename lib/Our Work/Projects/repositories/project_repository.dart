@@ -126,3 +126,6 @@ class FirebaseProjectRepository implements ProjectRepository {
     return null;
   }
 }
+
+// Ensure all sizes have .sp applied
+// Ensure any future UI-related elements in this repository follow responsive design principles.

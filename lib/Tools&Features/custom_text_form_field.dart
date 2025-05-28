@@ -60,53 +60,85 @@ class CustomTextForm extends StatelessWidget {
         hintText: hintText,
         hintStyle:
             hintStyle ??
-            TextStyle(color: WebsiteColors.greyColor, fontSize: 16.sp),
+            TextStyle(
+              color: WebsiteColors.greyColor,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+            ),
         labelStyle:
             labelStyle ??
             TextStyle(
               color: WebsiteColors.primaryBlueColor,
               fontWeight: FontWeight.bold,
-              fontSize: 16.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
             ),
         prefixIcon:
             icon != null
-                ? Icon(icon, color: WebsiteColors.primaryBlueColor)
+                ? Icon(
+                  icon,
+                  color: WebsiteColors.primaryBlueColor,
+                  size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+                )
                 : null,
         suffixIcon: suffix,
         contentPadding:
             contentPadding ??
-            EdgeInsets.symmetric(vertical: 16.sp, horizontal: 16.sp),
+            EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+              horizontal:
+                  MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+            ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.sp),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          ),
           borderSide: BorderSide(
             color: WebsiteColors.primaryBlueColor,
-            width: 1.5,
+            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.sp),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          ),
           borderSide: BorderSide(
             color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
-            width: 1.5,
+            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.sp),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          ),
           borderSide: BorderSide(
             color: WebsiteColors.primaryBlueColor,
-            width: 2.0,
+            width: MediaQuery.of(context).size.width > 600 ? 2.0.sp : 1.5.sp,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.sp),
-          borderSide: BorderSide(color: Colors.red, width: 1.5),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          ),
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
+          ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.sp),
-          borderSide: BorderSide(color: Colors.red.shade700, width: 2.0),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          ),
+          borderSide: BorderSide(
+            color: Colors.red.shade700,
+            width: MediaQuery.of(context).size.width > 600 ? 2.0.sp : 1.5.sp,
+          ),
         ),
       ),
-      style: textStyle ?? TextStyle(fontSize: 16.sp, color: Colors.black87),
+      style:
+          textStyle ??
+          TextStyle(
+            fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+            color: Colors.black87,
+          ),
       keyboardType: keyboardType,
       onChanged: onChanged,
       readOnly: readOnly,

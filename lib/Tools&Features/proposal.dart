@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:intl/intl.dart';
-import 'custom_date_picker.dart'; // Import the CustomDatePicker
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ieee_website/Tools&Features/custom_text_form_field.dart';
+import 'package:ieee_website/Tools&Features/custom_date_picker.dart';
 
 class EventProposalForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -116,18 +116,17 @@ class _EventProposalFormState extends State<EventProposalForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set page background to white
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: WebsiteColors.primaryBlueColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed:
-              () => Navigator.of(context).pop(), // Back button functionality
+          icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.sp),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Propose an Event',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: 20.sp),
         ),
       ),
       body: Form(
@@ -140,10 +139,11 @@ class _EventProposalFormState extends State<EventProposalForm> {
               Center(
                 child: Text(
                   'Propose an Event',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  style: TextStyle(
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 28.sp,
+                    fontSize:
+                        MediaQuery.of(context).size.width > 600 ? 28.sp : 20.sp,
                   ),
                 ),
               ),
@@ -157,14 +157,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 30.sp),
-              Text(
-                'Organizer Information',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: WebsiteColors.primaryBlueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22.sp,
-                ),
-              ),
+              _buildSectionTitle('Organizer Information'),
               SizedBox(height: 15.sp),
               CustomTextForm(
                 controller: widget.organizerNameController,
@@ -196,14 +189,12 @@ class _EventProposalFormState extends State<EventProposalForm> {
                 icon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty)
                     return 'Please enter your email';
-                  }
                   if (!RegExp(
                     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
+                  ).hasMatch(value))
                     return 'Please enter a valid email';
-                  }
                   return null;
                 },
               ),
@@ -222,14 +213,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
               SizedBox(height: 30.sp),
               Divider(color: WebsiteColors.primaryBlueColor.withOpacity(0.3)),
               SizedBox(height: 20.sp),
-              Text(
-                'Event Details',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: WebsiteColors.primaryBlueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22.sp,
-                ),
-              ),
+              _buildSectionTitle('Event Details'),
               SizedBox(height: 15.sp),
               CustomTextForm(
                 controller: widget.eventNameController,
@@ -259,7 +243,8 @@ class _EventProposalFormState extends State<EventProposalForm> {
               Text(
                 "Proposed Date",
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize:
+                      MediaQuery.of(context).size.width > 600 ? 18.sp : 16.sp,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.darkBlueColor,
                 ),
@@ -267,83 +252,48 @@ class _EventProposalFormState extends State<EventProposalForm> {
               SizedBox(height: 10.sp),
               CustomDatePicker(
                 initialDate: selectedDate,
-                onDatePicked: (date) {
+                onDatePicked: (pickedDate) {
                   setState(() {
-                    selectedDate = date;
+                    selectedDate = pickedDate;
                     widget.proposedDateController.text =
-                        DateFormat.yMMMd().format(date!);
+                        pickedDate != null
+                            ? DateFormat.yMMMd().format(pickedDate)
+                            : '';
                   });
                 },
               ),
               SizedBox(height: 20.sp),
               Text(
                 'Event Format',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: WebsiteColors.primaryBlueColor,
+                style: TextStyle(
                   fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: WebsiteColors.primaryBlueColor,
                 ),
               ),
               SizedBox(height: 10.sp),
               Row(
                 children: [
-                  ChoiceChip(
-                    label: const Text('In-Person'),
-                    selected: !isVirtual && !isHybrid,
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          isVirtual = false;
-                          isHybrid = false;
-                        }
-                      });
-                    },
-                    selectedColor: WebsiteColors.primaryBlueColor,
-                    backgroundColor: Colors.white,
-                    labelStyle: TextStyle(
-                      color:
-                          !isVirtual && !isHybrid
-                              ? Colors.white
-                              : WebsiteColors.primaryBlueColor,
-                    ),
-                  ),
+                  _buildChoiceChip('In-Person', !isVirtual && !isHybrid, () {
+                    setState(() {
+                      isVirtual = false;
+                      isHybrid = false;
+                    });
+                  }),
                   SizedBox(width: 10.sp),
-                  ChoiceChip(
-                    label: const Text('Virtual'),
-                    selected: isVirtual,
-                    onSelected: (selected) {
-                      setState(() {
-                        isVirtual = selected;
-                        if (selected) isHybrid = false;
-                      });
-                    },
-                    selectedColor: WebsiteColors.primaryBlueColor,
-                    backgroundColor: Colors.white,
-                    labelStyle: TextStyle(
-                      color:
-                          isVirtual
-                              ? Colors.white
-                              : WebsiteColors.primaryBlueColor,
-                    ),
-                  ),
+                  _buildChoiceChip('Virtual', isVirtual, () {
+                    setState(() {
+                      isVirtual = true;
+                      isHybrid = false;
+                    });
+                  }),
                   SizedBox(width: 10.sp),
-                  ChoiceChip(
-                    label: const Text('Hybrid'),
-                    selected: isHybrid,
-                    onSelected: (selected) {
-                      setState(() {
-                        isHybrid = selected;
-                        if (selected) isVirtual = false;
-                      });
-                    },
-                    selectedColor: WebsiteColors.primaryBlueColor,
-                    backgroundColor: Colors.white,
-                    labelStyle: TextStyle(
-                      color:
-                          isHybrid
-                              ? Colors.white
-                              : WebsiteColors.primaryBlueColor,
-                    ),
-                  ),
+                  _buildChoiceChip('Hybrid', isHybrid, () {
+                    setState(() {
+                      isHybrid = true;
+                      isVirtual = false;
+                    });
+                  }),
                 ],
               ),
               SizedBox(height: 20.sp),
@@ -393,21 +343,28 @@ class _EventProposalFormState extends State<EventProposalForm> {
                         borderRadius: BorderRadius.circular(10.sp),
                       ),
                       padding: EdgeInsets.symmetric(
-                        vertical: 15.sp,
+                        vertical:
+                            MediaQuery.of(context).size.width > 600
+                                ? 15.sp
+                                : 12.sp,
                         horizontal: 30.sp,
                       ),
                       elevation: 5,
                     ),
                     child:
                         widget.isLoading
-                            ? const CircularProgressIndicator(
+                            ? CircularProgressIndicator(
                               color: Colors.white,
+                              strokeWidth: 2.sp,
                             )
                             : Text(
                               'Submit Proposal',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18.sp,
+                                fontSize:
+                                    MediaQuery.of(context).size.width > 600
+                                        ? 18.sp
+                                        : 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -429,6 +386,34 @@ class _EventProposalFormState extends State<EventProposalForm> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 22.sp,
+        fontWeight: FontWeight.bold,
+        color: WebsiteColors.primaryBlueColor,
+      ),
+    );
+  }
+
+  Widget _buildChoiceChip(
+    String label,
+    bool isSelected,
+    VoidCallback onSelected,
+  ) {
+    return ChoiceChip(
+      label: Text(label, style: TextStyle(fontSize: 14.sp)),
+      selected: isSelected,
+      onSelected: (_) => onSelected(),
+      selectedColor: WebsiteColors.primaryBlueColor,
+      backgroundColor: Colors.white,
+      labelStyle: TextStyle(
+        color: isSelected ? Colors.white : WebsiteColors.primaryBlueColor,
       ),
     );
   }

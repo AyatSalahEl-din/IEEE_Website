@@ -21,17 +21,23 @@ class InfoCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: 450.sp,
-          height: 600.sp,
-          padding: EdgeInsets.all(20.sp),
+          width: MediaQuery.of(context).size.width > 600 ? 450.sp : 300.sp,
+          height: MediaQuery.of(context).size.width > 600 ? 600.sp : 400.sp,
+          padding: EdgeInsets.all(
+            MediaQuery.of(context).size.width > 600 ? 20.sp : 15.sp,
+          ),
           decoration: BoxDecoration(
             color: WebsiteColors.whiteColor,
-            borderRadius: BorderRadius.circular(15.sp),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width > 600 ? 15.sp : 10.sp,
+            ),
             boxShadow: [
               BoxShadow(
                 color: WebsiteColors.primaryBlueColor.withOpacity(0.1),
-                blurRadius: 40.sp,
-                spreadRadius: 2.sp,
+                blurRadius:
+                    MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+                spreadRadius:
+                    MediaQuery.of(context).size.width > 600 ? 2.sp : 1.sp,
               ),
             ],
           ),
@@ -40,25 +46,36 @@ class InfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: 50.sp,
+                radius: MediaQuery.of(context).size.width > 600 ? 50.sp : 35.sp,
                 backgroundColor: iconColor,
-                child: Icon(icon, color: WebsiteColors.whiteColor, size: 50.sp),
+                child: Icon(
+                  icon,
+                  color: WebsiteColors.whiteColor,
+                  size: MediaQuery.of(context).size.width > 600 ? 50.sp : 35.sp,
+                ),
               ),
-
-              SizedBox(height: 25.sp),
+              SizedBox(
+                height: MediaQuery.of(context).size.width > 600 ? 25.sp : 15.sp,
+              ),
               Text(
                 title,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.visionColor,
+                  fontSize:
+                      MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(
+                height: MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+              ),
               Text(
                 description,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: WebsiteColors.descGreyColor,
+                  fontSize:
+                      MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
                 ),
                 textAlign: TextAlign.center,
               ),

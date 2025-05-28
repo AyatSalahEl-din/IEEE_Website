@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -44,50 +45,36 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      focusNode: focusNode,
-      autofocus: autofocus,
-      readOnly: readOnly,
-      obscureText: obscureText,
-      textInputAction: textInputAction,
       decoration: InputDecoration(
         labelText: label,
+        hintText: label,
+        hintStyle: TextStyle(
+          color: WebsiteColors.greyColor,
+          fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+        ),
         labelStyle: TextStyle(
-          color: WebsiteColors.lightGreyColor,
-          fontSize: fontSize,
-          fontWeight: FontWeight.normal,
+          color: WebsiteColors.primaryBlueColor,
+          fontWeight: FontWeight.bold,
+          fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
         ),
-        prefixIcon: Icon(prefixIcon, color: WebsiteColors.primaryBlueColor),
-        suffixIcon: suffixIcon,
+        prefixIcon: Icon(
+          prefixIcon,
+          color: WebsiteColors.primaryBlueColor,
+          size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+          horizontal: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(
-            color: WebsiteColors.primaryBlueColor,
-            width: 2,
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
           ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.red, width: 2),
-        ),
-        filled: true,
-        fillColor: Colors.grey[100],
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 15,
         ),
       ),
       style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: FontWeight.normal,
-        color: Colors.black,
+        fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+        color: Colors.black87,
       ),
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,

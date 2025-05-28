@@ -18,7 +18,8 @@ class EventsGrid extends StatefulWidget {
     this.tabController,
     required this.filterType,
     required this.searchText,
-    required this.selectedFilter, required ComingSoonWidget Function() onEmpty,
+    required this.selectedFilter,
+    required ComingSoonWidget Function() onEmpty,
   }) : super(key: key);
 
   @override
@@ -60,7 +61,6 @@ class _EventsGridState extends State<EventsGrid> {
             ); // Pass the DocumentSnapshot directly
           }).toList();
 
-
       setState(() {
         allEvents = events;
       });
@@ -84,21 +84,46 @@ class _EventsGridState extends State<EventsGrid> {
     return allEvents.where((event) {
       bool matchesFilter = true;
 
-      if (widget.selectedFilter == "Today") {
-        matchesFilter =
-            event.date.year == now.year &&
-
-            event.date.month == now.month &&
-            event.date.day == now.day;
-      } else if (widget.selectedFilter == "This Week") {
-        DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-        DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-        matchesFilter =
-            event.date.isAfter(startOfWeek.subtract(Duration(seconds: 1))) &&
-            event.date.isBefore(endOfWeek.add(Duration(days: 1)));
-      } else if (widget.selectedFilter == "This Month") {
-        matchesFilter =
-            event.date.year == now.year && event.date.month == now.month;
+      if (widget.filterType == "upcoming") {
+        if (widget.selectedFilter == "Today") {
+          matchesFilter =
+              event.date.year == now.year &&
+              event.date.month == now.month &&
+              event.date.day == now.day;
+        } else if (widget.selectedFilter == "This Week") {
+          DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+          DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
+          matchesFilter =
+              event.date.isAfter(startOfWeek.subtract(Duration(seconds: 1))) &&
+              event.date.isBefore(endOfWeek.add(Duration(seconds: 1)));
+        } else if (widget.selectedFilter == "This Month") {
+          matchesFilter =
+              event.date.year == now.year && event.date.month == now.month;
+        }
+      } else if (widget.filterType == "previous") {
+        if (widget.selectedFilter == "Last Week") {
+          DateTime startOfLastWeek = now.subtract(
+            Duration(days: now.weekday + 6),
+          );
+          DateTime endOfLastWeek = startOfLastWeek.add(Duration(days: 6));
+          matchesFilter =
+              event.date.isAfter(
+                startOfLastWeek.subtract(Duration(seconds: 1)),
+              ) &&
+              event.date.isBefore(endOfLastWeek.add(Duration(seconds: 1)));
+        } else if (widget.selectedFilter == "Last Month") {
+          DateTime startOfLastMonth = DateTime(now.year, now.month - 1, 1);
+          DateTime endOfLastMonth = DateTime(now.year, now.month, 0);
+          matchesFilter =
+              event.date.isAfter(
+                startOfLastMonth.subtract(Duration(seconds: 1)),
+              ) &&
+              event.date.isBefore(endOfLastMonth.add(Duration(seconds: 1)));
+        } else if (widget.selectedFilter == "Last Year") {
+          matchesFilter = event.date.year == now.year - 1;
+        } else if (widget.selectedFilter == "This Year") {
+          matchesFilter = event.date.year == now.year;
+        }
       }
 
       bool matchesSearch =
@@ -109,7 +134,6 @@ class _EventsGridState extends State<EventsGrid> {
           event.location.toLowerCase().contains(
             widget.searchText.toLowerCase(),
           );
-
 
       return matchesFilter && matchesSearch;
     }).toList();
@@ -127,8 +151,9 @@ class _EventsGridState extends State<EventsGrid> {
 
     return Column(
       children: [
-        SizedBox(height: 10.sp),
-
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+        ),
         ...groupedByYear.entries.map((entry) {
           int year = entry.key;
           List<Event> events = entry.value;
@@ -136,38 +161,66 @@ class _EventsGridState extends State<EventsGrid> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Modern Year Header
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.sp),
-
+                padding: EdgeInsets.symmetric(
+                  vertical:
+                      MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+                ),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Divider(
                         color: Colors.grey,
-                        thickness: 1,
-                        endIndent: 10,
-                        indent: 20,
+                        thickness:
+                            MediaQuery.of(context).size.width > 600
+                                ? 2.sp
+                                : 1.sp,
+                        endIndent:
+                            MediaQuery.of(context).size.width > 600
+                                ? 10.sp
+                                : 5.sp,
+                        indent:
+                            MediaQuery.of(context).size.width > 600
+                                ? 20.sp
+                                : 10.sp,
                       ),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 16.sp,
-                        vertical: 8.sp,
+                        horizontal:
+                            MediaQuery.of(context).size.width > 600
+                                ? 16.sp
+                                : 8.sp,
+                        vertical:
+                            MediaQuery.of(context).size.width > 600
+                                ? 8.sp
+                                : 4.sp,
                       ),
-
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [const Color.fromARGB(255, 35, 65, 117), const Color.fromARGB(255, 145, 186, 227)],
+                          colors: [
+                            const Color.fromARGB(255, 35, 65, 117),
+                            const Color.fromARGB(255, 145, 186, 227),
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.circular(30.sp),
+                        borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.width > 600
+                              ? 30.sp
+                              : 15.sp,
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),
-                            blurRadius: 8,
-                            spreadRadius: 1,
+                            blurRadius:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 8.sp
+                                    : 4.sp,
+                            spreadRadius:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 2.sp
+                                    : 1.sp,
                             offset: const Offset(0, 3),
                           ),
                         ],
@@ -176,32 +229,45 @@ class _EventsGridState extends State<EventsGrid> {
                         "$year",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: WebsiteColors.whiteColor,
-                          fontSize: 30.sp,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 30.sp
+                                  : 20.sp,
                         ),
-
                       ),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Divider(
                         color: Colors.grey,
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 20,
+                        thickness:
+                            MediaQuery.of(context).size.width > 600
+                                ? 2.sp
+                                : 1.sp,
+                        indent:
+                            MediaQuery.of(context).size.width > 600
+                                ? 10.sp
+                                : 5.sp,
+                        endIndent:
+                            MediaQuery.of(context).size.width > 600
+                                ? 20.sp
+                                : 10.sp,
                       ),
                     ),
                   ],
                 ),
               ),
-
-              // Events of this year
               GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 3 / 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                  childAspectRatio:
+                      MediaQuery.of(context).size.width > 600 ? 3 / 2 : 4 / 3,
+                  mainAxisSpacing:
+                      MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+                  crossAxisSpacing:
+                      MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
                 ),
                 itemCount: events.length,
                 itemBuilder: (context, index) {
@@ -218,13 +284,17 @@ class _EventsGridState extends State<EventsGrid> {
             ],
           );
         }).toList(),
-        const SizedBox(height: 20),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+        ),
         GlowButton(
           itemsToShow: itemsToShow,
           allEvents: filteredEvents,
           toggleItemsToShow: toggleItemsToShow,
         ),
-        const SizedBox(height: 10),
+        SizedBox(
+          height: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+        ),
       ],
     );
   }

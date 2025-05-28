@@ -26,39 +26,60 @@ class ProjectDetailsPage extends StatelessWidget {
       width: double.infinity,
       color: WebsiteColors.primaryBlueColor,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 120.sp, vertical: 60.sp),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width > 600 ? 120.sp : 60.sp,
+          vertical: MediaQuery.of(context).size.width > 600 ? 60.sp : 30.sp,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
-            SizedBox(height: 20.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            ),
             Text(
               project.title,
-              style: Theme.of(
-                context,
-              ).textTheme.displaySmall!.copyWith(color: Colors.white),
+              style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 36.sp : 24.sp,
+              ),
             ),
-            SizedBox(height: 20.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            ),
             Text(
               "Made By: ${project.madeBy}",
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.white.withOpacity(0.9),
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 20.sp : 16.sp,
               ),
             ),
-            SizedBox(height: 10.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+            ),
             Text(
               DateFormat('dd MMMM yyyy').format(project.date),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.white.withOpacity(0.8),
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
               ),
             ),
-            SizedBox(height: 20.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            ),
             Wrap(
-              spacing: 10.sp,
-              runSpacing: 10.sp,
+              spacing: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+              runSpacing:
+                  MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
               children:
                   project.tags.map((tag) => _buildTag(context, tag)).toList(),
             ),
@@ -71,44 +92,56 @@ class ProjectDetailsPage extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 120.sp, vertical: 60.sp),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width > 600 ? 120.sp : 60.sp,
+        vertical: MediaQuery.of(context).size.width > 600 ? 60.sp : 30.sp,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Project Description",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: WebsiteColors.primaryBlueColor,
-              fontSize: 40.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
             ),
           ),
-          SizedBox(height: 20.sp),
+          SizedBox(
+            height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+          ),
           Text(
             project.description,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              fontSize: 24.sp,
-              color: WebsiteColors.darkBlueColor,
-              height: 1.8,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 16.sp,
             ),
           ),
           if (project.imageUrls != null && project.imageUrls!.isNotEmpty) ...[
-            SizedBox(height: 40.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+            ),
             Text(
               "Images",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
-                fontSize: 40.sp,
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
               ),
             ),
-            SizedBox(height: 20.sp),
             SizedBox(
-              height: 400.sp,
+              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 400.sp : 300.sp,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: project.imageUrls!.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: EdgeInsets.only(right: 20.sp),
+                    padding: EdgeInsets.only(
+                      right:
+                          MediaQuery.of(context).size.width > 600
+                              ? 20.sp
+                              : 10.sp,
+                    ),
                     child: GestureDetector(
                       onTap: () {
                         showDialog(
@@ -125,12 +158,22 @@ class ProjectDetailsPage extends StatelessWidget {
                         );
                       },
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20.sp),
+                        borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.width > 600
+                              ? 20.sp
+                              : 10.sp,
+                        ),
                         child: Image.network(
                           project.imageUrls![index],
                           fit: BoxFit.cover,
-                          width: 400.sp,
-                          height: 400.sp,
+                          width:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 400.sp
+                                  : 300.sp,
+                          height:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 400.sp
+                                  : 300.sp,
                         ),
                       ),
                     ),
@@ -141,29 +184,46 @@ class ProjectDetailsPage extends StatelessWidget {
           ],
           if (project.additionalDetails != null &&
               project.additionalDetails!.isNotEmpty) ...[
-            SizedBox(height: 40.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+            ),
             Text(
               "Additional Details",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
-                fontSize: 40.sp,
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
               ),
             ),
-            SizedBox(height: 20.sp),
+            SizedBox(
+              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            ),
             ...project.additionalDetails!.entries.map(
               (entry) => Padding(
-                padding: EdgeInsets.only(bottom: 10.sp),
+                padding: EdgeInsets.only(
+                  bottom:
+                      MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+                ),
                 child: Row(
                   children: [
                     Text(
                       "${entry.key.replaceAll('_', ' ').toUpperCase()}: ",
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: WebsiteColors.primaryBlueColor,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 600
+                                ? 18.sp
+                                : 14.sp,
                       ),
                     ),
                     Text(
                       entry.value.toString(),
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontSize:
+                            MediaQuery.of(context).size.width > 600
+                                ? 18.sp
+                                : 14.sp,
+                      ),
                     ),
                   ],
                 ),
@@ -177,16 +237,22 @@ class ProjectDetailsPage extends StatelessWidget {
 
   Widget _buildTag(BuildContext context, String tag) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 10.sp),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+        vertical: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+      ),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(20.sp),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+        ),
       ),
       child: Text(
         tag,
-        style: Theme.of(
-          context,
-        ).textTheme.bodyMedium!.copyWith(color: Colors.white, fontSize: 18.sp),
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          color: Colors.white,
+          fontSize: MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
+        ),
       ),
     );
   }

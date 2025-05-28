@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +13,8 @@ class EventDetailsScreen extends StatefulWidget {
   final Event event;
   final TabController? tabController;
 
-  const EventDetailsScreen({Key? key, required this.event, this.tabController}) : super(key: key);
+  const EventDetailsScreen({Key? key, required this.event, this.tabController})
+    : super(key: key);
 
   @override
   _EventDetailsScreenState createState() => _EventDetailsScreenState();
@@ -54,19 +53,24 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: WebsiteColors.primaryBlueColor,
         title: Text(
           widget.event.name,
-          style: TextStyle(color: WebsiteColors.whiteColor, fontSize: 35.sp),
+          style: TextStyle(
+            color: WebsiteColors.whiteColor,
+            fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
+          ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -74,17 +78,29 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 70.sp, vertical: 70.sp),
+              padding: EdgeInsets.symmetric(
+                horizontal:
+                    MediaQuery.of(context).size.width > 600 ? 70.sp : 40.sp,
+                vertical:
+                    MediaQuery.of(context).size.width > 600 ? 70.sp : 40.sp,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Container(
-                      width: width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.8,
                       decoration: BoxDecoration(
                         color: WebsiteColors.whiteColor,
-                        borderRadius: BorderRadius.circular(20.sp),
-                        border: Border.all(color: WebsiteColors.greyColor, width: 1),
+                        borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.width > 600
+                              ? 20.sp
+                              : 12.sp,
+                        ),
+                        border: Border.all(
+                          color: WebsiteColors.greyColor,
+                          width: 1,
+                        ),
                       ),
                       child: Column(
                         children: [
@@ -92,102 +108,180 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             alignment: Alignment.center,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(20.sp),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width > 600
+                                      ? 20.sp
+                                      : 12.sp,
+                                ),
                                 child: SizedBox(
-                                  width: width * 0.7,
-                                  height: width * 0.5,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.5,
                                   child: PageView.builder(
                                     controller: _pageController,
                                     itemCount: widget.event.imageUrls.length,
-                                    onPageChanged: (index) => setState(() => _currentPage = index),
+                                    onPageChanged:
+                                        (index) => setState(
+                                          () => _currentPage = index,
+                                        ),
                                     itemBuilder: (context, index) {
-                                      // Network image for each URL in the list
                                       return Image.network(
                                         widget.event.imageUrls[index],
                                         fit: BoxFit.fill,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          // Fallback to a placeholder in case of error
-                                          return const Icon(Icons.error);
+                                        errorBuilder: (
+                                          context,
+                                          error,
+                                          stackTrace,
+                                        ) {
+                                          return Icon(
+                                            Icons.error,
+                                            size:
+                                                MediaQuery.of(
+                                                          context,
+                                                        ).size.width >
+                                                        600
+                                                    ? 50.sp
+                                                    : 40.sp,
+                                          );
                                         },
                                       );
                                     },
                                   ),
                                 ),
                               ),
-                              // Navigation Arrows and Other UI components
                               Positioned(
-                                left: 10.sp,
-                                child: _buildArrowButton(Icons.arrow_back_ios, isLeft: true),
+                                left:
+                                    MediaQuery.of(context).size.width > 600
+                                        ? 10.sp
+                                        : 8.sp,
+                                child: _buildArrowButton(
+                                  Icons.arrow_back_ios,
+                                  isLeft: true,
+                                ),
                               ),
                               Positioned(
-                                right: 10.sp,
-                                child: _buildArrowButton(Icons.arrow_forward_ios, isLeft: false),
+                                right:
+                                    MediaQuery.of(context).size.width > 600
+                                        ? 10.sp
+                                        : 8.sp,
+                                child: _buildArrowButton(
+                                  Icons.arrow_forward_ios,
+                                  isLeft: false,
+                                ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 20.sp),
+                          SizedBox(
+                            height:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 20.sp
+                                    : 10.sp,
+                          ),
                           SmoothPageIndicator(
                             controller: _pageController,
                             count: widget.event.imageUrls.length,
                             effect: WormEffect(
-                              dotHeight: 10.sp
-                              ,
-                              dotWidth: 10.sp,
+                              dotHeight:
+                                  MediaQuery.of(context).size.width > 600
+                                      ? 10.sp
+                                      : 8.sp,
+                              dotWidth:
+                                  MediaQuery.of(context).size.width > 600
+                                      ? 10.sp
+                                      : 8.sp,
                               activeDotColor: WebsiteColors.primaryBlueColor,
                             ),
                           ),
-                          SizedBox(height: 30.sp),
-                          Center(child: _buildInfoRow(Icons.timelapse_outlined, "Time: ${widget.event.time ?? 'Not Available'}")),
-                          SizedBox(height: 8.sp),
-                          Center(child: _buildInfoRow(Icons.location_on, "Location: ${widget.event.location ?? 'Not Available'}")),
-                          SizedBox(height: 8.sp),
+                          SizedBox(
+                            height:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 30.sp
+                                    : 15.sp,
+                          ),
+                          Center(
+                            child: _buildInfoRow(
+                              Icons.timelapse_outlined,
+                              "Time: ${widget.event.time ?? 'Not Available'}",
+                            ),
+                          ),
+                          SizedBox(
+                            height:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 8.sp
+                                    : 4.sp,
+                          ),
+                          Center(
+                            child: _buildInfoRow(
+                              Icons.location_on,
+                              "Location: ${widget.event.location ?? 'Not Available'}",
+                            ),
+                          ),
+                          SizedBox(
+                            height:
+                                MediaQuery.of(context).size.width > 600
+                                    ? 8.sp
+                                    : 4.sp,
+                          ),
                           Center(
                             child: _buildInfoRow(
                               Icons.date_range,
-                              "Date: ${widget.event.date!= null
-                                  ? DateFormat('dd-MM-yyyy').format((widget.event.date))
-                                  : 'Not Available'}",
+                              "Date: ${widget.event.date != null ? DateFormat('dd-MM-yyyy').format(widget.event.date) : 'Not Available'}",
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 70.sp),
+                  SizedBox(
+                    height:
+                        MediaQuery.of(context).size.width > 600 ? 70.sp : 40.sp,
+                  ),
                   _buildSectionTitle('Description'),
-                  _buildSectionText(widget.event.details ?? "No details available"),
+                  _buildSectionText(
+                    widget.event.details ?? "No details available",
+                  ),
                 ],
               ),
             ),
           ),
-          if (widget.tabController != null) Footer(tabController: widget.tabController!),
+          if (widget.tabController != null)
+            Footer(tabController: widget.tabController!),
         ],
       ),
     );
   }
 
   Widget _buildArrowButton(IconData icon, {required bool isLeft}) {
-    bool isDisabled = isLeft ? _currentPage == 0 : _currentPage == widget.event.imageUrls.length - 1;
+    bool isDisabled =
+        isLeft
+            ? _currentPage == 0
+            : _currentPage == widget.event.imageUrls.length - 1;
     return GestureDetector(
-      onTap: isDisabled
-          ? null
-          : () {
-        if (isLeft && _currentPage > 0) {
-          _pageController.previousPage(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        } else if (!isLeft && _currentPage < widget.event.imageUrls.length - 1) {
-          _pageController.nextPage(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      },
+      onTap:
+          isDisabled
+              ? null
+              : () {
+                if (isLeft && _currentPage > 0) {
+                  _pageController.previousPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                } else if (!isLeft &&
+                    _currentPage < widget.event.imageUrls.length - 1) {
+                  _pageController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
       child: Container(
         padding: EdgeInsets.all(10.sp),
         decoration: BoxDecoration(
-          color: isDisabled ? Colors.grey.withOpacity(0.5) : Colors.black.withOpacity(0.7),
+          color:
+              isDisabled
+                  ? Colors.grey.withOpacity(0.5)
+                  : Colors.black.withOpacity(0.7),
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: Colors.white, size: 30.sp),
@@ -225,13 +319,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: WebsiteColors.primaryBlueColor),
-        SizedBox(width: 8.sp),
+        Icon(
+          icon,
+          color: WebsiteColors.primaryBlueColor,
+          size: MediaQuery.of(context).size.width > 600 ? 30.sp : 24.sp,
+        ),
+        SizedBox(width: MediaQuery.of(context).size.width > 600 ? 8.sp : 6.sp),
         Text(
           text,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: WebsiteColors.primaryBlueColor,
-            fontSize: 30.sp,
+            fontSize: MediaQuery.of(context).size.width > 600 ? 30.sp : 20.sp,
           ),
         ),
       ],

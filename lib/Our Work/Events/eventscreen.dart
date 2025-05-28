@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class EventScreen extends StatefulWidget {
@@ -54,11 +55,7 @@ class _EventScreenState extends State<EventScreen> {
         _events =
             snapshot.docs.map((doc) {
               final data =
-                  doc.data()
-                      as Map<
-                        String,
-                        dynamic
-                      >; // Explicitly cast to Map<String, dynamic>
+                  doc.data(); // Explicitly cast to Map<String, dynamic>
               return {
                 'id': doc.id,
                 'name': data['name'] ?? 'Unnamed Event',
@@ -103,35 +100,6 @@ class _EventScreenState extends State<EventScreen> {
     }
   }
 
-  Future<void> _editEvent(String eventId) async {
-    try {
-      final updatedEventData = {
-        'name': _eventNameController.text.trim(),
-        'date': Timestamp.fromDate(_selectedDate!),
-        'location': _eventLocationController.text.trim(),
-        'time': _eventTimeController.text.trim(),
-        'isOnlineEvent': _isOnlineEvent,
-        'ticketLimit': int.tryParse(_ticketLimitController.text.trim()) ?? 0,
-        'discount': double.tryParse(_discountController.text.trim()) ?? 0.0,
-        'discountFor': _discountForController.text.trim(),
-        'numberOfBuses':
-            int.tryParse(_numberOfBusesController.text.trim()) ?? 0,
-        'seatsPerBus': int.tryParse(_seatsPerBusController.text.trim()) ?? 0,
-      };
-
-      await FirebaseFirestore.instance
-          .collection('events')
-          .doc(eventId)
-          .update(updatedEventData);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Event updated successfully!')),
-      );
-    } catch (e) {
-      _showError('Failed to update event: $e');
-    }
-  }
-
   void _showError(String message) {
     ScaffoldMessenger.of(
       context,
@@ -141,28 +109,72 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Event Management')),
+      appBar: AppBar(
+        title: Text(
+          'Event Management',
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
+          ),
+        ),
+      ),
       body:
           _isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? Center(
+                child: CircularProgressIndicator(
+                  strokeWidth:
+                      MediaQuery.of(context).size.width > 600 ? 4.sp : 3.sp,
+                ),
+              )
               : ListView.builder(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(
+                  MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+                ),
                 itemCount: _events.length,
                 itemBuilder: (context, index) {
                   final event = _events[index];
                   return Card(
-                    margin: const EdgeInsets.only(bottom: 16.0),
+                    margin: EdgeInsets.only(
+                      bottom:
+                          MediaQuery.of(context).size.width > 600
+                              ? 16.sp
+                              : 12.sp,
+                    ),
                     child: ListTile(
-                      title: Text(event['name']),
+                      title: Text(
+                        event['name'],
+                        style: TextStyle(
+                          fontSize:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 18.sp
+                                  : 14.sp,
+                        ),
+                      ),
                       subtitle: Text(
                         '${DateFormat('yyyy-MM-dd').format(event['date'])} at ${event['time']}',
+                        style: TextStyle(
+                          fontSize:
+                              MediaQuery.of(context).size.width > 600
+                                  ? 16.sp
+                                  : 12.sp,
+                        ),
                       ),
                       trailing:
                           event['isOnlineEvent']
-                              ? const Icon(Icons.wifi, color: Colors.green)
-                              : const Icon(
+                              ? Icon(
+                                Icons.wifi,
+                                color: Colors.green,
+                                size:
+                                    MediaQuery.of(context).size.width > 600
+                                        ? 24.sp
+                                        : 20.sp,
+                              )
+                              : Icon(
                                 Icons.location_on,
                                 color: Colors.blue,
+                                size:
+                                    MediaQuery.of(context).size.width > 600
+                                        ? 24.sp
+                                        : 20.sp,
                               ),
                     ),
                   );
@@ -174,7 +186,10 @@ class _EventScreenState extends State<EventScreen> {
             _addEvent();
           }
         },
-        child: const Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          size: MediaQuery.of(context).size.width > 600 ? 28.sp : 24.sp,
+        ),
       ),
     );
   }

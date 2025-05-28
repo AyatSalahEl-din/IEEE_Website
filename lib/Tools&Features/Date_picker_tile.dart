@@ -18,20 +18,25 @@ class CustomDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.grey[200],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.sp)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+        ),
+      ),
       title: Text(
         initialDate != null
             ? DateFormat.yMMMd().format(initialDate!)
             : "Pick a date",
         style: TextStyle(
-          fontSize: 20.sp,
+          fontSize: MediaQuery.of(context).size.width > 600 ? 20.sp : 16.sp,
           color: WebsiteColors.primaryBlueColor,
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: const Icon(
+      trailing: Icon(
         Icons.calendar_month_outlined,
         color: WebsiteColors.primaryBlueColor,
+        size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
       ),
       onTap: () async {
         DateTime? newDateTime = await showRoundedDatePicker(
@@ -44,7 +49,8 @@ class CustomDatePicker extends StatelessWidget {
             textTheme: TextTheme(
               bodyMedium: TextStyle(
                 color: WebsiteColors.darkBlueColor,
-                fontSize: 16.sp,
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
               ),
             ),
             colorScheme: ColorScheme.fromSwatch(
@@ -54,37 +60,41 @@ class CustomDatePicker extends StatelessWidget {
           imageHeader: const AssetImage("assets/images/IEEE.jpg"),
           lastDate: DateTime(2100),
           firstDate: DateTime(2000),
-          height: 400.sp,
-          borderRadius: 16.0.sp,
+          height: MediaQuery.of(context).size.width > 600 ? 400.sp : 300.sp,
+          borderRadius: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
           styleDatePicker: MaterialRoundedDatePickerStyle(
             textStyleDayButton: TextStyle(
-              fontSize: 20.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 20.sp : 16.sp,
               color: WebsiteColors.whiteColor,
             ),
             textStyleYearButton: TextStyle(
-              fontSize: 24.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
               color: WebsiteColors.whiteColor,
             ),
             textStyleDayOnCalendar: TextStyle(
-              fontSize: 18.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
               color: Colors.black,
             ),
             textStyleDayOnCalendarSelected: TextStyle(
-              fontSize: 20.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 20.sp : 16.sp,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
             textStyleDayOnCalendarDisabled: TextStyle(
-              fontSize: 16.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
               color: Colors.grey,
             ),
-            sizeArrow: 24.sp,
+            sizeArrow: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
             colorArrowNext: WebsiteColors.primaryBlueColor,
             colorArrowPrevious: WebsiteColors.primaryBlueColor,
-            marginLeftArrowPrevious: 16.sp,
-            marginTopArrowPrevious: 16.sp,
-            marginTopArrowNext: 16.sp,
-            marginRightArrowNext: 16.sp,
+            marginLeftArrowPrevious:
+                MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+            marginTopArrowPrevious:
+                MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+            marginTopArrowNext:
+                MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
+            marginRightArrowNext:
+                MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
           ),
         );
 

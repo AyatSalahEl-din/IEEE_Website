@@ -16,14 +16,16 @@ class ComingSoonWidget extends StatelessWidget {
         children: [
           Icon(
             Icons.hourglass_empty,
-            size: 100.sp,
+            size: MediaQuery.of(context).size.width > 600 ? 100.sp : 70.sp,
             color: WebsiteColors.primaryBlueColor,
           ),
-          SizedBox(height: 20.sp),
+          SizedBox(
+            height: MediaQuery.of(context).size.width > 600 ? 20.sp : 15.sp,
+          ),
           Text(
             message,
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.primaryBlueColor,
             ),

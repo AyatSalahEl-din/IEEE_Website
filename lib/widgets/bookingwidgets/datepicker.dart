@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
 class DatePickerWidget extends StatelessWidget {
@@ -18,17 +19,15 @@ class DatePickerWidget extends StatelessWidget {
         final DateTime? picked = await showDatePicker(
           context: context,
           initialDate: selectedDate,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2025),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: ColorScheme.light(
                   primary: WebsiteColors.primaryBlueColor,
-                ),
-                // Customize additional date picker styles here
-                textTheme: TextTheme(
-                  titleLarge: TextStyle(color: WebsiteColors.darkGreyColor),
+                  onPrimary: Colors.white,
+                  onSurface: WebsiteColors.darkBlueColor,
                 ),
               ),
               child: child!,
@@ -40,10 +39,15 @@ class DatePickerWidget extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.width > 600 ? 12.sp : 10.sp,
+          horizontal: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+        ),
         decoration: BoxDecoration(
           color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+          ),
           border: Border.all(color: Colors.grey[300]!),
         ),
         child: Row(
@@ -51,12 +55,16 @@ class DatePickerWidget extends StatelessWidget {
             Icon(
               Icons.calendar_today,
               color: WebsiteColors.primaryBlueColor,
+              size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
             ),
-            SizedBox(width: 10),
+            SizedBox(
+              width: MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+            ),
             Text(
               '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
               style: TextStyle(
-                fontSize: 16,
+                fontSize:
+                    MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
                 fontWeight: FontWeight.normal,
                 color: WebsiteColors.darkGreyColor,
               ),
