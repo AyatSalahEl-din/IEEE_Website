@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GradientText extends StatelessWidget {
   final String text;
@@ -22,10 +21,7 @@ class GradientText extends StatelessWidget {
           ),
       child: Text(
         text,
-        style: style.copyWith(
-          fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
-          color: Colors.white, // Use white as base color
-        ),
+        style: style.copyWith(color: Colors.white), // Use white as base color
       ),
     );
   }
