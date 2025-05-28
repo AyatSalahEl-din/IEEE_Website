@@ -32,22 +32,38 @@ class Tools extends StatelessWidget {
         backgroundColor: WebsiteColors.primaryBlueColor,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical:
-                    MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
-                horizontal:
-                    MediaQuery.of(context).size.width > 600 ? 16.sp : 8.sp,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical:
+                            MediaQuery.of(context).size.width > 600
+                                ? 20.sp
+                                : 10.sp,
+                        horizontal:
+                            MediaQuery.of(context).size.width > 600
+                                ? 16.sp
+                                : 8.sp,
+                      ),
+                      child: _buildToolsContent(context),
+                    ),
+                    const Spacer(), // Push footer to the bottom
+                    if (tabController != null)
+                      Footer(
+                        tabController: tabController!,
+                      ), // Footer at the bottom
+                  ],
+                ),
               ),
-              child: _buildToolsContent(context),
             ),
-            if (tabController != null)
-              Footer(tabController: tabController!), // Footer at the bottom
-          ],
-        ),
+          );
+        },
       ),
     );
   }
