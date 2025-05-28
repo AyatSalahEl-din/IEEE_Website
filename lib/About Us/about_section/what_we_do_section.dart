@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/About Us/models/about_data_model.dart';
-import 'package:ieee_website/About Us/widgets/video_player_widget.dart';
 
 class WhatWeDoSection extends StatelessWidget {
   final AboutDataModel? aboutData;
@@ -38,7 +37,6 @@ class WhatWeDoSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Feature content
                 Container(
                   padding: EdgeInsets.all(24),
                   width: double.infinity,
@@ -66,7 +64,7 @@ class WhatWeDoSection extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       Text(
-                        aboutData?.empowermentText ?? 'Through IEEE-led workshops, hands-on projects, and mentorship programs, we help students develop practical skills that complement their academic education in electrical and electronic engineering.',
+                        aboutData?.empowermentText ?? 'Through IEEE-led workshops, hands-on projects, and mentorship programs...',
                         style: TextStyle(
                           fontSize: 16,
                           height: 1.6,
@@ -76,13 +74,6 @@ class WhatWeDoSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 40),
-                // Video container
-                VideoPlayerWidget(
-                  videoUrl: aboutData?.videoUrl ?? 'assets/video/IEEE_Video.mp4',
-                  videoTitle: aboutData?.videoTitle ?? 'IEEE PUA Student Branch',
-                  watchVideoText: aboutData?.watchVideoText ?? 'Watch IEEE Video',
                 ),
               ],
             ),
