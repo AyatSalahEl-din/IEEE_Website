@@ -90,10 +90,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   fixedSize: Size(190.sp, 50.sp),
                 ),
                 onPressed: () {
-                  /* Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => JoinUs()),
-                            );*/
                   UrlHelper.fetchAndLaunchURL('joinUs');
                 },
                 child: Text(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ieee_website/Home_Screen/url_helper.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
-
 
 class Footer extends StatelessWidget {
   final TabController tabController; // ✅ Accept TabController
@@ -43,14 +43,6 @@ class Footer extends StatelessWidget {
                     height: 300.sp,
                     width: 300.sp,
                   ),
-                  //SizedBox(width: 10.sp),
-                  /*Text(
-                    "IEEE PHAROS",
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      fontSize: 22.sp,
-                      color: WebsiteColors.primaryBlueColor,
-                    ),
-                  ),*/
                 ],
               ),
               //SizedBox(height: 10.sp),
@@ -71,7 +63,8 @@ class Footer extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 26.sp,
                   color: WebsiteColors.primaryBlueColor,
-                ),),
+                ),
+              ),
 
               SizedBox(height: 20.sp),
 
@@ -99,7 +92,7 @@ class Footer extends StatelessWidget {
                   context,
                 ).textTheme.displayMedium?.copyWith(fontSize: 22.sp),
               ),
-          ],
+            ],
           ),
         ),
       ],
@@ -113,11 +106,7 @@ class Footer extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (text == "Join Us") {
-            // ✅ Navigate to Join Us Page Instead of Switching Tabs
-            /* Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => JoinUs()),
-                            );*/
+            UrlHelper.fetchAndLaunchURL('joinUs');
           } else if (tabIndex != null) {
             // ✅ Switch Tab Normally
             tabController.animateTo(tabIndex);
