@@ -40,11 +40,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: WebsiteColors.whiteColor,
-
-      // ✅ Custom AppBar with TabBar
       appBar: AppBar(
+        iconTheme: IconThemeData(color: WebsiteColors.whiteColor),
         toolbarHeight: 120.sp,
-
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -54,58 +52,156 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         ),
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // IEEE Logo
-              Image.asset(
-                'assets/images/whitehoriz.png',
-                height: 170.sp,
-                width: 160.sp,
-              ),
+          child: Builder(
+            builder: (context) {
+              // Get the screen width
+              double screenWidth = MediaQuery.of(context).size.width;
 
-              // ✅ TabBar instead of Text links
-              TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicatorColor: WebsiteColors.whiteColor,
-                unselectedLabelStyle: Theme.of(context).textTheme.displayMedium,
-                labelStyle: Theme.of(context).textTheme.displaySmall,
-                tabs: const [
-                  Tab(text: "Home"),
-                  Tab(text: "About Us"),
-                  Tab(text: "Events"),
-                  Tab(text: "Projects"),
-                  Tab(text: "Contact Us"),
-                  Tab(text: "Tools"),
-                  Tab(text: "FAQ"),
-                ],
-              ),
-
-              // "Join Us" Button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: WebsiteColors.whiteColor,
-                  foregroundColor: WebsiteColors.primaryBlueColor,
-                  fixedSize: Size(190.sp, 50.sp),
-                ),
-                onPressed: () {
-                  UrlHelper.fetchAndLaunchURL('joinUs');
-                },
-                child: Text(
-                  'Join Us',
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontSize: 25.sp,
-                    color: WebsiteColors.primaryBlueColor,
-                  ),
-                ),
-              ),
-            ],
+              // Define a breakpoint for switching layouts
+              if (screenWidth < 900) {
+                // For small screens, show a Drawer (hamburger menu)
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'assets/images/whitehoriz.png',
+                      height: 170.sp,
+                      width: 160.sp,
+                    ),
+                  ],
+                );
+              } else {
+                // For larger screens, show the TabBar and Join Us button
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      'assets/images/whitehoriz.png',
+                      height: 170.sp,
+                      width: 160.sp,
+                    ),
+                    TabBar(
+                      controller: _tabController,
+                      isScrollable: true,
+                      indicatorColor: WebsiteColors.whiteColor,
+                      unselectedLabelStyle:
+                          Theme.of(context).textTheme.displayMedium,
+                      labelStyle: Theme.of(context).textTheme.displaySmall,
+                      tabs: const [
+                        Tab(text: "Home"),
+                        Tab(text: "About Us"),
+                        Tab(text: "Events"),
+                        Tab(text: "Projects"),
+                        Tab(text: "Contact Us"),
+                        Tab(text: "Tools"),
+                        Tab(text: "FAQ"),
+                      ],
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: WebsiteColors.whiteColor,
+                        foregroundColor: WebsiteColors.primaryBlueColor,
+                        fixedSize: Size(190.sp, 50.sp),
+                      ),
+                      onPressed: () {
+                        UrlHelper.fetchAndLaunchURL('joinUs');
+                      },
+                      child: Text(
+                        'Join Us',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.displayMedium?.copyWith(
+                          fontSize: 25.sp,
+                          color: WebsiteColors.primaryBlueColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),
-
-      // ✅ Remove Footer from Base
+      endDrawer:
+          MediaQuery.of(context).size.width < 900
+              ? Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: WebsiteColors.primaryBlueColor,
+                      ),
+                      child: Text(
+                        'Tabs',
+                        style: TextStyle(
+                          color: WebsiteColors.whiteColor,
+                          fontSize: 30,
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('Home'),
+                      onTap: () {
+                        _tabController.animateTo(0);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('About Us'),
+                      onTap: () {
+                        _tabController.animateTo(1);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Events'),
+                      onTap: () {
+                        _tabController.animateTo(2);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Projects'),
+                      onTap: () {
+                        _tabController.animateTo(3);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Contact Us'),
+                      onTap: () {
+                        _tabController.animateTo(4);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Tools'),
+                      onTap: () {
+                        _tabController.animateTo(5);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('FAQ'),
+                      onTap: () {
+                        _tabController.animateTo(6);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
+                      title: Text('Join Us'),
+                      onTap: () {
+                        UrlHelper.fetchAndLaunchURL('joinUs');
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              )
+              : null, // No drawer for large screens
       body: TabBarView(
         controller: _tabController,
         children: [
