@@ -196,6 +196,7 @@ class _EventsCardState extends State<EventsCard> {
     List<String>? localImages = EventsCard.eventImageMap[widget.event.name];
     String? firstImage;
 
+    // ignore: unnecessary_null_comparison
     if (firebaseImages != null && firebaseImages.isNotEmpty) {
       firstImage = firebaseImages.first;
     } else if (localImages != null && localImages.isNotEmpty) {

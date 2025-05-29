@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../provider/chat_provider.dart';
 
 class EmptyHistoryWidget extends StatelessWidget {
   const EmptyHistoryWidget({super.key});

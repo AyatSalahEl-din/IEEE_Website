@@ -49,6 +49,7 @@ class CustomTextFormField extends StatelessWidget {
               fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
             ),
         prefixIcon:
+            // ignore: unnecessary_null_comparison
             icon != null
                 ? Icon(
                   icon,

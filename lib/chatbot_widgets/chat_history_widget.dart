@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../Utility/utilities.dart';
 import '../hive/chat_history.dart';
-import '../provider/chat_provider.dart';
 
 
 class ChatHistoryWidget extends StatelessWidget {

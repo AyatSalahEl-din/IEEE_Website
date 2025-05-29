@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math' as Math;
+//port 'dart:math' as Math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
@@ -34,7 +34,6 @@ class _ProjectsState extends State<Projects> {
   String? _lastProjectId;
   List<double> projectOpacities = [];
   Timer? _searchDebounce;
-  String _lastSearchQuery = '';
   List<String> _allCategories = [];
   String? _selectedCategory;
   int _currentCategoryIndex = 0;
@@ -85,70 +84,9 @@ class _ProjectsState extends State<Projects> {
   }
 
   void _setupScrollListener() {
+    // Remove fading logic by not modifying projectOpacities
     _scrollController.addListener(() {
-      double currentScroll = _scrollController.position.pixels;
-      double viewportHeight = MediaQuery.of(context).size.height;
-
-      setState(() {
-        for (int i = 1; i < _projects.length; i++) {
-          // Start from index 1
-          double projectPosition = (i * 500.sp) + 600.sp;
-          double fadeStart = projectPosition - viewportHeight;
-          double fadeEnd = projectPosition - (viewportHeight * 0.4);
-
-          if (currentScroll >= fadeStart && currentScroll <= fadeEnd) {
-            double progress =
-                (currentScroll - fadeStart) / (fadeEnd - fadeStart);
-            double easedProgress = Math.pow(progress, 2.0).toDouble();
-            projectOpacities[i] = easedProgress.clamp(0.0, 1.0);
-          } else if (currentScroll > fadeEnd) {
-            projectOpacities[i] = 1.0;
-          } else {
-            projectOpacities[i] = 0.0;
-          }
-        }
-      });
-    });
-  }
-
-  Future<void> _handleSearch(String query) async {
-    if (_searchDebounce?.isActive ?? false) {
-      _searchDebounce!.cancel();
-    }
-
-    // Don't search if query hasn't changed
-    if (query == _lastSearchQuery && _selectedCategory == null) return;
-    _lastSearchQuery = query;
-
-    _searchDebounce = Timer(Duration(milliseconds: 500), () async {
-      setState(() => _isLoading = true);
-      try {
-        List<Project> results;
-        if (query.isEmpty && _selectedCategory == null) {
-          // Retrieve all projects in original order
-          results = List.from(_originalProjects);
-        } else {
-          results = await _projectRepository.searchProjects(query);
-          if (_selectedCategory != null) {
-            results =
-                results
-                    .where(
-                      (project) => project.tags.contains(_selectedCategory),
-                    )
-                    .toList();
-          }
-        }
-        setState(() {
-          _projects = results;
-          projectOpacities = List.generate(results.length, (index) => 1.0);
-          _isSelected = List.generate(results.length, (index) => false);
-          _isHovered = List.generate(results.length, (index) => false);
-        });
-      } catch (e) {
-        print('Error searching projects: $e');
-      } finally {
-        setState(() => _isLoading = false);
-      }
+      setState(() {}); // Only update the state without opacity logic
     });
   }
 
@@ -305,7 +243,6 @@ class _ProjectsState extends State<Projects> {
               textAlign: TextAlign.start,
               onChanged: (value) {
                 setState(() {
-                  _lastSearchQuery = value;
                   _projects =
                       _originalProjects.where((project) {
                         return project.title.toLowerCase().contains(
@@ -478,7 +415,7 @@ class _ProjectsState extends State<Projects> {
 
   Widget _buildProjectsSection() {
     if (_isLoading && _projects.isEmpty) {
-      return Center(child: _buildFlickeringDots());
+      return Center(child: _buildFlickeringDots()); // Use flickering dots
     }
 
     if (_projects.isEmpty) {
@@ -490,10 +427,10 @@ class _ProjectsState extends State<Projects> {
       child: Column(
         children: [
           ...List.generate(_projects.length, (index) {
-            return _buildProjectItem(index);
+            return _buildProjectItem(index); // Directly display projects
           }),
-          SizedBox(height: 40.sp), // Add space between projects and the button
-          if (_isLoading) _buildFlickeringDots(),
+          SizedBox(height: 40.sp),
+          if (_isLoading) _buildFlickeringDots(), // Use flickering dots
           if (!_isLoading && _lastProjectId != null) _buildLoadMoreButton(),
         ],
       ),
@@ -513,13 +450,11 @@ class _ProjectsState extends State<Projects> {
             width: 10.sp,
             height: 10.sp,
             decoration: BoxDecoration(
-              color: _isLoading ? Colors.grey : Colors.transparent,
+              color: Colors.grey.withOpacity(index == 0 ? 0.3 : 0.6),
               shape: BoxShape.circle,
             ),
             onEnd: () {
-              if (_isLoading) {
-                setState(() {});
-              }
+              setState(() {});
             },
           );
         }),
@@ -560,59 +495,42 @@ class _ProjectsState extends State<Projects> {
 
   Widget _buildProjectItem(int index) {
     bool isEven = index % 2 == 0;
-    return AnimatedOpacity(
-      duration: Duration(milliseconds: 300),
-      opacity:
-          index == 0
-              ? 1.0
-              : projectOpacities[index], // Ensure first project is not blurred
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 100.sp),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (_) => setState(() => _isHovered[index] = true),
-          onExit: (_) => setState(() => _isHovered[index] = false),
-          child: InkWell(
-            onTap: () => _navigateToProjectDetails(index),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.sp),
-                color: Colors.white,
-                boxShadow:
-                    _isSelected[index]
-                        ? [
-                          BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(
-                              0.5,
-                            ),
-                            blurRadius: 15,
-                            spreadRadius: 15,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 100.sp),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovered[index] = true),
+        onExit: (_) => setState(() => _isHovered[index] = false),
+        child: InkWell(
+          onTap: () => _navigateToProjectDetails(index),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.sp),
+              color: Colors.white,
+              boxShadow:
+                  _isHovered[index]
+                      ? [
+                        BoxShadow(
+                          color: WebsiteColors.primaryBlueColor.withOpacity(
+                            0.2,
                           ),
-                        ]
-                        : _isHovered[index]
-                        ? [
-                          BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(
-                              0.2,
-                            ),
-                            blurRadius: 15,
-                            spreadRadius: 15,
-                          ),
-                        ]
-                        : [],
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(30.sp),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isEven) _buildProjectImage(_projects[index]),
-                    if (isEven) SizedBox(width: 60.sp),
-                    Expanded(child: _buildProjectContent(_projects[index])),
-                    if (!isEven) SizedBox(width: 60.sp),
-                    if (!isEven) _buildProjectImage(_projects[index]),
-                  ],
-                ),
+                          blurRadius: 15,
+                          spreadRadius: 15,
+                        ),
+                      ]
+                      : [],
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(30.sp),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (isEven) _buildProjectImage(_projects[index]),
+                  if (isEven) SizedBox(width: 60.sp),
+                  Expanded(child: _buildProjectContent(_projects[index])),
+                  if (!isEven) SizedBox(width: 60.sp),
+                  if (!isEven) _buildProjectImage(_projects[index]),
+                ],
               ),
             ),
           ),
@@ -773,23 +691,36 @@ class _ProjectsState extends State<Projects> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        controller: _scrollController,
-        children: [
-          // Header Section
-          _buildHeroSection(),
-          SizedBox(height: 20.sp),
-          // Content Section
-          _buildCategoryFilter(),
-          SizedBox(height: 20.sp),
-          _buildProjectsSection(),
-          SizedBox(height: 20.sp),
-          // Footer Section
-          if (widget.tabController != null)
-            Footer(
-              tabController: widget.tabController!,
-            ), // Footer appears at the bottom when scrolled to
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          // Header Section
+                          _buildHeroSection(),
+                          SizedBox(height: 20.sp),
+                          // Content Section
+                          _buildCategoryFilter(),
+                          SizedBox(height: 20.sp),
+                          _buildProjectsSection(),
+                          SizedBox(height: 20.sp),
+                        ],
+                      ),
+                    ),
+                    if (widget.tabController != null)
+                      Footer(tabController: widget.tabController!),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
