@@ -58,7 +58,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
               double screenWidth = MediaQuery.of(context).size.width;
 
               // Define a breakpoint for switching layouts
-              if (screenWidth < 900) {
+              if (screenWidth < 1000) {
                 // For small screens, show a Drawer (hamburger menu)
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,7 +124,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         ),
       ),
       endDrawer:
-          MediaQuery.of(context).size.width < 900
+          MediaQuery.of(context).size.width < 1000
               ? Drawer(
                 child: ListView(
                   padding: EdgeInsets.zero,

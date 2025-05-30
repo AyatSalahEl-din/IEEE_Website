@@ -17,8 +17,18 @@ class TeamMemberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 450.sp,
-      height: 520.sp,
+      // Remove fixed width and height to allow the card to size itself based on content
+      // and let the parent layout (e.g., Wrap) handle its overall positioning.
+      // If you MUST have a fixed width, consider making the text smaller or
+      // using FittedBox (which you want to avoid) or allow parent scrolling.
+      // For now, we'll remove them to truly prevent text overflow by allowing expansion.
+      // width: 450.sp, // REMOVED
+      // height: 520.sp, // REMOVED
+      constraints: BoxConstraints(
+        maxWidth: 450.sp, // Set a max width, but allow it to be smaller
+        minWidth: 200.sp, // Set a minimum width for very small screens
+        minHeight: 520.sp, // Maintain minimum height to prevent collapse
+      ),
       decoration: BoxDecoration(
         color: WebsiteColors.whiteColor,
         borderRadius: BorderRadius.circular(20.sp),
@@ -36,8 +46,9 @@ class TeamMemberCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12.sp),
             child: Image.network(
-              "$imagePath?timestamp=${DateTime.now().millisecondsSinceEpoch}", // Adds unique value to URL
-              width: 430.sp,
+              "$imagePath?timestamp=${DateTime.now().millisecondsSinceEpoch}",
+              width:
+                  430.sp, // This width will now be relative to the card's actual width
               height: 400.sp,
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
@@ -53,27 +64,36 @@ class TeamMemberCard extends StatelessWidget {
                 );
               },
               errorBuilder: (context, error, stackTrace) {
-                print("Image Load Error: $imagePath"); // Debugging
+                print("Image Load Error: $imagePath");
                 return Icon(Icons.error, color: Colors.red, size: 40);
               },
             ),
           ),
           SizedBox(height: 10.sp),
-          Text(
-            name,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: WebsiteColors.darkBlueColor,
+          // Add Padding to give text some breathing room horizontally
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.sp),
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                color: WebsiteColors.darkBlueColor,
+              ),
+              maxLines: null, // Allow unlimited lines for wrapping
             ),
           ),
-
           SizedBox(height: 10.sp),
-          Text(
-            jobTitle,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              fontSize: 25.sp,
-              color: WebsiteColors.visionColor,
+          // Add Padding for jobTitle as well
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.sp),
+            child: Text(
+              jobTitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                fontSize: 25.sp,
+                color: WebsiteColors.visionColor,
+              ),
+              maxLines: null, // Allow unlimited lines for wrapping
             ),
           ),
         ],

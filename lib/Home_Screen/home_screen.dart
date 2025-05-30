@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
               HomeScreenFeatureButton(
                 left: 1391.sp,
                 top: 393.sp,
-
                 onTap: () => widget.tabController!.animateTo(2),
+
                 child: Row(
                   children: [
                     Container(
@@ -73,20 +73,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: 30.sp,
                       ),
                     ),
-                    SizedBox(width: 15.sp),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Upcoming Events",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          "Book your seats",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
+                    SizedBox(width: 15.w), // 📏 Keep original spacing
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Upcoming Events",
+                            style: Theme.of(context).textTheme.titleLarge,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "Book your seats",
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -104,37 +111,58 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 63.sp,
                     ),
                     SizedBox(width: 15.sp),
-                    Text(
-                      "New Features",
-                      style: Theme.of(context).textTheme.titleLarge,
+
+                    Expanded(
+                      child: Text(
+                        "New Features",
+                        style:
+                            Theme.of(
+                              context,
+                            ).textTheme.titleLarge, // 🎨 Keep original style
+                        maxLines: null, // ✅ Allow unlimited lines for wrapping
+                        // overflow: TextOverflow.clip,
+                      ),
                     ),
                   ],
                 ),
               ),
 
+              // HomeScreenFeatureButton 3
               HomeScreenFeatureButton(
-                left: 1400.sp,
-                top: 750.sp,
+                left: 1400.sp, // 📏 Keep original left position
+                top: 750.sp, // 📏 Keep original top position
                 onTap: () => widget.tabController!.animateTo(3),
                 child: Row(
                   children: [
                     Container(
-                      height: 50.sp,
-                      width: 50.sp,
+                      height: 50.sp, // 🎨 Keep original style
+                      width: 50.sp, // 🎨 Keep original style
                       decoration: BoxDecoration(
-                        color: WebsiteColors.primaryYellowColor,
+                        color:
+                            WebsiteColors
+                                .primaryYellowColor, // 🎨 Keep original color
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.lightbulb,
-                        color: WebsiteColors.whiteColor,
-                        size: 30.sp,
+                        color:
+                            WebsiteColors.whiteColor, // 🎨 Keep original color
+                        size: 30.sp, // 🎨 Keep original size
                       ),
                     ),
-                    SizedBox(width: 15.sp),
-                    Text(
-                      "Papers and Projects",
-                      style: Theme.of(context).textTheme.titleLarge,
+                    SizedBox(width: 15.sp), // 📏 Keep original spacing
+                    // ✅ Use Expanded for the Text
+                    Expanded(
+                      // ✅ This allows the Text to take remaining space
+                      child: Text(
+                        "Papers and Projects",
+                        style:
+                            Theme.of(
+                              context,
+                            ).textTheme.titleLarge, // 🎨 Keep original style
+                        maxLines: null, // ✅ Allow unlimited lines for wrapping
+                        // overflow: TextOverflow.clip,
+                      ),
                     ),
                   ],
                 ),
@@ -146,7 +174,12 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               WelcomeSection(),
-              Text("Our Vision", style: Theme.of(context).textTheme.bodyLarge),
+              Text(
+                "Our Vision",
+                style: Theme.of(context).textTheme.bodyLarge,
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
               SizedBox(height: 40.h),
 
               Row(

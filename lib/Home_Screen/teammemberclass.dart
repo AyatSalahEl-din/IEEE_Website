@@ -40,7 +40,12 @@ class OurTeamSection extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: 200.sp),
-        Text("Meet Our Team", style: Theme.of(context).textTheme.bodyLarge),
+        Text(
+          "Meet Our Team",
+          style: Theme.of(context).textTheme.bodyLarge,
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+        ),
         SizedBox(height: 40.sp),
 
         // Fetch members from Firestore in real-time, ordered by number (ascending)
