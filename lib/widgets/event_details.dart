@@ -202,7 +202,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           Center(
                             child: _buildInfoRow(
                               Icons.timelapse_outlined,
-                              "Time: ${widget.event.time ?? 'Not Available'}",
+                              "Time: ${widget.event.time}",
                             ),
                           ),
                           SizedBox(
@@ -214,7 +214,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           Center(
                             child: _buildInfoRow(
                               Icons.location_on,
-                              "Location: ${widget.event.location ?? 'Not Available'}",
+                              "Location: ${widget.event.location}",
                             ),
                           ),
                           SizedBox(
@@ -226,6 +226,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                           Center(
                             child: _buildInfoRow(
                               Icons.date_range,
+                              // ignore: unnecessary_null_comparison
                               "Date: ${widget.event.date != null ? DateFormat('dd-MM-yyyy').format(widget.event.date) : 'Not Available'}",
                             ),
                           ),
@@ -239,7 +240,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   ),
                   _buildSectionTitle('Description'),
                   _buildSectionText(
-                    widget.event.details ?? "No details available",
+                    widget.event.details,
                   ),
                 ],
               ),

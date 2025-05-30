@@ -493,49 +493,6 @@ Please let me know the next steps for payment.
     );
   }
 
-  Future<void> _launchWhatsApp(Event event) async {
-    // Ensure all personal details are filled
-    if (_userNameController.text.trim().isEmpty ||
-        _userEmailController.text.trim().isEmpty ||
-        _userPhoneController.text.trim().isEmpty) {
-      _showError(
-        'Please fill in all personal details (Name, Email, Phone) before sending the WhatsApp message.',
-      );
-      return;
-    }
-
-    final message = '''
-Hello, I would like to confirm my booking for the following event:
-
-Event Details:
-- Name: ${event.name}
-- Date: ${DateFormat('yyyy-MM-dd').format(event.date)}
-- Location: ${event.location}
-- Time: ${event.time}
-
-Personal Details:
-- Name: ${_userNameController.text.trim()}
-- Email: ${_userEmailController.text.trim()}
-- Phone: ${_userPhoneController.text.trim()}
-
-Booking Details:
-- Number of Tickets: $_numberOfTickets
-${_numberOfBusTickets > 0 ? '- Bus Tickets: $_numberOfBusTickets\n' : ''}
-- Total Price: \$${_totalPrice.toStringAsFixed(2)}
-
-Please confirm the payment method and next steps.
-''';
-
-    final whatsappUrl = Uri.parse(
-      "https://wa.me/${event.contactNumber}?text=${Uri.encodeComponent(message)}",
-    );
-
-    if (await canLaunchUrl(whatsappUrl)) {
-      await launchUrl(whatsappUrl, mode: LaunchMode.externalApplication);
-    } else {
-      _showError('Could not launch WhatsApp');
-    }
-  }
 
   Future<void> _sendAttendanceConfirmation(Event event) async {
     try {
@@ -554,33 +511,6 @@ Please confirm the payment method and next steps.
     }
   }
 
-  Future<void> _showDatePicker(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: WebsiteColors.primaryBlueColor,
-            colorScheme: ColorScheme.light(
-              primary: WebsiteColors.primaryBlueColor,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: WebsiteColors.darkBlueColor,
-            ),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selectedDate != null) {
-      // Handle the selected date
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
