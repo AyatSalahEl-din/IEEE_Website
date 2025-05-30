@@ -17,13 +17,6 @@ class TeamMemberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Remove fixed width and height to allow the card to size itself based on content
-      // and let the parent layout (e.g., Wrap) handle its overall positioning.
-      // If you MUST have a fixed width, consider making the text smaller or
-      // using FittedBox (which you want to avoid) or allow parent scrolling.
-      // For now, we'll remove them to truly prevent text overflow by allowing expansion.
-      // width: 450.sp, // REMOVED
-      // height: 520.sp, // REMOVED
       constraints: BoxConstraints(
         maxWidth: 450.sp, // Set a max width, but allow it to be smaller
         minWidth: 200.sp, // Set a minimum width for very small screens
