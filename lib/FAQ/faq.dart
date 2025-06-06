@@ -177,7 +177,7 @@ class _FAQState extends State<FAQ> {
           textAlign: TextAlign.center,
           text: TextSpan(
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

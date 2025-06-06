@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
-class CustomTextForm extends StatelessWidget {
+class CustomTextForm extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final IconData? icon;
@@ -45,104 +44,61 @@ class CustomTextForm extends StatelessWidget {
   });
 
   @override
+  _CustomTextFormState createState() => _CustomTextFormState();
+}
+
+class _CustomTextFormState extends State<CustomTextForm> {
+  bool _isWriting = false;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      validator: validator,
-      maxLines:
-          isMultiline
-              ? (maxLines ?? null)
-              : (obscureText ? 1 : (maxLines ?? 1)),
-      minLines: isMultiline ? (minLines ?? 3) : null,
-      obscureText: obscureText,
+      controller: widget.controller,
+      validator: widget.validator,
+      maxLines: widget.isMultiline ? (widget.maxLines ?? null) : (widget.obscureText ? 1 : (widget.maxLines ?? 1)),
+      minLines: widget.isMultiline ? (widget.minLines ?? 3) : null,
+      obscureText: widget.obscureText,
+      onChanged: (value) {
+        setState(() {
+          _isWriting = value.isNotEmpty;
+        });
+        if (widget.onChanged != null) {
+          widget.onChanged!(value);
+        }
+      },
       decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        hintStyle:
-            hintStyle ??
-            TextStyle(
-              color: WebsiteColors.greyColor,
-              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
-            ),
-        labelStyle:
-            labelStyle ??
-            TextStyle(
-              color: WebsiteColors.primaryBlueColor,
-              fontWeight: FontWeight.bold,
-              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
-            ),
-        prefixIcon:
-            icon != null
-                ? Icon(
-                  icon,
-                  color: WebsiteColors.primaryBlueColor,
-                  size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
-                )
-                : null,
-        suffixIcon: suffix,
-        contentPadding:
-            contentPadding ??
-            EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
-              horizontal:
-                  MediaQuery.of(context).size.width > 600 ? 16.sp : 12.sp,
-            ),
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        hintStyle: widget.hintStyle ?? TextStyle(color: WebsiteColors.greyColor, fontSize: 16),
+        labelStyle: widget.labelStyle ?? TextStyle(color: WebsiteColors.primaryBlueColor, fontWeight: FontWeight.bold, fontSize: 16),
+        prefixIcon: widget.icon != null ? Icon(widget.icon, color: WebsiteColors.primaryBlueColor, size: 24) : null,
+        suffixIcon: widget.suffix,
+        contentPadding: widget.contentPadding ?? EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
-          ),
-          borderSide: BorderSide(
-            color: WebsiteColors.primaryBlueColor,
-            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: WebsiteColors.primaryBlueColor, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
-          ),
-          borderSide: BorderSide(
-            color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
-            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: WebsiteColors.primaryBlueColor.withOpacity(0.7), width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
-          ),
-          borderSide: BorderSide(
-            color: WebsiteColors.primaryBlueColor,
-            width: MediaQuery.of(context).size.width > 600 ? 2.0.sp : 1.5.sp,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: _isWriting ? Colors.blue : WebsiteColors.primaryBlueColor, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
-          ),
-          borderSide: BorderSide(
-            color: Colors.red,
-            width: MediaQuery.of(context).size.width > 600 ? 1.5.sp : 1.0.sp,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.red, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
-          ),
-          borderSide: BorderSide(
-            color: Colors.red.shade700,
-            width: MediaQuery.of(context).size.width > 600 ? 2.0.sp : 1.5.sp,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.red.shade700, width: 2),
         ),
       ),
-      style:
-          textStyle ??
-          TextStyle(
-            fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
-            color: Colors.black87,
-          ),
-      keyboardType: keyboardType,
-      onChanged: onChanged,
-      readOnly: readOnly,
-      onTap: onTap,
+      style: widget.textStyle ?? TextStyle(fontSize: 16, color: Colors.black87),
+      keyboardType: widget.keyboardType,
+      readOnly: widget.readOnly,
+      onTap: widget.onTap,
     );
   }
 }

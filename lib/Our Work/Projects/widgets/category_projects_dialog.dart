@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Our Work/Projects/pages/project_details_page.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:intl/intl.dart';
@@ -29,13 +28,13 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-          MediaQuery.of(context).size.width > 600 ? 20.sp : 12.sp,
+          20,
         ),
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width > 600 ? 800.sp : 400.sp,
+        width: 800,
         padding: EdgeInsets.all(
-          MediaQuery.of(context).size.width > 600 ? 30.sp : 20.sp,
+          30,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -50,7 +49,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,
                     fontSize:
-                        MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
+                        40,
                   ),
                 ),
                 IconButton(
@@ -58,13 +57,13 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                   icon: Icon(
                     Icons.close,
                     size:
-                        MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+                        24,
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height: 20,
             ),
             Container(
               constraints: BoxConstraints(
@@ -81,9 +80,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                   return Padding(
                     padding: EdgeInsets.only(
                       bottom:
-                          MediaQuery.of(context).size.width > 600
-                              ? 20.sp
-                              : 10.sp,
+                         20,
                     ),
                     child: MouseRegion(
                       onEnter: (_) {
@@ -119,38 +116,28 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width > 600
-                                  ? 15.sp
-                                  : 10.sp,
+                              15,
                             ),
                             boxShadow: [
                               if (isHovered || isClicked)
                                 BoxShadow(
                                   color: Colors.blue.withOpacity(0.5),
                                   blurRadius:
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 15.sp
-                                          : 10.sp,
+                                     15,
                                   spreadRadius:
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 5.sp
-                                          : 3.sp,
+                                      5,
                                 ),
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.1),
                                 blurRadius:
-                                    MediaQuery.of(context).size.width > 600
-                                        ? 10.sp
-                                        : 6.sp,
+                                    10,
                                 offset: const Offset(0, 5),
                               ),
                             ],
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width > 600
-                                  ? 15.sp
-                                  : 10.sp,
+                              15,
                             ),
                             child: Row(
                               children: [
@@ -158,41 +145,27 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                     project.imageUrls!.isNotEmpty)
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 10.sp
-                                          : 8.sp,
+                                      10,
                                     ),
                                     child: Image.network(
                                       project.imageUrls!.first,
                                       width:
-                                          MediaQuery.of(context).size.width >
-                                                  600
-                                              ? 100.sp
-                                              : 80.sp,
+                                         100,
                                       height:
-                                          MediaQuery.of(context).size.width >
-                                                  600
-                                              ? 100.sp
-                                              : 80.sp,
+                                          100,
                                       fit: BoxFit.cover,
                                     ),
                                   )
                                 else
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width > 600
-                                            ? 100.sp
-                                            : 80.sp,
+                                       100,
                                     height:
-                                        MediaQuery.of(context).size.width > 600
-                                            ? 100.sp
-                                            : 80.sp,
+                                        100,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[300],
                                       borderRadius: BorderRadius.circular(
-                                        MediaQuery.of(context).size.width > 600
-                                            ? 10.sp
-                                            : 8.sp,
+                                        10,
                                       ),
                                     ),
                                     child: Center(
@@ -201,21 +174,14 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                         style: TextStyle(
                                           color: Colors.grey[600],
                                           fontSize:
-                                              MediaQuery.of(
-                                                        context,
-                                                      ).size.width >
-                                                      600
-                                                  ? 14.sp
-                                                  : 12.sp,
+                                              14,
                                         ),
                                       ),
                                     ),
                                   ),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 15.sp
-                                          : 10.sp,
+                                     15,
                                 ),
                                 Expanded(
                                   child: Column(
@@ -230,20 +196,12 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                           fontSize:
-                                              MediaQuery.of(
-                                                        context,
-                                                      ).size.width >
-                                                      600
-                                                  ? 18.sp
-                                                  : 14.sp,
+                                              18,
                                         ),
                                       ),
                                       SizedBox(
                                         height:
-                                            MediaQuery.of(context).size.width >
-                                                    600
-                                                ? 5.sp
-                                                : 3.sp,
+                                           5,
                                       ),
                                       Text(
                                         project.description,
@@ -254,20 +212,12 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                         ).textTheme.bodySmall!.copyWith(
                                           color: Colors.grey[700],
                                           fontSize:
-                                              MediaQuery.of(
-                                                        context,
-                                                      ).size.width >
-                                                      600
-                                                  ? 16.sp
-                                                  : 12.sp,
+                                             16,
                                         ),
                                       ),
                                       SizedBox(
                                         height:
-                                            MediaQuery.of(context).size.width >
-                                                    600
-                                                ? 5.sp
-                                                : 3.sp,
+                                            5,
                                       ),
                                       Text(
                                         "Date: ${DateFormat('dd MMM yyyy').format(project.date)}",
@@ -276,12 +226,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                         ).textTheme.bodySmall!.copyWith(
                                           color: Colors.grey[600],
                                           fontSize:
-                                              MediaQuery.of(
-                                                        context,
-                                                      ).size.width >
-                                                      600
-                                                  ? 14.sp
-                                                  : 12.sp,
+                                              14,
                                         ),
                                       ),
                                     ],

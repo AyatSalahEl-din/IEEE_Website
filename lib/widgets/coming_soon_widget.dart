@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../Themes/website_colors.dart';
 
 class ComingSoonWidget extends StatelessWidget {
@@ -16,16 +15,16 @@ class ComingSoonWidget extends StatelessWidget {
         children: [
           Icon(
             Icons.hourglass_empty,
-            size: MediaQuery.of(context).size.width > 600 ? 100.sp : 70.sp,
+            size: 100,
             color: WebsiteColors.primaryBlueColor,
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.width > 600 ? 20.sp : 15.sp,
+            height: 20,
           ),
           Text(
             message,
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.primaryBlueColor,
             ),

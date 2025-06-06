@@ -41,7 +41,7 @@ class HeroSection extends StatelessWidget {
               Text(
                 aboutData?.heroTitle ?? 'About IEEE PUA',
                 style: TextStyle(
-                  fontSize: 60,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.whiteColor,
                   letterSpacing: -0.5,

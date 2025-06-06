@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
@@ -24,12 +23,12 @@ class CustomDropdown<T> extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(
-          MediaQuery.of(context).size.width > 600 ? 12.sp : 8.sp,
+          12,
         ),
         border: Border.all(color: Colors.grey[300]!),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width > 600 ? 15.sp : 10.sp,
+        horizontal: 15,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
@@ -38,7 +37,7 @@ class CustomDropdown<T> extends StatelessWidget {
             hintText,
             style: TextStyle(
               color: WebsiteColors.greyColor,
-              fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+              fontSize: 16,
               fontWeight: FontWeight.w100,
               fontFamily: 'Poppins',
             ),
@@ -51,11 +50,11 @@ class CustomDropdown<T> extends StatelessWidget {
           icon: Icon(
             Icons.keyboard_arrow_down,
             color: WebsiteColors.primaryBlueColor,
-            size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+            size: 24,
           ),
           style: TextStyle(
             color: WebsiteColors.greyColor,
-            fontSize: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+            fontSize: 16,
             fontWeight: FontWeight.w100,
             fontFamily: 'Poppins',
           ),

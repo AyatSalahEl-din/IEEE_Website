@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -121,18 +120,18 @@ class _EventProposalFormState extends State<EventProposalForm> {
         backgroundColor: WebsiteColors.primaryBlueColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white, size: 24.sp),
+          icon: Icon(Icons.arrow_back, color: Colors.white, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Propose an Event',
-          style: TextStyle(color: Colors.white, fontSize: 20.sp),
+          style: TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
       body: Form(
         key: widget.formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.sp),
+          padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -142,23 +141,22 @@ class _EventProposalFormState extends State<EventProposalForm> {
                   style: TextStyle(
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,
-                    fontSize:
-                        MediaQuery.of(context).size.width > 600 ? 28.sp : 20.sp,
+                    fontSize: 20,
                   ),
                 ),
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               Text(
-                'Do you want to propose an event to collaborate with IEEE SB PUA? Fill out the form below with your details and event information, and we will get back to you shortly!',
+                'Do you want to propose an event to collaborate with IEEE? Fill out the form below with your details and event information, and we will get back to you shortly!',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 14,
                   color: WebsiteColors.darkBlueColor,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 30.sp),
+              SizedBox(height: 30),
               _buildSectionTitle('Organizer Information'),
-              SizedBox(height: 15.sp),
+              SizedBox(height: 15),
               CustomTextForm(
                 controller: widget.organizerNameController,
                 labelText: 'Your Full Name',
@@ -170,7 +168,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please enter your name'
                             : null,
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.companyNameController,
                 labelText: 'Company/Organization Name',
@@ -182,7 +180,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please enter company/organization name'
                             : null,
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.emailController,
                 labelText: 'Email Address',
@@ -198,7 +196,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                   return null;
                 },
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.phoneController,
                 labelText: 'Phone Number',
@@ -210,11 +208,11 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please enter your phone number'
                             : null,
               ),
-              SizedBox(height: 30.sp),
+              SizedBox(height: 30),
               Divider(color: WebsiteColors.primaryBlueColor.withOpacity(0.3)),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               _buildSectionTitle('Event Details'),
-              SizedBox(height: 15.sp),
+              SizedBox(height: 15),
               CustomTextForm(
                 controller: widget.eventNameController,
                 labelText: 'Event Name',
@@ -226,7 +224,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please enter event name'
                             : null,
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.eventDescriptionController,
                 labelText: 'Event Description',
@@ -239,17 +237,16 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please enter event description'
                             : null,
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               Text(
                 "Proposed Date",
                 style: TextStyle(
-                  fontSize:
-                      MediaQuery.of(context).size.width > 600 ? 18.sp : 16.sp,
+                  fontSize:18 ,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.darkBlueColor,
                 ),
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(height: 10),
               CustomDatePicker(
                 initialDate: selectedDate,
                 onDatePicked: (pickedDate) {
@@ -262,16 +259,16 @@ class _EventProposalFormState extends State<EventProposalForm> {
                   });
                 },
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               Text(
                 'Event Format',
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.primaryBlueColor,
                 ),
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(height: 10),
               Row(
                 children: [
                   _buildChoiceChip('In-Person', !isVirtual && !isHybrid, () {
@@ -280,14 +277,14 @@ class _EventProposalFormState extends State<EventProposalForm> {
                       isHybrid = false;
                     });
                   }),
-                  SizedBox(width: 10.sp),
+                  SizedBox(width: 10),
                   _buildChoiceChip('Virtual', isVirtual, () {
                     setState(() {
                       isVirtual = true;
                       isHybrid = false;
                     });
                   }),
-                  SizedBox(width: 10.sp),
+                  SizedBox(width: 10),
                   _buildChoiceChip('Hybrid', isHybrid, () {
                     setState(() {
                       isHybrid = true;
@@ -296,7 +293,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                   }),
                 ],
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               if (!isVirtual)
                 CustomTextForm(
                   controller: widget.proposedLocationController,
@@ -310,7 +307,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                     return null;
                   },
                 ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.ieeeBenefitsController,
                 labelText: 'How will IEEE benefit from this collaboration?',
@@ -323,7 +320,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                             ? 'Please explain benefits to IEEE'
                             : null,
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               CustomTextForm(
                 controller: widget.additionalNotesController,
                 labelText: 'Additional Notes/Requirements',
@@ -331,23 +328,21 @@ class _EventProposalFormState extends State<EventProposalForm> {
                 isMultiline: true,
                 keyboardType: TextInputType.multiline,
               ),
-              SizedBox(height: 40.sp),
+              SizedBox(height: 40),
               Center(
                 child: SizedBox(
-                  width: 250.sp,
+                  width: 250,
                   child: ElevatedButton(
                     onPressed: widget.isLoading ? null : _submitProposal,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: WebsiteColors.primaryBlueColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.sp),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.symmetric(
                         vertical:
-                            MediaQuery.of(context).size.width > 600
-                                ? 15.sp
-                                : 12.sp,
-                        horizontal: 30.sp,
+                            15,
+                        horizontal: 30,
                       ),
                       elevation: 5,
                     ),
@@ -355,29 +350,27 @@ class _EventProposalFormState extends State<EventProposalForm> {
                         widget.isLoading
                             ? CircularProgressIndicator(
                               color: Colors.white,
-                              strokeWidth: 2.sp,
+                              strokeWidth: 2,
                             )
                             : Text(
                               'Submit Proposal',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
-                                    MediaQuery.of(context).size.width > 600
-                                        ? 18.sp
-                                        : 14.sp,
+                                      18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                   ),
                 ),
               ),
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
               Center(
                 child: Text(
                   'We will review your proposal and contact you within 5 business days',
                   style: TextStyle(
                     color: WebsiteColors.darkBlueColor,
-                    fontSize: 14.sp,
+                    fontSize: 14,
                     fontStyle: FontStyle.italic,
                   ),
                   textAlign: TextAlign.center,
@@ -394,7 +387,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 22.sp,
+        fontSize: 22,
         fontWeight: FontWeight.bold,
         color: WebsiteColors.primaryBlueColor,
       ),
@@ -407,7 +400,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
     VoidCallback onSelected,
   ) {
     return ChoiceChip(
-      label: Text(label, style: TextStyle(fontSize: 14.sp)),
+      label: Text(label, style: TextStyle(fontSize: 14)),
       selected: isSelected,
       onSelected: (_) => onSelected(),
       selectedColor: WebsiteColors.primaryBlueColor,

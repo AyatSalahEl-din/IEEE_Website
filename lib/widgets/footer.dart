@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ieee_website/Home_Screen/url_helper.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
@@ -15,7 +14,7 @@ class Footer extends StatelessWidget {
       children: [
         // ✅ Gradient Background
         Container(
-          height: 593.sp,
+          height: 593,
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -40,42 +39,57 @@ class Footer extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/bluehoriz.png',
-                    height: 300.sp,
-                    width: 300.sp,
+                    height: 300,
+                    width: 300,
                   ),
                 ],
               ),
               //SizedBox(height: 10.sp),
 
               // Newsletter Subscription
-              Text(
-                "Fuel your passion. Expand your network. Make an impact.",
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26.sp,
-                  color: WebsiteColors.primaryBlueColor,
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Expand your network.",
+                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        color: WebsiteColors.primaryBlueColor,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Make Impact",
+                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        color: WebsiteColors.primaryBlueColor,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 10.sp),
+              
+              SizedBox(height: 10),
               Text(
                 "Join Us Now!",
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: 26.sp,
+                  fontSize: 26,
                   color: WebsiteColors.primaryBlueColor,
                 ),
               ),
 
-              SizedBox(height: 20.sp),
+              SizedBox(height: 20),
 
               // ✅ Navigation Links (Clickable)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildFooterNavItem(context, "About Us", 1), // Switch Tab
-                  SizedBox(width: 20.sp),
+                  SizedBox(width: 20),
                   _buildFooterNavItem(context, "Contact Us", 4), // Switch Tab
-                  SizedBox(width: 20.sp),
+                  SizedBox(width: 20),
                   _buildFooterNavItem(
                     context,
                     "Join Us",
@@ -83,14 +97,14 @@ class Footer extends StatelessWidget {
                   ), // ✅ Open New Page
                 ],
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(height: 10),
 
               // ✅ Copyright
               Text(
                 "© 2025 IEEE Pharos University's Web Team",
                 style: Theme.of(
                   context,
-                ).textTheme.displayMedium?.copyWith(fontSize: 22.sp),
+                ).textTheme.displayMedium?.copyWith(fontSize: 22),
               ),
             ],
           ),
@@ -113,12 +127,12 @@ class Footer extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.sp),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             text,
             style: GoogleFonts.poppins(
               color: WebsiteColors.whiteColor,
-              fontSize: 22.sp,
+              fontSize: 22,
             ),
           ),
         ),

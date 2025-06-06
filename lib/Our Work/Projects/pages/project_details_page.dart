@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:intl/intl.dart';
 import '../models/project_model.dart';
@@ -27,9 +26,8 @@ class ProjectDetailsPage extends StatelessWidget {
       color: WebsiteColors.primaryBlueColor,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width > 600 ? 120.sp : 60.sp,
-          vertical: MediaQuery.of(context).size.width > 600 ? 60.sp : 30.sp,
-        ),
+          horizontal: 120,
+          vertical: 60,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,49 +35,49 @@ class ProjectDetailsPage extends StatelessWidget {
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.white,
-                size: MediaQuery.of(context).size.width > 600 ? 24.sp : 20.sp,
+                size: 24,
               ),
               onPressed: () => Navigator.pop(context),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height: 20,
             ),
             Text(
               project.title,
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 fontSize:
-                    MediaQuery.of(context).size.width > 600 ? 36.sp : 24.sp,
+                    36,
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height: 20,
             ),
             Text(
               "Made By: ${project.madeBy}",
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.white.withOpacity(0.9),
                 fontSize:
-                    MediaQuery.of(context).size.width > 600 ? 20.sp : 16.sp,
+                   20,
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+              height:10,
             ),
             Text(
               DateFormat('dd MMMM yyyy').format(project.date),
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.white.withOpacity(0.8),
                 fontSize:
-                    MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
+                    18,
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height:20,
             ),
             Wrap(
-              spacing: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+              spacing: 10,
               runSpacing:
-                  MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+                 10,
               children:
                   project.tags.map((tag) => _buildTag(context, tag)).toList(),
             ),
@@ -93,8 +91,8 @@ class ProjectDetailsPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width > 600 ? 120.sp : 60.sp,
-        vertical: MediaQuery.of(context).size.width > 600 ? 60.sp : 30.sp,
+        horizontal: 120,
+        vertical: 60,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,35 +100,35 @@ class ProjectDetailsPage extends StatelessWidget {
           Text(
             "Project Description",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontSize: MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
+              fontSize: 40,
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+            height: 20,
           ),
           Text(
             project.description,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              fontSize: MediaQuery.of(context).size.width > 600 ? 24.sp : 16.sp,
+              fontSize: 24,
             ),
           ),
           if (project.imageUrls != null && project.imageUrls!.isNotEmpty) ...[
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+              height: 40,
             ),
             Text(
               "Images",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
                 fontSize:
-                    MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
+                    40,
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height: 20,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 400.sp : 300.sp,
+              height: 400,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: project.imageUrls!.length,
@@ -138,9 +136,7 @@ class ProjectDetailsPage extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.only(
                       right:
-                          MediaQuery.of(context).size.width > 600
-                              ? 20.sp
-                              : 10.sp,
+                          20,
                     ),
                     child: GestureDetector(
                       onTap: () {
@@ -159,21 +155,15 @@ class ProjectDetailsPage extends StatelessWidget {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width > 600
-                              ? 20.sp
-                              : 10.sp,
+                         20,
                         ),
                         child: Image.network(
                           project.imageUrls![index],
                           fit: BoxFit.cover,
                           width:
-                              MediaQuery.of(context).size.width > 600
-                                  ? 400.sp
-                                  : 300.sp,
+                              400,
                           height:
-                              MediaQuery.of(context).size.width > 600
-                                  ? 400.sp
-                                  : 300.sp,
+                             400,
                         ),
                       ),
                     ),
@@ -185,24 +175,24 @@ class ProjectDetailsPage extends StatelessWidget {
           if (project.additionalDetails != null &&
               project.additionalDetails!.isNotEmpty) ...[
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+              height: 40,
             ),
             Text(
               "Additional Details",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
                 fontSize:
-                    MediaQuery.of(context).size.width > 600 ? 40.sp : 24.sp,
+                    40,
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+              height: 20,
             ),
             ...project.additionalDetails!.entries.map(
               (entry) => Padding(
                 padding: EdgeInsets.only(
                   bottom:
-                      MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+                      10,
                 ),
                 child: Row(
                   children: [
@@ -211,18 +201,14 @@ class ProjectDetailsPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: WebsiteColors.primaryBlueColor,
                         fontSize:
-                            MediaQuery.of(context).size.width > 600
-                                ? 18.sp
-                                : 14.sp,
+                           18,
                       ),
                     ),
                     Text(
                       entry.value.toString(),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         fontSize:
-                            MediaQuery.of(context).size.width > 600
-                                ? 18.sp
-                                : 14.sp,
+                           18,
                       ),
                     ),
                   ],
@@ -238,20 +224,20 @@ class ProjectDetailsPage extends StatelessWidget {
   Widget _buildTag(BuildContext context, String tag) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
-        vertical: MediaQuery.of(context).size.width > 600 ? 10.sp : 5.sp,
+        horizontal: 20,
+        vertical: 10,
       ),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(
-          MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
+          20,
         ),
       ),
       child: Text(
         tag,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
           color: Colors.white,
-          fontSize: MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
+          fontSize: 18,
         ),
       ),
     );

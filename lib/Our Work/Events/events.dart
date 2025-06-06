@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Our%20Work/Events/bookingscreen.dart';
 import 'package:ieee_website/widgets/coming_soon_widget.dart';
 import 'package:ieee_website/widgets/event_grid.dart';
@@ -18,257 +17,130 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
-  String searchText = ''; // State for search text
-  String upcomingSelectedFilter = 'All'; // Separate state for upcoming filter
-  String previousSelectedFilter = 'All'; // Separate state for previous filter
-  bool isHovered = false;
+  String searchText = '';
+  String upcomingSelectedFilter = 'All';
+  String previousSelectedFilter = 'All';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          Column(
-            children: [
-              _buildHeroSection(),
-              SizedBox(height: 10.sp),
-
-              // Upcoming Events Section
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.sp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Upcoming Events",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize:
-                            MediaQuery.of(context).size.width > 600
-                                ? 40.sp
-                                : 24.sp,
-                      ),
-                    ),
-                    SizedBox(height: 25.sp),
-
-                    // Upcoming Events Filter Chips
-                    _buildUpcomingFilter(),
-
-                    SizedBox(height: 30.sp),
-
-                    // Pass searchText and upcomingSelectedFilter to EventsGrid
-                    EventsGrid(
-                      filterType: "upcoming",
-                      searchText: searchText,
-                      selectedFilter: upcomingSelectedFilter,
-                      onEmpty: () => ComingSoonWidget(),
-                    ),
-
-                    SizedBox(height: 45.sp),
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.sp),
-                          child: Container(
-                            height: 430.sp,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.sp),
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/images/book_your_seat.png",
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(20.sp),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(80.sp),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Secure your Spot",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodyMedium?.copyWith(
-                                  color: WebsiteColors.darkBlueColor,
-                                  fontSize: 38.sp,
-                                ),
-                              ),
-                              SizedBox(height: 10.sp),
-                              Text(
-                                "Empowering Ideas, Connecting Minds",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodySmall?.copyWith(
-                                  color: WebsiteColors.whiteColor,
-                                  fontSize: 36.sp,
-                                ),
-                              ),
-                              SizedBox(height: 5.sp),
-                              Text(
-                                "Seamless Booking for Every Event!",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.bodySmall?.copyWith(
-                                  color: WebsiteColors.whiteColor,
-                                  fontSize: 36.sp,
-                                ),
-                              ),
-                              SizedBox(height: 20.sp),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom:
-                              MediaQuery.of(context).size.width > 600
-                                  ? 20.sp
-                                  : 10.sp,
-                          right:
-                              MediaQuery.of(context).size.width > 600
-                                  ? 20.sp
-                                  : 10.sp,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => const EventBookingPage(),
-                                ),
-                              ); // Navigate to booking screen
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.zero, // Remove padding
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.sp),
-                              ),
-                              elevation: 5,
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.black.withOpacity(0),
-                            ),
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    WebsiteColors.primaryYellowColor,
-                                    const Color.fromARGB(255, 255, 230, 190),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(20.sp),
-                              ),
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(
-                                  vertical:
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 20.sp
-                                          : 15.sp,
-                                  horizontal:
-                                      MediaQuery.of(context).size.width > 600
-                                          ? 30.sp
-                                          : 20.sp,
-                                ),
-                                child: Text(
-                                  "Book Your Ticket", // Button text
-                                  style: Theme.of(
-                                    context,
-                                  ).textTheme.bodyMedium?.copyWith(
-                                    color: WebsiteColors.darkBlueColor,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width > 600
-                                            ? 24.sp
-                                            : 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 20.sp),
-
-                    // Previous Events Section
-                    Text(
-                      "Previous Events",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: WebsiteColors.primaryBlueColor,
-                        fontSize: 40.sp,
-                      ),
-                    ),
-                    SizedBox(height: 15.sp),
-
-                    // Previous Events Filter Chips
-                    _buildPreviousFilter(),
-
-                    SizedBox(height: 30.sp),
-
-                    // Pass searchText and previousSelectedFilter to EventsGrid
-                    EventsGrid(
-                      filterType: "previous",
-                      searchText: searchText,
-                      selectedFilter: previousSelectedFilter,
-                      onEmpty: () => ComingSoonWidget(),
-                    ),
-
-                    SizedBox(height: 20.sp),
-                  ],
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 80,
+                  width: double.infinity,
+                  child: Image.asset(
+                    "assets/images/m.png", // Fixed asset path
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+                _buildHeroSection(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0,
+                    vertical: 16.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Upcoming Events Section
+                      _buildSectionHeader("Upcoming Events"),
+                      _buildUpcomingFilter(),
+                      const SizedBox(height: 24),
+                      EventsGrid(
+                        filterType: "upcoming",
+                        searchText: searchText,
+                        selectedFilter: upcomingSelectedFilter,
+                        onEmpty: () => const ComingSoonWidget(),
+                      ),
+                      const SizedBox(height: 40),
+                      _buildBookingBanner(),
+                      const SizedBox(height: 40),
+
+                      // Previous Events Section
+                      _buildSectionHeader(
+                        "Previous Events",
+                        color: WebsiteColors.primaryBlueColor,
+                      ),
+                      _buildPreviousFilter(),
+                      const SizedBox(height: 24),
+                      EventsGrid(
+                        filterType: "previous",
+                        searchText: searchText,
+                        selectedFilter: previousSelectedFilter,
+                        onEmpty: () => const ComingSoonWidget(),
+                      ),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           if (widget.tabController != null)
-            Footer(tabController: widget.tabController!),
+            SliverToBoxAdapter(
+              child: Footer(tabController: widget.tabController!),
+            ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(
+    String title, {
+    Color color = WebsiteColors.primaryBlueColor,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: color,
+        ),
       ),
     );
   }
 
   Widget _buildHeroSection() {
     return Stack(
+      alignment: Alignment.center,
       children: [
         Container(
+          height: 300,
           width: double.infinity,
-          height: MediaQuery.of(context).size.width > 600 ? 500.sp : 300.sp,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/Mask group.png"),
               fit: BoxFit.cover,
             ),
           ),
-          child: Container(color: Colors.black.withOpacity(0.2)),
+          child: Container(color: Colors.black.withOpacity(0.3)),
         ),
-        Positioned(
-          top: MediaQuery.of(context).size.width > 600 ? 200.sp : 100.sp,
-          left: MediaQuery.of(context).size.width > 600 ? 100.sp : 50.sp,
-          right: MediaQuery.of(context).size.width > 600 ? 100.sp : 50.sp,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Don't miss out! Explore our events.",
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: WebsiteColors.whiteColor,
-                  fontSize:
-                      MediaQuery.of(context).size.width > 600 ? 28.sp : 18.sp,
-                  fontWeight: FontWeight.bold,
+              const FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  "Don't miss out! Explore our events.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    shadows: [Shadow(blurRadius: 10.0, color: Colors.black54)],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.width > 600 ? 20.sp : 10.sp,
-              ),
+              const SizedBox(height: 20),
               _buildSearchBar(),
             ],
           ),
@@ -280,15 +152,12 @@ class _EventsState extends State<Events> {
   Widget _buildSearchBar() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double searchBarWidth =
-            constraints.maxWidth > 800.sp ? 600.sp : constraints.maxWidth * 0.8;
-
         return Container(
-          width: searchBarWidth,
-          height: 50.sp,
+          width: 500,
+          height: 40,
           decoration: BoxDecoration(
             color: WebsiteColors.whiteColor,
-            borderRadius: BorderRadius.circular(25.sp),
+            borderRadius: BorderRadius.circular(25),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
@@ -307,34 +176,34 @@ class _EventsState extends State<Events> {
                 });
               },
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 16.sp,
+                fontSize: 16,
                 color: WebsiteColors.primaryBlueColor,
               ),
               decoration: InputDecoration(
                 hintText: "Search Events, Categories, Location...",
                 hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16,
                   color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  size: 20.sp,
+                  size: 20,
                   color: WebsiteColors.primaryBlueColor,
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.sp),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide(color: WebsiteColors.primaryBlueColor),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.sp),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide(
                     color: WebsiteColors.primaryBlueColor,
                     width: 2,
                   ),
                 ),
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: 12.sp,
-                  horizontal: 10.sp,
+                  vertical: 12,
+                  horizontal: 10,
                 ),
                 isCollapsed: true,
               ),
@@ -345,89 +214,172 @@ class _EventsState extends State<Events> {
     );
   }
 
+  Widget _buildBookingBanner() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool isSmallScreen = constraints.maxWidth < 600;
+
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: AspectRatio(
+              aspectRatio:
+                  isSmallScreen ? 3 / 2 : 16 / 5, // Adjusted aspect ratio
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    "assets/images/book_your_seat.png",
+                    fit: BoxFit.cover,
+                  ),
+                  Container(color: Colors.black.withOpacity(0.3)),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Secure your Spot",
+                          style: TextStyle(
+                            color: WebsiteColors.primaryYellowColor,
+                            fontSize: isSmallScreen ? 26 : 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Empowering Ideas, Connecting Minds.",
+                          style: TextStyle(
+                            color: WebsiteColors.whiteColor,
+                            fontSize: isSmallScreen ? 18 : 20,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap:
+                              () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => const EventBookingPage(),
+                                ),
+                              ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  WebsiteColors.primaryYellowColor,
+                                  const Color.fromARGB(255, 255, 255, 255),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: const Text(
+                              "Book Your Ticket",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: WebsiteColors.lightGreyColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildUpcomingFilter() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 8.0,
       children: [
         FilterChipWidget(
           label: "All",
           isSelected: upcomingSelectedFilter == "All",
-          onSelected: () {
-            setState(() {
-              upcomingSelectedFilter = "All";
-            });
-          },
+          onSelected: () => setState(() => upcomingSelectedFilter = "All"),
         ),
         FilterChipWidget(
           label: "Today",
           isSelected: upcomingSelectedFilter == "Today",
-          onSelected: () {
-            setState(() {
-              upcomingSelectedFilter = "Today";
-            });
-          },
+          onSelected: () => setState(() => upcomingSelectedFilter = "Today"),
         ),
         FilterChipWidget(
           label: "This Week",
           isSelected: upcomingSelectedFilter == "This Week",
-          onSelected: () {
-            setState(() {
-              upcomingSelectedFilter = "This Week";
-            });
-          },
+          onSelected:
+              () => setState(() => upcomingSelectedFilter = "This Week"),
         ),
         FilterChipWidget(
           label: "This Month",
           isSelected: upcomingSelectedFilter == "This Month",
-          onSelected: () {
-            setState(() {
-              upcomingSelectedFilter = "This Month";
-            });
-          },
+          onSelected:
+              () => setState(() => upcomingSelectedFilter = "This Month"),
         ),
       ],
     );
   }
 
   Widget _buildPreviousFilter() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    // ✨ Replaced Row with Wrap for responsiveness
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 8.0,
       children: [
         FilterChipWidget(
           label: "All",
           isSelected: previousSelectedFilter == "All",
-          onSelected: () {
-            setState(() {
-              previousSelectedFilter = "All";
-            });
-          },
+          onSelected: () => setState(() => previousSelectedFilter = "All"),
         ),
         FilterChipWidget(
           label: "Last Month",
           isSelected: previousSelectedFilter == "Last Month",
-          onSelected: () {
-            setState(() {
-              previousSelectedFilter = "Last Month";
-            });
-          },
+          onSelected:
+              () => setState(() => previousSelectedFilter = "Last Month"),
         ),
         FilterChipWidget(
           label: "This Year",
           isSelected: previousSelectedFilter == "This Year",
-          onSelected: () {
-            setState(() {
-              previousSelectedFilter = "This Year";
-            });
-          },
+          onSelected:
+              () => setState(() => previousSelectedFilter = "This Year"),
         ),
         FilterChipWidget(
           label: "Last Year",
           isSelected: previousSelectedFilter == "Last Year",
-          onSelected: () {
-            setState(() {
-              previousSelectedFilter = "Last Year";
-            });
-          },
+          onSelected:
+              () => setState(() => previousSelectedFilter = "Last Year"),
         ),
       ],
     );

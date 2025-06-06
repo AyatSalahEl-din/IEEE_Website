@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/Tools&Features/proposal.dart';
@@ -21,7 +20,7 @@ class Tools extends StatelessWidget {
           'Our Tools & Features',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20.sp,
+            fontSize: 18, // Fixed size
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -33,17 +32,15 @@ class Tools extends StatelessWidget {
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-              ),
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: IntrinsicHeight(
                 child: Column(
                   children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          vertical: 10.sp,
-                          horizontal: 8.sp,
+                          vertical: 8, // Fixed size
+                          horizontal: 12, // Fixed size
                         ),
                         child: _buildToolsContent(context),
                       ),
@@ -71,24 +68,21 @@ class Tools extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Discover the tools and features we offer to enhance your experience. Stay tuned for more exciting updates!',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ),
-        SizedBox(height: 15.sp),
+        SizedBox(height: 15),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: _buildSectionTitle('Available Tools'),
         ),
-        SizedBox(height: 8.sp),
+        SizedBox(height: 8),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: _buildToolCard(
             context: context,
             icon: FontAwesomeIcons.calendarCheck,
@@ -99,37 +93,38 @@ class Tools extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EventProposalForm(
-                    formKey: GlobalKey<FormState>(),
-                    eventNameController: TextEditingController(),
-                    organizerNameController: TextEditingController(),
-                    companyNameController: TextEditingController(),
-                    emailController: TextEditingController(),
-                    phoneController: TextEditingController(),
-                    eventDescriptionController: TextEditingController(),
-                    expectedAttendeesController: TextEditingController(),
-                    proposedDateController: TextEditingController(),
-                    proposedLocationController: TextEditingController(),
-                    ieeeBenefitsController: TextEditingController(),
-                    additionalNotesController: TextEditingController(),
-                    submitProposal: () {
-                      // Add your submit logic here
-                    },
-                    isLoading: false,
-                  ),
+                  builder:
+                      (context) => EventProposalForm(
+                        formKey: GlobalKey<FormState>(),
+                        eventNameController: TextEditingController(),
+                        organizerNameController: TextEditingController(),
+                        companyNameController: TextEditingController(),
+                        emailController: TextEditingController(),
+                        phoneController: TextEditingController(),
+                        eventDescriptionController: TextEditingController(),
+                        expectedAttendeesController: TextEditingController(),
+                        proposedDateController: TextEditingController(),
+                        proposedLocationController: TextEditingController(),
+                        ieeeBenefitsController: TextEditingController(),
+                        additionalNotesController: TextEditingController(),
+                        submitProposal: () {
+                          // Add your submit logic here
+                        },
+                        isLoading: false,
+                      ),
                 ),
               );
             },
           ),
         ),
-        SizedBox(height: 15.sp),
+        SizedBox(height: 15),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: _buildSectionTitle('Upcoming Features'),
         ),
-        SizedBox(height: 8.sp),
+        SizedBox(height: 8),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
               _buildToolCard(
@@ -142,14 +137,15 @@ class Tools extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ComingSoonWidget(
-                        message: "Mobile App is coming soon!",
-                      ),
+                      builder:
+                          (context) => const ComingSoonWidget(
+                            message: "Mobile App is coming soon!",
+                          ),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(height: 10),
               _buildToolCard(
                 context: context,
                 icon: FontAwesomeIcons.comments,
@@ -160,14 +156,15 @@ class Tools extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ComingSoonWidget(
-                        message: "Chatbot is coming soon!",
-                      ),
+                      builder:
+                          (context) => const ComingSoonWidget(
+                            message: "Chatbot is coming soon!",
+                          ),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 10.sp),
+              SizedBox(height: 10),
               _buildToolCard(
                 context: context,
                 icon: FontAwesomeIcons.video,
@@ -178,9 +175,10 @@ class Tools extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ComingSoonWidget(
-                        message: "Virtual Events Platform is coming soon!",
-                      ),
+                      builder:
+                          (context) => const ComingSoonWidget(
+                            message: "Virtual Events Platform is coming soon!",
+                          ),
                     ),
                   );
                 },
@@ -188,21 +186,21 @@ class Tools extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 20.sp),
+        SizedBox(height: 20),
         Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.sp),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Stay tuned for more updates!',
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: WebsiteColors.primaryBlueColor,
               ),
             ),
           ),
         ),
-        SizedBox(height: 20.sp),
+        SizedBox(height: 20),
       ],
     );
   }
@@ -216,7 +214,7 @@ class Tools extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 18.sp,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
         color: WebsiteColors.darkBlueColor,
       ),
@@ -236,28 +234,32 @@ class Tools extends StatelessWidget {
       color: Colors.white,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.sp),
+        borderRadius: BorderRadius.circular(
+          10,
+        ), // Adjusted to match contact_us.dart
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8.sp),
+        borderRadius: BorderRadius.circular(
+          10,
+        ), // Adjusted to match contact_us.dart
         child: Padding(
-          padding: EdgeInsets.all(12.sp),
+          padding: EdgeInsets.all(12), // Adjusted to match contact_us.dart
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.sp),
+                padding: EdgeInsets.all(8), // Adjusted to match contact_us.dart
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
-                child: FaIcon(
+                child: Icon(
                   icon,
-                  size: 20.sp,
+                  size: 18, // Adjusted to match contact_us.dart
                   color: color,
                 ),
               ),
-              SizedBox(width: 12.sp),
+              SizedBox(width: 10), // Adjusted to match contact_us.dart
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,27 +267,23 @@ class Tools extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 14, // Adjusted to match contact_us.dart
                         fontWeight: FontWeight.bold,
                         color: WebsiteColors.darkBlueColor,
                       ),
                     ),
-                    SizedBox(height: 4.sp),
+                    SizedBox(height: 4), // Adjusted to match contact_us.dart
                     Text(
                       description,
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 12, // Adjusted to match contact_us.dart
                         color: Colors.grey[600],
                       ),
                     ),
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                size: 20.sp,
-                color: Colors.grey,
-              ),
+              Icon(Icons.chevron_right, size: 18, color: Colors.grey),
             ],
           ),
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -18,15 +17,15 @@ class SectionTitle extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width > 600 ? 22.sp : 18.sp,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.darkBlueColor,
             ),
           ),
-          SizedBox(height: 5.sp),
+          SizedBox(height: 5),
           Container(
-            width: 60.sp,
-            height: 3.sp,
+            width: 60,
+            height: 3,
             color: WebsiteColors.primaryYellowColor,
           ),
         ],

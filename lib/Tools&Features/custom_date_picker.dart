@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:intl/intl.dart';
 
@@ -27,13 +26,11 @@ class CustomDatePicker extends StatelessWidget {
               data: Theme.of(context).copyWith(
                 textTheme: TextTheme(
                   bodyMedium: TextStyle(
-                    fontSize:
-                        MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
+                    fontSize: 16,
                     color: WebsiteColors.darkBlueColor,
                   ),
                   titleLarge: TextStyle(
-                    fontSize:
-                        MediaQuery.of(context).size.width > 600 ? 18.sp : 16.sp,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: WebsiteColors.primaryBlueColor,
                   ),
@@ -58,15 +55,10 @@ class CustomDatePicker extends StatelessWidget {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.width > 600 ? 12.sp : 10.sp,
-          horizontal: MediaQuery.of(context).size.width > 600 ? 16.sp : 14.sp,
-        ),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
-          ),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.grey[300]!),
         ),
         child: Row(
@@ -74,17 +66,15 @@ class CustomDatePicker extends StatelessWidget {
             Icon(
               Icons.calendar_today,
               color: WebsiteColors.primaryBlueColor,
-              size: MediaQuery.of(context).size.width > 600 ? 20.sp : 18.sp,
+              size: 20,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
-            ),
+            SizedBox(width: 10),
             Text(
               initialDate != null
                   ? DateFormat.yMMMd().format(initialDate!)
                   : "Pick a date",
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 14,
                 fontWeight: FontWeight.normal,
                 color: WebsiteColors.darkGreyColor,
               ),
