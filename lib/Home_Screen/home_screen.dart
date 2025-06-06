@@ -255,9 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              Positioned(
-                bottom: 0,
-                child: Container(
+              Container(
                   key: ourStoryKey,
                   child: Column(
                     children: [
@@ -275,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-              ),
+
               SizedBox(height: 40.h),
               StorySlideshow(),
               SizedBox(height: 100.h),
