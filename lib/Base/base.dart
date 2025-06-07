@@ -21,6 +21,8 @@ class Base extends StatefulWidget {
 
 class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  
+  //get image => NetworkImage('https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/mm.png');
 
   @override
   void initState() {
@@ -62,11 +64,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/images/whitehoriz.png',
-                      height: 190.sp,
-                      width: 180.sp,
-                    ),
+                    Image.network(
+              'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/white.png',
+              height: 190.sp,
+              width: 180.sp,
+              fit: BoxFit.contain,
+            ),
+                    
                   ],
                 );
               } else {
@@ -74,11 +78,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/images/whitehoriz.png',
-                      height: 190.sp,
-                      width: 180.sp,
-                    ),
+                    Image.network(
+              'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/white.png',
+              height: 190.sp,
+              width: 180.sp,
+              fit: BoxFit.contain,
+            ),
+                    
                     TabBar(
                       controller: _tabController,
                       isScrollable: true,

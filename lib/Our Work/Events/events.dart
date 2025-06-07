@@ -117,9 +117,10 @@ class _EventsState extends State<Events> {
           width: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/Mask group.png"),
-              fit: BoxFit.cover,
-            ),
+              image: NetworkImage('https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/mm.png'),
+
+              fit: BoxFit.cover,)
+            
           ),
           child: Container(color: Colors.black.withOpacity(0.3)),
         ),
@@ -240,8 +241,8 @@ class _EventsState extends State<Events> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.asset(
-                    "assets/images/book_your_seat.png",
+                  Image.network(
+                    "https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/book.png",
                     fit: BoxFit.cover,
                   ),
                   Container(color: Colors.black.withOpacity(0.3)),

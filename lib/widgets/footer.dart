@@ -37,8 +37,8 @@ class Footer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/bluehoriz.png',
+                  Image.network(
+                    'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/bluehoriz.png',
                     height: 300,
                     width: 300,
                   ),

@@ -621,7 +621,7 @@ class _ProjectsState extends State<Projects> {
                   fit: BoxFit.cover,
                 )
                 : DecorationImage(
-                  image: AssetImage('assets/images/n.png'), // Static image
+                  image: NetworkImage('https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/n.png'), // Static image
                   fit: BoxFit.cover,
                 ),
       ),
