@@ -64,8 +64,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   children: [
                     Image.asset(
                       'assets/images/whitehoriz.png',
-                      height: 170.sp,
-                      width: 160.sp,
+                      height: 190.sp,
+                      width: 180.sp,
                     ),
                   ],
                 );
@@ -76,8 +76,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   children: [
                     Image.asset(
                       'assets/images/whitehoriz.png',
-                      height: 170.sp,
-                      width: 160.sp,
+                      height: 190.sp,
+                      width: 180.sp,
                     ),
                     TabBar(
                       controller: _tabController,

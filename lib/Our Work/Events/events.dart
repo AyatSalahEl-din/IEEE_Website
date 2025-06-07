@@ -30,14 +30,15 @@ class _EventsState extends State<Events> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                SizedBox(
-                  height: 80,
-                  width: double.infinity,
-                  child: Image.asset(
-                    "assets/images/m.png", // Fixed asset path
-                    fit: BoxFit.cover,
-                  ),
-                ),
+               Container(
+          height:80,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color:WebsiteColors.primaryBlueColor,
+            
+          ),
+          child: Container(color: Colors.black.withOpacity(0.3)),
+        ),
                 _buildHeroSection(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
