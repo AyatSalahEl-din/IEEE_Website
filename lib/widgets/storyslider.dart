@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 import 'package:ieee_website/Themes/website_colors.dart';
@@ -74,7 +73,7 @@ class _StorySlideshowState extends State<StorySlideshow> {
   }
 
   void _startSlideshow() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (!isHovered) {
         _nextSlide();
       }
@@ -102,6 +101,9 @@ class _StorySlideshowState extends State<StorySlideshow> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Center(
       child: MouseRegion(
         onEnter: (_) => setState(() => isHovered = true),
@@ -112,40 +114,33 @@ class _StorySlideshowState extends State<StorySlideshow> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Left Arrow
                 IconButton(
                   icon: Icon(
                     Icons.arrow_back_ios,
                     color: WebsiteColors.primaryBlueColor,
-                    size: 30.sp,
+                    size: screenWidth > 600 ? 30 : 20,
                   ),
                   onPressed: _prevSlide,
                 ),
-
-                // Image & Description Side by Side
                 Container(
-                  width: 1500.w, // Total width of slideshow
-                  height: 3000.h, // Ensure consistency in height
+                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.5,
                   decoration: BoxDecoration(
                     color: WebsiteColors.whiteColor,
-                    borderRadius: BorderRadius.circular(12.sp),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: WebsiteColors.gradeintBlueColor,
-                        blurRadius: 10.sp,
-                        spreadRadius: 3.sp,
+                        blurRadius: 10,
+                        spreadRadius: 3,
                       ),
                     ],
                   ),
                   child: Row(
                     children: [
-                      // Image Section
                       AnimatedSwitcher(
-                        duration: Duration(seconds: 1),
-                        transitionBuilder: (
-                          Widget child,
-                          Animation<double> animation,
-                        ) {
+                        duration: const Duration(seconds: 1),
+                        transitionBuilder: (child, animation) {
                           return FadeTransition(
                             opacity: animation,
                             child: child,
@@ -153,22 +148,20 @@ class _StorySlideshowState extends State<StorySlideshow> {
                         },
                         child: ClipRRect(
                           key: ValueKey<int>(currentIndex),
-                          borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(12.sp),
+                          borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(12),
                           ),
                           child: Image.asset(
                             sliderItems[currentIndex]['image']!,
                             fit: BoxFit.cover,
-                            width: 800.w, // Half of the container width
-                            height: 3000.w, // Full height of the container
+                            width: screenWidth * 0.4,
+                            height: screenHeight * 0.5,
                           ),
                         ),
                       ),
-
-                      // Description Section
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.all(16.sp),
+                          padding: const EdgeInsets.all(16),
                           child: Text(
                             sliderItems[currentIndex]['description']!,
                             textAlign: TextAlign.start,
@@ -176,7 +169,7 @@ class _StorySlideshowState extends State<StorySlideshow> {
                               context,
                             ).textTheme.displaySmall?.copyWith(
                               color: WebsiteColors.visionColor,
-                              fontSize: 28.sp,
+                              fontSize: screenWidth > 600 ? 18 : 14,
                             ),
                           ),
                         ),
@@ -184,13 +177,11 @@ class _StorySlideshowState extends State<StorySlideshow> {
                     ],
                   ),
                 ),
-
-                // Right Arrow
                 IconButton(
                   icon: Icon(
                     Icons.arrow_forward_ios,
                     color: WebsiteColors.primaryBlueColor,
-                    size: 30.sp,
+                    size: screenWidth > 600 ? 30 : 20,
                   ),
                   onPressed: _nextSlide,
                 ),

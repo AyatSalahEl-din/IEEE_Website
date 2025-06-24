@@ -20,25 +20,29 @@ class WelcomeSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Flexible(
+               FittedBox(
                 child: Text(
                   "Welcome to ",
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  maxLines: null,
-                ),
-              ),
-
-              Flexible(
-                child: Text(
-                  "IEEE Pharos Student Branch",
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: WebsiteColors.darkBlueColor,
-                  ),
+                  style: GoogleFonts.poppins(
+        color: WebsiteColors.blackColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 28,),
                   maxLines: null,
                 ),
               ),
             ],
           ),
+          SizedBox(height: 30.h),
+               FittedBox(
+                child: Text(
+                  "IEEE Pharos Student Branch",
+                  style: GoogleFonts.poppins(
+        color: WebsiteColors.darkBlueColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 28, ),
+                  maxLines: null,
+                ),
+              ),
 
           SizedBox(height: 30.h),
 
@@ -47,7 +51,10 @@ class WelcomeSection extends StatelessWidget {
             child: Text(
               "where innovation meets passion!",
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: GoogleFonts.poppins(
+        color: WebsiteColors.blackColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 28,),
               maxLines: null,
             ),
           ),
@@ -60,9 +67,11 @@ class WelcomeSection extends StatelessWidget {
               "At Pharos SB, we believe in empowering students to explore, create, and lead. Whether you're diving into cutting-edge projects, attending transformative events, or collaborating with like-minded peers, this is your space to grow and make an impact.",
               textAlign: TextAlign.center,
               style:
-                  Theme.of(
-                    context,
-                  ).textTheme.titleMedium, // 🎨 Keep original style
+                  GoogleFonts.poppins(
+        color: WebsiteColors.darkGreyColor,
+        fontWeight: FontWeight.w400,
+        fontSize: 20,
+      ), // 🎨 Keep original style
               maxLines: null,
             ),
           ),
@@ -90,7 +99,7 @@ class WelcomeSection extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: GradientText(
             text: value,
-            style: GoogleFonts.abel(fontSize: 120.sp),
+            style: GoogleFonts.abel(fontSize: 50),
             gradient: LinearGradient(
               colors: [
                 WebsiteColors.primaryBlueColor,
@@ -101,7 +110,11 @@ class WelcomeSection extends StatelessWidget {
             ),
           ),
         ),
-        Text(label, style: Theme.of(context).textTheme.titleSmall),
+        Text(label, style:GoogleFonts.alexandria(
+        color: WebsiteColors.darkGreyColor,
+        fontWeight: FontWeight.w400,
+        fontSize: 24,
+      ),),
       ],
     );
   }

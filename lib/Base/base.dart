@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ieee_website/About%20Us/about.dart';
 import 'package:ieee_website/Contact%20Us/contact.dart';
 import 'package:ieee_website/FAQ/faq.dart';
@@ -21,7 +20,7 @@ class Base extends StatefulWidget {
 
 class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  
+
   //get image => NetworkImage('https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/mm.png');
 
   @override
@@ -36,6 +35,20 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  Widget _buildClickableLogo() {
+    return GestureDetector(
+      onTap: () => _tabController.animateTo(0),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Image.network(
+          'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/white.webp',
+          height: 80,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +56,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       backgroundColor: WebsiteColors.whiteColor,
       appBar: AppBar(
         iconTheme: IconThemeData(color: WebsiteColors.whiteColor),
-        toolbarHeight: 120.sp,
+        toolbarHeight: 120,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -52,7 +65,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
           ),
         ),
         title: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0.sp),
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Builder(
             builder: (context) {
               // Get the screen width
@@ -64,13 +77,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.network(
-              'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/white.png',
-              height: 190.sp,
-              width: 180.sp,
-              fit: BoxFit.contain,
-            ),
-                    
+                    _buildClickableLogo(), // Use the new logo widget
                   ],
                 );
               } else {
@@ -78,13 +85,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.network(
-              'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/white.png',
-              height: 190.sp,
-              width: 180.sp,
-              fit: BoxFit.contain,
-            ),
-                    
+                    _buildClickableLogo(), // Use the new logo widget
+
                     TabBar(
                       controller: _tabController,
                       isScrollable: true,
@@ -106,7 +108,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: WebsiteColors.whiteColor,
                         foregroundColor: WebsiteColors.primaryBlueColor,
-                        fixedSize: Size(190.sp, 50.sp),
+                        fixedSize: Size(190, 50),
                       ),
                       onPressed: () {
                         UrlHelper.fetchAndLaunchURL('joinUs');
@@ -116,7 +118,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                         style: Theme.of(
                           context,
                         ).textTheme.displayMedium?.copyWith(
-                          fontSize: 25.sp,
+                          fontSize: 25,
                           color: WebsiteColors.primaryBlueColor,
                         ),
                       ),
@@ -136,79 +138,80 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   child: ListView(
                     padding: EdgeInsets.zero,
                     children: <Widget>[
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                        color: WebsiteColors.primaryBlueColor,
-                      ),
-                      child: Text(
-                        'Tabs',
-                        style: TextStyle(
-                          color: WebsiteColors.whiteColor,
-                          fontSize: 30,
+                      DrawerHeader(
+                        decoration: BoxDecoration(
+                          color: WebsiteColors.primaryBlueColor,
+                        ),
+                        child: Text(
+                          'Tabs',
+                          style: TextStyle(
+                            color: WebsiteColors.whiteColor,
+                            fontSize: 30,
+                          ),
                         ),
                       ),
-                    ),
-                    ListTile(
-                      title: Text('Home'),
-                      onTap: () {
-                        _tabController.animateTo(0);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('About Us'),
-                      onTap: () {
-                        _tabController.animateTo(1);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Events'),
-                      onTap: () {
-                        _tabController.animateTo(2);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Projects'),
-                      onTap: () {
-                        _tabController.animateTo(3);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Contact Us'),
-                      onTap: () {
-                        _tabController.animateTo(4);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Tools'),
-                      onTap: () {
-                        _tabController.animateTo(5);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ListTile(
-                      title: Text('FAQ'),
-                      onTap: () {
-                        _tabController.animateTo(6);
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Divider(),
-                    ListTile(
-                      title: Text('Join Us'),
-                      onTap: () {
-                        UrlHelper.fetchAndLaunchURL('joinUs');
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+                      ListTile(
+                        title: Text('Home'),
+                        onTap: () {
+                          _tabController.animateTo(0);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('About Us'),
+                        onTap: () {
+                          _tabController.animateTo(1);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Events'),
+                        onTap: () {
+                          _tabController.animateTo(2);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Projects'),
+                        onTap: () {
+                          _tabController.animateTo(3);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Contact Us'),
+                        onTap: () {
+                          _tabController.animateTo(4);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Tools'),
+                        onTap: () {
+                          _tabController.animateTo(5);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('FAQ'),
+                        onTap: () {
+                          _tabController.animateTo(6);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Divider(),
+                      ListTile(
+                        title: Text('Join Us'),
+                        onTap: () {
+                          UrlHelper.fetchAndLaunchURL('joinUs');
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               )
-              ): null, // No drawer for large screens
+              : null, // No drawer for large screens
       body: TabBarView(
         controller: _tabController,
         children: [

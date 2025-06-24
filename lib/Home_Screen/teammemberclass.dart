@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ieee_website/Home_Screen/layout_config.dart';
+import 'package:ieee_website/Themes/website_colors.dart';
 import 'package:ieee_website/widgets/team_member.dart';
 
 class TeamMember {
@@ -42,7 +44,10 @@ class OurTeamSection extends StatelessWidget {
         SizedBox(height: 200.sp),
         Text(
           "Meet Our Team",
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: GoogleFonts.poppins(
+        color: WebsiteColors.darkBlueColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 28,),
           maxLines: 4,
           overflow: TextOverflow.ellipsis,
         ),

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ieee_website/Home_Screen/url_helper.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
@@ -15,8 +16,9 @@ class MainSection extends StatelessWidget {
   ];
 
   final VoidCallback onStoryTap;
+  final TabController? tabController;
 
-  MainSection({super.key, required this.onStoryTap});
+  MainSection({super.key, required this.onStoryTap, this.tabController});
 
   double _getResponsiveDimension(
     double currentDimension,
@@ -24,29 +26,25 @@ class MainSection extends StatelessWidget {
     double originalDesignDimension,
   ) {
     double ratio = baseDimension / originalDesignDimension;
-
     double responsiveValue = currentDimension * ratio;
-
     return responsiveValue.clamp(baseDimension * 0.8, baseDimension);
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 800;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final double parentWidth = constraints.maxWidth;
-        final double parentHeight = constraints.maxHeight;
 
-        final double basePositionedLeft = 133.sp;
-        final double basePositionedTop = 335.sp;
-        final double baseDescriptionWidth = 803.sp;
-        final double baseButtonWidth = 220.sp;
+        final double basePositionedLeft = isMobile ? 20.sp : 133.sp;
+        final double basePositionedTop = isMobile ? 250.sp : 335.sp;
+        final double baseDescriptionWidth =
+            isMobile ? parentWidth - 40.sp : 803.sp;
         final double baseButtonHeight = 80.sp;
 
-        final double baseButtonSpacing = 20.sp;
-
         const double originalDesignWidthForScaling = 1920;
-        const double originalDesignHeightForScaling = 6743;
 
         final borderRadius = BorderRadius.only(
           bottomRight: Radius.elliptical(900.sp, 100.sp),
@@ -103,27 +101,19 @@ class MainSection extends StatelessWidget {
             ),
 
             Positioned(
-              left: _getResponsiveDimension(
-                parentWidth,
-                basePositionedLeft,
-                originalDesignWidthForScaling.sp,
-              ),
-              top: _getResponsiveDimension(
-                parentHeight,
-                basePositionedTop,
-                originalDesignHeightForScaling.sp,
-              ),
-
+              left: basePositionedLeft,
+              top: basePositionedTop,
               width:
-                  parentWidth -
-                  _getResponsiveDimension(
-                    parentWidth,
-                    basePositionedLeft,
-                    originalDesignWidthForScaling.sp,
-                  ) -
-                  20.w,
+                  isMobile
+                      ? parentWidth - 40.w
+                      : parentWidth -
+                          _getResponsiveDimension(
+                            parentWidth,
+                            basePositionedLeft,
+                            originalDesignWidthForScaling.sp,
+                          ) -
+                          20.w,
               child: Padding(
-                //
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +123,11 @@ class MainSection extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Text(
                         "IEEE Pharos University in Alexandria",
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        style: GoogleFonts.poppins(
+                          color: WebsiteColors.darkGreyColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: isMobile ? 28 : 30,
+                        ),
                         maxLines: null,
                       ),
                     ),
@@ -143,7 +137,11 @@ class MainSection extends StatelessWidget {
                       alignment: Alignment.topLeft,
                       child: Text(
                         "Where Innovation Meets Excellence",
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: GoogleFonts.poppins(
+                          color: WebsiteColors.darkGreyColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: isMobile ? 28 : 30,
+                        ),
                         maxLines: null,
                       ),
                     ),
@@ -152,56 +150,165 @@ class MainSection extends StatelessWidget {
                     ConstrainedBox(
                       constraints: BoxConstraints(
                         maxWidth: baseDescriptionWidth.clamp(
-                          parentWidth * 0.7 - 40.w,
+                          parentWidth * 0.68 - 40.w,
                           parentWidth - 40.w,
                         ),
                       ),
                       child: Text(
-                        "Join us in shaping a future where technology and creativity unite, and where every member has the opportunity to thrive. Together, we’re not just building a community—we’re building a brighter tomorrow.",
-                        style: Theme.of(context).textTheme.displayMedium,
+                        "Join us in shaping a future where technology and creativity unite, and where every member has the opportunity to thrive.",
+                        style: GoogleFonts.poppins(
+                          color: WebsiteColors.whiteColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: isMobile ? 18 : 24,
+                        ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     SizedBox(height: 20.sp),
 
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: WebsiteColors.primaryBlueColor,
-                            foregroundColor: WebsiteColors.whiteColor,
-                            fixedSize: Size(baseButtonWidth, baseButtonHeight),
-                          ),
-                          onPressed:
-                              () => UrlHelper.fetchAndLaunchURL('joinUs'),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              "Join Us",
-                              style: Theme.of(context).textTheme.displayMedium,
+                    // Buttons section - different layout for mobile
+                    if (isMobile)
+                      // Mobile layout: 3 feature icons beside play button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Feature icons
+                          GestureDetector(
+                            onTap: () {
+                              if (tabController != null) {
+                                tabController!.animateTo(2); // Events tab
+                              }
+                            },
+                            child: Container(
+                              width: 130.sp,
+                              height: 130.sp,
+                              decoration: BoxDecoration(
+                                color: WebsiteColors.primaryBlueColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.calendar_month_outlined,
+                                color: WebsiteColors.whiteColor,
+                                size: 20,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: baseButtonSpacing),
 
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            backgroundColor: WebsiteColors.whiteColor,
-                            fixedSize: Size(baseButtonHeight, baseButtonHeight),
-                          ),
-                          onPressed: onStoryTap,
-                          child: FittedBox(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: WebsiteColors.primaryYellowColor,
-                              size: 60.sp,
+                          GestureDetector(
+                            onTap: () {
+                              if (tabController != null) {
+                                tabController!.animateTo(5); // Features tab
+                              }
+                            },
+                            child: Container(
+                              width: 130.sp,
+                              height: 130.sp,
+                              decoration: BoxDecoration(
+                                color: WebsiteColors.visionColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.auto_awesome,
+                                color: WebsiteColors.whiteColor,
+                                size: 20,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+
+                          GestureDetector(
+                            onTap: () {
+                              if (tabController != null) {
+                                tabController!.animateTo(3); // Papers tab
+                              }
+                            },
+                            child: Container(
+                              width: 130.sp,
+                              height: 130.sp,
+                              decoration: BoxDecoration(
+                                color: WebsiteColors.primaryYellowColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.lightbulb,
+                                color: WebsiteColors.whiteColor,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+
+                          // Play button
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: WebsiteColors.whiteColor,
+                              fixedSize: Size(
+                                baseButtonHeight,
+                                baseButtonHeight,
+                              ),
+                              padding: EdgeInsets.zero, // Remove extra padding
+                            ),
+                            onPressed: onStoryTap,
+                            child: Center(
+                              // Ensure the icon is centered
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: WebsiteColors.primaryYellowColor,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      // Desktop layout: original buttons
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: WebsiteColors.primaryBlueColor,
+                              foregroundColor: WebsiteColors.whiteColor,
+                              fixedSize: Size(
+                                160,
+                               80,
+                              ),
+                            ),
+                            onPressed:
+                                () => UrlHelper.fetchAndLaunchURL('joinUs'),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Join Us",
+                                style: GoogleFonts.poppins(
+                                  color: WebsiteColors.whiteColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 15.w),
+
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: WebsiteColors.whiteColor,
+                              fixedSize: Size(
+                                80,
+                                80,
+                              ),
+                            ),
+                            onPressed: onStoryTap,
+                            child: Center(
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: WebsiteColors.primaryYellowColor,
+                                size: 30
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

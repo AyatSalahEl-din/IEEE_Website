@@ -29,10 +29,11 @@ class _ContactState extends State<Contact> {
     return Scaffold(
       backgroundColor: WebsiteColors.whiteColor,
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('contact_page')
-            .doc('content')
-            .snapshots(),
+        stream:
+            FirebaseFirestore.instance
+                .collection('contact_page')
+                .doc('content')
+                .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -55,10 +56,11 @@ class _ContactState extends State<Contact> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 80),
-            decoration: BoxDecoration(
-              color: WebsiteColors.primaryBlueColor,
-            ),
+            padding: EdgeInsets.only(
+              top: 120,
+              bottom: 80,
+            ), // Adjusted top padding
+            decoration: BoxDecoration(color: WebsiteColors.primaryBlueColor),
             child: Center(
               child: Column(
                 children: [
@@ -105,10 +107,11 @@ class _ContactState extends State<Contact> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 80),
-            decoration: BoxDecoration(
-              color: WebsiteColors.primaryBlueColor,
-            ),
+            padding: EdgeInsets.only(
+              top: 120,
+              bottom: 80,
+            ), // Adjusted top padding
+            decoration: BoxDecoration(color: WebsiteColors.primaryBlueColor),
             child: Center(
               child: Column(
                 children: [
@@ -188,10 +191,7 @@ class _ContactState extends State<Contact> {
                 onPressed: () => _handleMessageSubmit(),
                 child: Text(
                   "Send Message",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -202,13 +202,18 @@ class _ContactState extends State<Contact> {
   }
 
   Widget _buildContactInfoSection([Map<String, dynamic>? contactData]) {
-    final emails = contactData?['emails'] as List<dynamic>? ??
+    final emails =
+        contactData?['emails'] as List<dynamic>? ??
         ['pua-ieee-sb@pua.edu.eg', 'ieee.pua.sb.pr@gmail.com'];
-    final socialLinks = contactData?['socialLinks'] as Map<String, dynamic>? ?? {
-      'facebook': 'https://www.facebook.com/share/1YKyPBgRVK/',
-      'linkedin': 'https://www.linkedin.com/company/ieee-pua-student-branch/',
-      'instagram': 'https://www.instagram.com/ieeepua?igsh=MWVla2RzbmJkNTZ5MQ==',
-    };
+    final socialLinks =
+        contactData?['socialLinks'] as Map<String, dynamic>? ??
+        {
+          'facebook': 'https://www.facebook.com/share/1YKyPBgRVK/',
+          'linkedin':
+              'https://www.linkedin.com/company/ieee-pua-student-branch/',
+          'instagram':
+              'https://www.instagram.com/ieeepua?igsh=MWVla2RzbmJkNTZ5MQ==',
+        };
 
     return Container(
       width: double.infinity,
@@ -221,15 +226,16 @@ class _ContactState extends State<Contact> {
             children: [
               Row(
                 children: [
-                  Icon(Icons.location_on, color: WebsiteColors.primaryBlueColor),
+                  Icon(
+                    Icons.location_on,
+                    color: WebsiteColors.primaryBlueColor,
+                  ),
                   SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      contactData?['address'] ?? "Pharos University in Alexandria (PUA)",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
+                      contactData?['address'] ??
+                          "Pharos University in Alexandria (PUA)",
+                      style: TextStyle(fontSize: 16, color: Colors.black87),
                     ),
                   ),
                 ],
@@ -246,10 +252,7 @@ class _ContactState extends State<Contact> {
                       children: [
                         Text(
                           "Email:",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.black87),
                         ),
                         SizedBox(height: 5),
                         ...emails.asMap().entries.map((entry) {
@@ -287,19 +290,28 @@ class _ContactState extends State<Contact> {
                       children: [
                         Text(
                           "Social Media:",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.black87),
                         ),
                         SizedBox(height: 8),
                         Row(
                           children: [
-                            _buildSocialIcon(0, FontAwesomeIcons.facebook, socialLinks['facebook']),
+                            _buildSocialIcon(
+                              0,
+                              FontAwesomeIcons.facebook,
+                              socialLinks['facebook'],
+                            ),
                             SizedBox(width: 15),
-                            _buildSocialIcon(1, FontAwesomeIcons.linkedin, socialLinks['linkedin']),
+                            _buildSocialIcon(
+                              1,
+                              FontAwesomeIcons.linkedin,
+                              socialLinks['linkedin'],
+                            ),
                             SizedBox(width: 15),
-                            _buildSocialIcon(2, FontAwesomeIcons.instagram, socialLinks['instagram']),
+                            _buildSocialIcon(
+                              2,
+                              FontAwesomeIcons.instagram,
+                              socialLinks['instagram'],
+                            ),
                           ],
                         ),
                       ],
@@ -336,7 +348,9 @@ class _ContactState extends State<Contact> {
           children: [
             Expanded(child: _buildInputField("Full Name", _nameController)),
             SizedBox(width: 15),
-            Expanded(child: _buildInputField("Email Address", _emailController)),
+            Expanded(
+              child: _buildInputField("Email Address", _emailController),
+            ),
           ],
         ),
         SizedBox(height: 15),
@@ -347,20 +361,18 @@ class _ContactState extends State<Contact> {
     );
   }
 
-  Widget _buildInputField(String placeholder, TextEditingController controller, {int maxLines = 1}) {
+  Widget _buildInputField(
+    String placeholder,
+    TextEditingController controller, {
+    int maxLines = 1,
+  }) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
-      style: TextStyle(
-        fontSize: 14,
-        color: Colors.black87,
-      ),
+      style: TextStyle(fontSize: 14, color: Colors.black87),
       decoration: InputDecoration(
         hintText: placeholder,
-        hintStyle: TextStyle(
-          color: Colors.grey.shade400,
-          fontSize: 14,
-        ),
+        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
         filled: true,
         fillColor: Colors.grey.shade100,
         contentPadding: EdgeInsets.symmetric(
@@ -377,7 +389,10 @@ class _ContactState extends State<Contact> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: WebsiteColors.primaryBlueColor, width: 1),
+          borderSide: BorderSide(
+            color: WebsiteColors.primaryBlueColor,
+            width: 1,
+          ),
         ),
       ),
     );
@@ -392,11 +407,7 @@ class _ContactState extends State<Contact> {
           color: WebsiteColors.primaryBlueColor,
           shape: BoxShape.circle,
         ),
-        child: FaIcon(
-          icon,
-          color: WebsiteColors.whiteColor,
-          size: 18,
-        ),
+        child: FaIcon(icon, color: WebsiteColors.whiteColor, size: 18),
       ),
     );
   }
@@ -408,10 +419,7 @@ class _ContactState extends State<Contact> {
   }
 
   void _launchEmail(String email) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: email,
-    );
+    final Uri emailUri = Uri(scheme: 'mailto', path: email);
 
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);

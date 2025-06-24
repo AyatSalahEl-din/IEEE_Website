@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ieee_website/Themes/website_colors.dart';
 
 class InfoCard extends StatelessWidget {
@@ -21,23 +21,23 @@ class InfoCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width > 600 ? 450.sp : 300.sp,
-          height: MediaQuery.of(context).size.width > 600 ? 600.sp : 400.sp,
+          width: 450,
+          height: 600,
           padding: EdgeInsets.all(
-            MediaQuery.of(context).size.width > 600 ? 20.sp : 15.sp,
+            20,
           ),
           decoration: BoxDecoration(
             color: WebsiteColors.whiteColor,
             borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width > 600 ? 15.sp : 10.sp,
+              15,
             ),
             boxShadow: [
               BoxShadow(
                 color: WebsiteColors.primaryBlueColor.withOpacity(0.1),
                 blurRadius:
-                    MediaQuery.of(context).size.width > 600 ? 40.sp : 20.sp,
+                    40,
                 spreadRadius:
-                    MediaQuery.of(context).size.width > 600 ? 2.sp : 1.sp,
+                   2
               ),
             ],
           ),
@@ -46,36 +46,37 @@ class InfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: MediaQuery.of(context).size.width > 600 ? 50.sp : 35.sp,
+                radius: 50,
                 backgroundColor: iconColor,
                 child: Icon(
                   icon,
                   color: WebsiteColors.whiteColor,
-                  size: MediaQuery.of(context).size.width > 600 ? 50.sp : 35.sp,
+                  size: 50,
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width > 600 ? 25.sp : 15.sp,
+               height:25
               ),
               Text(
                 title,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.visionColor,
                   fontSize:
-                      MediaQuery.of(context).size.width > 600 ? 24.sp : 18.sp,
+                     24
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width > 600 ? 10.sp : 8.sp,
+               height:10
               ),
               Text(
                 description,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: WebsiteColors.descGreyColor,
+                style: GoogleFonts.poppins(
+        color: WebsiteColors.descGreyColor,
+        fontWeight: FontWeight.w400,
                   fontSize:
-                      MediaQuery.of(context).size.width > 600 ? 18.sp : 14.sp,
+                     18
                 ),
                 textAlign: TextAlign.center,
               ),
