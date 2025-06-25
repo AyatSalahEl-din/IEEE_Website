@@ -159,7 +159,7 @@ class MainSection extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           color: WebsiteColors.whiteColor,
                           fontWeight: FontWeight.w400,
-                          fontSize: isMobile ? 18 : 24,
+                          fontSize: isMobile ? 18 : 22,
                         ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
