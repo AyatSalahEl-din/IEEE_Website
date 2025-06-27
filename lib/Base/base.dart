@@ -56,7 +56,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       backgroundColor: WebsiteColors.whiteColor,
       appBar: AppBar(
         iconTheme: IconThemeData(color: WebsiteColors.whiteColor),
-        toolbarHeight: 120,
+        toolbarHeight: 90,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(

@@ -25,7 +25,7 @@ class GlowButton extends StatelessWidget {
       onPressed: toggleItemsToShow,
       child: Text(
         itemsToShow >= allEvents.length ? "See Less" : "See More",
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: MediaQuery.of(context).size.width < 600 ? 16 : 18, fontWeight: FontWeight.bold),
       ),
     );
   }

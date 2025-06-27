@@ -19,7 +19,7 @@ class FilterChipWidget extends StatelessWidget {
       onTap: onSelected,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.width < 600 ? 8 : 10, horizontal:   MediaQuery.of(context).size.width < 600 ?10:20,),
         decoration: BoxDecoration(
           gradient:
               isSelected
@@ -45,7 +45,7 @@ class FilterChipWidget extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 16,
+            fontSize:   MediaQuery.of(context).size.width < 600 ?12:16,
             fontWeight: FontWeight.bold,
             color:
                 isSelected

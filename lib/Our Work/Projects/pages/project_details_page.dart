@@ -35,7 +35,7 @@ class ProjectDetailsPage extends StatelessWidget {
               icon: Icon(
                 Icons.arrow_back,
                 color: Colors.white,
-                size: 24,
+                size: MediaQuery.of(context).size.width < 600 ?16:24,
               ),
               onPressed: () => Navigator.pop(context),
             ),
@@ -46,7 +46,7 @@ class ProjectDetailsPage extends StatelessWidget {
               project.title,
               style: Theme.of(context).textTheme.displaySmall!.copyWith(
                 fontSize:
-                    36,
+                     MediaQuery.of(context).size.width < 600 ?18:36,
               ),
             ),
             SizedBox(
@@ -57,7 +57,7 @@ class ProjectDetailsPage extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.white.withOpacity(0.9),
                 fontSize:
-                   20,
+                  MediaQuery.of(context).size.width < 600 ?18:20,
               ),
             ),
             SizedBox(
@@ -68,7 +68,7 @@ class ProjectDetailsPage extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.white.withOpacity(0.8),
                 fontSize:
-                    18,
+                     MediaQuery.of(context).size.width < 600 ?16:18,
               ),
             ),
             SizedBox(
@@ -100,7 +100,7 @@ class ProjectDetailsPage extends StatelessWidget {
           Text(
             "Project Description",
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontSize: 40,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?20:40,
             ),
           ),
           SizedBox(
@@ -121,7 +121,7 @@ class ProjectDetailsPage extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
                 fontSize:
-                    40,
+                    MediaQuery.of(context).size.width < 600 ?20:40,
               ),
             ),
             SizedBox(
@@ -182,7 +182,7 @@ class ProjectDetailsPage extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 color: WebsiteColors.primaryBlueColor,
                 fontSize:
-                    40,
+                     MediaQuery.of(context).size.width < 600 ?20:40,
               ),
             ),
             SizedBox(
@@ -201,14 +201,14 @@ class ProjectDetailsPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: WebsiteColors.primaryBlueColor,
                         fontSize:
-                           18,
+                           MediaQuery.of(context).size.width < 600 ?16:18,
                       ),
                     ),
                     Text(
                       entry.value.toString(),
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         fontSize:
-                           18,
+                           MediaQuery.of(context).size.width < 600 ?16:18,
                       ),
                     ),
                   ],
@@ -237,7 +237,7 @@ class ProjectDetailsPage extends StatelessWidget {
         tag,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
           color: Colors.white,
-          fontSize: 18,
+          fontSize: MediaQuery.of(context).size.width < 600 ?16:18,
         ),
       ),
     );

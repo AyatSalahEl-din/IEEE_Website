@@ -102,7 +102,7 @@ class _StorySlideshowState extends State<StorySlideshow> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 600; // Define mobile screen condition
 
     return Center(
       child: MouseRegion(
@@ -113,18 +113,26 @@ class _StorySlideshowState extends State<StorySlideshow> {
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment:
+                  isMobile
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: WebsiteColors.primaryBlueColor,
-                    size: screenWidth > 600 ? 30 : 20,
+                if (!isMobile) // Hide left arrow on mobile
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: WebsiteColors.primaryBlueColor,
+                      size: 30,
+                    ),
+                    onPressed: _prevSlide,
                   ),
-                  onPressed: _prevSlide,
-                ),
                 Container(
-                  width: screenWidth * 0.8,
-                  height: screenHeight * 0.5,
+                  width: isMobile ? screenWidth * 0.9 : screenWidth * 0.8,
+                  height:
+                      isMobile
+                          ? screenWidth * 0.5
+                          : MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
                     color: WebsiteColors.whiteColor,
                     borderRadius: BorderRadius.circular(12),
@@ -136,55 +144,58 @@ class _StorySlideshowState extends State<StorySlideshow> {
                       ),
                     ],
                   ),
-                  child: Row(
-                    children: [
-                      AnimatedSwitcher(
-                        duration: const Duration(seconds: 1),
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                        child: ClipRRect(
-                          key: ValueKey<int>(currentIndex),
-                          borderRadius: const BorderRadius.horizontal(
-                            left: Radius.circular(12),
-                          ),
-                          child: Image.asset(
-                            sliderItems[currentIndex]['image']!,
-                            fit: BoxFit.cover,
-                            width: screenWidth * 0.4,
-                            height: screenHeight * 0.5,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            sliderItems[currentIndex]['description']!,
-                            textAlign: TextAlign.start,
-                            style: Theme.of(
-                              context,
-                            ).textTheme.displaySmall?.copyWith(
-                              color: WebsiteColors.visionColor,
-                              fontSize: screenWidth > 600 ? 18 : 14,
+                  child:
+                      isMobile
+                          ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              sliderItems[currentIndex]['image']!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
                             ),
+                          )
+                          : Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.horizontal(
+                                  left: Radius.circular(12),
+                                ),
+                                child: Image.asset(
+                                  sliderItems[currentIndex]['image']!,
+                                  fit: BoxFit.cover,
+                                  width: screenWidth * 0.4,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.5,
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Text(
+                                    sliderItems[currentIndex]['description']!,
+                                    textAlign: TextAlign.start,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.displaySmall?.copyWith(
+                                      color: WebsiteColors.visionColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_forward_ios,
-                    color: WebsiteColors.primaryBlueColor,
-                    size: screenWidth > 600 ? 30 : 20,
+                if (!isMobile) // Hide right arrow on mobile
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: WebsiteColors.primaryBlueColor,
+                      size: 30,
+                    ),
+                    onPressed: _nextSlide,
                   ),
-                  onPressed: _nextSlide,
-                ),
               ],
             ),
           ],

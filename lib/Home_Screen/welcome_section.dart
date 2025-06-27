@@ -9,97 +9,100 @@ class WelcomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 800;
+
     return SingleChildScrollView(
-      // ✅ 1. Wrap the entire content in SingleChildScrollView to handle vertical overflow.
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 150.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-               FittedBox(
-                child: Text(
-                  "Welcome to ",
-                  style: GoogleFonts.poppins(
-        color: WebsiteColors.blackColor,
-        fontWeight: FontWeight.bold,
-        fontSize: 28,),
-                  maxLines: null,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 16.0 : 50.0,
+        ), // Adjusted horizontal padding
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 150.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                FittedBox(
+                  child: Text(
+                    "Welcome to ",
+                    style: GoogleFonts.poppins(
+                      color: WebsiteColors.blackColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isMobile ? 18 : 24,
+                    ),
+                    maxLines: null,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 30.h),
-               FittedBox(
-                child: Text(
-                  "IEEE Pharos Student Branch",
-                  style: GoogleFonts.poppins(
-        color: WebsiteColors.darkBlueColor,
-        fontWeight: FontWeight.bold,
-        fontSize: 28, ),
-                  maxLines: null,
-                ),
-              ),
-
-          SizedBox(height: 30.h),
-
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              "where innovation meets passion!",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-        color: WebsiteColors.blackColor,
-        fontWeight: FontWeight.bold,
-        fontSize: 28,),
-              maxLines: null,
+              ],
             ),
-          ),
-
-          SizedBox(height: 30.sp),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50.w),
-            child: Text(
+            SizedBox(height: 30.h),
+            FittedBox(
+              child: Text(
+                "IEEE Pharos Student Branch",
+                style: GoogleFonts.poppins(
+                  color: WebsiteColors.darkBlueColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: isMobile ? 18 : 24,
+                ),
+                maxLines: null,
+              ),
+            ),
+            SizedBox(height: 30.h),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "where innovation meets passion!",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  color: WebsiteColors.blackColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: isMobile ? 18 : 24,
+                ),
+                maxLines: null,
+              ),
+            ),
+            SizedBox(height: 30.sp),
+            Text(
               "At Pharos SB, we believe in empowering students to explore, create, and lead. Whether you're diving into cutting-edge projects, attending transformative events, or collaborating with like-minded peers, this is your space to grow and make an impact.",
               textAlign: TextAlign.center,
-              style:
-                  GoogleFonts.poppins(
-        color: WebsiteColors.darkGreyColor,
-        fontWeight: FontWeight.w400,
-        fontSize: 20,
-      ), // 🎨 Keep original style
+              style: GoogleFonts.poppins(
+                color: WebsiteColors.darkGreyColor,
+                fontWeight: FontWeight.w400,
+                fontSize: isMobile ? 14 : 20,
+              ),
               maxLines: null,
             ),
-          ),
-
-          SizedBox(height: 50.sp),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildStatBlock(context, "150", "Members"),
-              SizedBox(width: 120.w),
-              _buildStatBlock(context, "14", "Years"),
-            ],
-          ),
-
-          SizedBox(height: 550.h),
-        ],
+            SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildStatBlock(context, "150", "Members"),
+                SizedBox(
+                  width: isMobile ? 60 : 120,
+                ), // Adjusted spacing for mobile
+                _buildStatBlock(context, "14", "Years"),
+              ],
+            ),
+            SizedBox(height: 550.h),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildStatBlock(BuildContext context, String value, String label) {
+    final isMobile = MediaQuery.of(context).size.width < 800;
+
     return Column(
       children: [
         FittedBox(
           fit: BoxFit.scaleDown,
           child: GradientText(
             text: value,
-            style: GoogleFonts.abel(fontSize: 50),
+            style: GoogleFonts.abel(fontSize: isMobile ? 30: 60),
             gradient: LinearGradient(
               colors: [
                 WebsiteColors.primaryBlueColor,
@@ -110,11 +113,14 @@ class WelcomeSection extends StatelessWidget {
             ),
           ),
         ),
-        Text(label, style:GoogleFonts.alexandria(
-        color: WebsiteColors.darkGreyColor,
-        fontWeight: FontWeight.w400,
-        fontSize: 24,
-      ),),
+        Text(
+          label,
+          style: GoogleFonts.alexandria(
+            color: WebsiteColors.darkGreyColor,
+            fontWeight: FontWeight.w400,
+            fontSize: isMobile ? 18 : 24,
+          ),
+        ),
       ],
     );
   }

@@ -49,17 +49,17 @@ class CustomTextField extends StatelessWidget {
         hintText: label,
         hintStyle: TextStyle(
           color: WebsiteColors.greyColor,
-          fontSize: 16,
+          fontSize: MediaQuery.of(context).size.width < 600 ?12:16,
         ),
         labelStyle: TextStyle(
           color: WebsiteColors.primaryBlueColor,
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: MediaQuery.of(context).size.width < 600 ?12:16,
         ),
         prefixIcon: Icon(
           prefixIcon,
           color: WebsiteColors.primaryBlueColor,
-          size: 24,
+          size: MediaQuery.of(context).size.width < 600 ?16:24,
         ),
         contentPadding: EdgeInsets.symmetric(
           vertical: 16,
@@ -72,7 +72,7 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       style: TextStyle(
-        fontSize: 16,
+        fontSize: MediaQuery.of(context).size.width < 600 ?12:16,
         color: Colors.black87,
       ),
       keyboardType: keyboardType,

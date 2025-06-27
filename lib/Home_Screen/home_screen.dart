@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Desktop layout - original positioned buttons
                 HomeScreenFeatureButton(
                   left: 1391.sp,
-                  top: 393.sp,
+                  top: 200.sp,
                   onTap: () => widget.tabController!.animateTo(2),
                   child: Row(
                     children: [
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 HomeScreenFeatureButton(
                   left: 1000.sp,
-                  top: 577.sp,
+                  top: 410.sp,
                   onTap: () => widget.tabController!.animateTo(5),
                   child: Row(
                     children: [
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 HomeScreenFeatureButton(
                   left: 1400.sp,
-                  top: 750.sp,
+                  top: 600.sp,
                   onTap: () => widget.tabController!.animateTo(3),
                   child: Row(
                     children: [
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Our Vision",
                 style: GoogleFonts.poppins(
                   color: WebsiteColors.darkBlueColor,
-                  fontSize: 28, // Increased size for mobile
+                  fontSize: isMobile ? 20 : 28,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 4,
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: HoverAnimatedCard(
                         child: InfoCard(
                           icon: Icons.groups,
@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: HoverAnimatedCard(
                         child: InfoCard(
                           icon: Icons.library_books,
@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: HoverAnimatedCard(
                         child: InfoCard(
                           icon: Icons.handshake,
@@ -229,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: HoverAnimatedCard(
                         child: InfoCard(
                           icon: Icons.autorenew,
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(30.0),
                       child: HoverAnimatedCard(
                         child: InfoCard(
                           icon: Icons.design_services,
@@ -345,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Our Story",
                       style: GoogleFonts.poppins(
                         color: WebsiteColors.darkBlueColor,
-                        fontSize: 28,
+                        fontSize: isMobile ? 20 : 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -355,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: GoogleFonts.poppins(
                         color: WebsiteColors.descGreyColor,
                         fontWeight: FontWeight.w400,
-                        fontSize: 20,
+                        fontSize: isMobile ? 16 : 20,
                       ),
                     ),
                   ],
@@ -372,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: GoogleFonts.poppins(
                   color: WebsiteColors.darkBlueColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 28,
+                  fontSize: isMobile ? 20 : 28,
                 ),
               ),
               SizedBox(height: 40.h),

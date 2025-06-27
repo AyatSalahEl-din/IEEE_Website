@@ -38,7 +38,9 @@ class TeamMember {
 
 class OurTeamSection extends StatelessWidget {
   @override
+  
   Widget build(BuildContext context) {
+    
     return Column(
       children: [
         SizedBox(height: 200.sp),
@@ -47,7 +49,7 @@ class OurTeamSection extends StatelessWidget {
           style: GoogleFonts.poppins(
         color: WebsiteColors.darkBlueColor,
         fontWeight: FontWeight.bold,
-        fontSize: 28,),
+        fontSize: MediaQuery.of(context).size.width < 800 ? 20 : 28,),
           maxLines: 4,
           overflow: TextOverflow.ellipsis,
         ),

@@ -18,26 +18,24 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Stack(
       children: [
         Container(
-          width: 450,
-          height: 600,
+          width: isMobile ? 300 : 420, // Adjusted width for mobile
+          height: isMobile ? 400 : 480, // Adjusted height for mobile
           padding: EdgeInsets.all(
-            20,
-          ),
+            isMobile ? 20 : 30,
+          ), // Adjusted padding for mobile
           decoration: BoxDecoration(
             color: WebsiteColors.whiteColor,
-            borderRadius: BorderRadius.circular(
-              15,
-            ),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 color: WebsiteColors.primaryBlueColor.withOpacity(0.1),
-                blurRadius:
-                    40,
-                spreadRadius:
-                   2
+                blurRadius: 40,
+                spreadRadius: 2,
               ),
             ],
           ),
@@ -46,37 +44,35 @@ class InfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: 50,
+                radius: isMobile ? 40 : 50, // Adjusted radius for mobile
                 backgroundColor: iconColor,
                 child: Icon(
                   icon,
                   color: WebsiteColors.whiteColor,
-                  size: 50,
+                  size: isMobile ? 40 : 50, // Adjusted icon size for mobile
                 ),
               ),
               SizedBox(
-               height:25
-              ),
+                height: isMobile ? 20 : 25,
+              ), // Adjusted spacing for mobile
               Text(
                 title,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.visionColor,
-                  fontSize:
-                     24
+                  fontSize: isMobile ? 16 : 20, // Adjusted font size for mobile
                 ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-               height:10
-              ),
+                height: isMobile ? 8 : 10,
+              ), // Adjusted spacing for mobile
               Text(
                 description,
                 style: GoogleFonts.poppins(
-        color: WebsiteColors.descGreyColor,
-        fontWeight: FontWeight.w400,
-                  fontSize:
-                     18
+                  color: WebsiteColors.descGreyColor,
+                  fontWeight: FontWeight.w400,
+                  fontSize: isMobile ? 14 : 16, // Adjusted font size for mobile
                 ),
                 textAlign: TextAlign.center,
               ),

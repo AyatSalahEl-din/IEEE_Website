@@ -216,7 +216,7 @@ Please let me know the next steps for payment.
               'Your booking request has been successfully submitted.\n\nOrder Number: $orderNumber\n\nPlease save this order number for future reference.',
               style: TextStyle(
                 color: WebsiteColors.darkBlueColor,
-                fontSize: 16,
+                fontSize:MediaQuery.of(context).size.width < 600 ?12:16,
               ),
             ),
             actions: [

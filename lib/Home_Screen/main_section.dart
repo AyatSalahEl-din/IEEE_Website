@@ -7,9 +7,10 @@ import 'package:ieee_website/Themes/website_colors.dart';
 
 class MainSection extends StatelessWidget {
   final List<String> imageUrls = [
-    'assets/images/Picture1.png',
+    
     'assets/images/Picture2.png',
     'assets/images/Picture3.png',
+    'assets/images/Picture1.png',
     'assets/images/Picture4.png',
     'assets/images/Picture5.png',
     'assets/images/Picture6.png',
@@ -39,10 +40,9 @@ class MainSection extends StatelessWidget {
         final double parentWidth = constraints.maxWidth;
 
         final double basePositionedLeft = isMobile ? 20.sp : 133.sp;
-        final double basePositionedTop = isMobile ? 250.sp : 335.sp;
+        final double basePositionedTop = isMobile ? 200.sp : 200.sp;
         final double baseDescriptionWidth =
             isMobile ? parentWidth - 40.sp : 803.sp;
-        final double baseButtonHeight = 80.sp;
 
         const double originalDesignWidthForScaling = 1920;
 
@@ -64,7 +64,7 @@ class MainSection extends StatelessWidget {
           children: [
             CarouselSlider(
               options: CarouselOptions(
-                height: 1118.sp,
+                height: isMobile ? 1200.sp : 900.sp,
                 autoPlay: true,
                 viewportFraction: 1.0,
                 enlargeCenterPage: false,
@@ -92,7 +92,7 @@ class MainSection extends StatelessWidget {
             ),
 
             Container(
-              height: 1118.sp,
+              height: isMobile ? 1200.sp : 900.sp,
               width: 1920.sp,
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
@@ -114,7 +114,7 @@ class MainSection extends StatelessWidget {
                           ) -
                           20.w,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -126,7 +126,7 @@ class MainSection extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           color: WebsiteColors.darkGreyColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: isMobile ? 28 : 30,
+                          fontSize: isMobile ? 28 : 40,
                         ),
                         maxLines: null,
                       ),
@@ -140,7 +140,7 @@ class MainSection extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           color: WebsiteColors.darkGreyColor,
                           fontWeight: FontWeight.w400,
-                          fontSize: isMobile ? 28 : 30,
+                          fontSize: isMobile ? 28 : 40,
                         ),
                         maxLines: null,
                       ),
@@ -159,7 +159,7 @@ class MainSection extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           color: WebsiteColors.whiteColor,
                           fontWeight: FontWeight.w400,
-                          fontSize: isMobile ? 18 : 22,
+                          fontSize: isMobile ? 14 : 22,
                         ),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
@@ -169,11 +169,10 @@ class MainSection extends StatelessWidget {
 
                     // Buttons section - different layout for mobile
                     if (isMobile)
-                      // Mobile layout: 3 feature icons beside play button
+                      // Mobile layout: 3 feature icons without play button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Feature icons
                           GestureDetector(
                             onTap: () {
                               if (tabController != null) {
@@ -236,21 +235,19 @@ class MainSection extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                          // Play button
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              backgroundColor: WebsiteColors.whiteColor,
-                              fixedSize: Size(
-                                baseButtonHeight,
-                                baseButtonHeight,
+                          GestureDetector(
+                            onTap: () {
+                              if (onStoryTap != null) {
+                                onStoryTap(); // Navigate to the story section
+                              }
+                            },
+                            child: Container(
+                              width: 130.sp,
+                              height: 130.sp,
+                              decoration: BoxDecoration(
+                                color: WebsiteColors.whiteColor,
+                                shape: BoxShape.circle,
                               ),
-                              padding: EdgeInsets.zero, // Remove extra padding
-                            ),
-                            onPressed: onStoryTap,
-                            child: Center(
-                              // Ensure the icon is centered
                               child: Icon(
                                 Icons.play_arrow,
                                 color: WebsiteColors.primaryYellowColor,
@@ -261,17 +258,14 @@ class MainSection extends StatelessWidget {
                         ],
                       )
                     else
-                      // Desktop layout: original buttons
+                      // Desktop layout: original buttons with play button
                       Row(
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: WebsiteColors.primaryBlueColor,
                               foregroundColor: WebsiteColors.whiteColor,
-                              fixedSize: Size(
-                                160,
-                               80,
-                              ),
+                              fixedSize: Size(160, 80),
                             ),
                             onPressed:
                                 () => UrlHelper.fetchAndLaunchURL('joinUs'),
@@ -288,23 +282,19 @@ class MainSection extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 15.w),
-
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
                               backgroundColor: WebsiteColors.whiteColor,
-                              fixedSize: Size(
-                                80,
-                                80,
-                              ),
+                              fixedSize: Size(80, 80),
                             ),
                             onPressed: onStoryTap,
                             child: Center(
                               child: Icon(
                                 Icons.play_arrow,
                                 color: WebsiteColors.primaryYellowColor,
-                                size: 30
-                              )
+                                size: 30,
+                              ),
                             ),
                           ),
                         ],

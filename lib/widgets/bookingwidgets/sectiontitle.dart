@@ -17,7 +17,7 @@ class SectionTitle extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 22,
+              fontSize:MediaQuery.of(context).size.width < 600 ?16:22,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.darkBlueColor,
             ),

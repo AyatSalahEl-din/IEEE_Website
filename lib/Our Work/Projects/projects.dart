@@ -146,8 +146,9 @@ class _ProjectsState extends State<Projects> {
 
   Widget _buildHeroSection() {
     return Stack(
+      alignment: Alignment.center,
       children: [
-        SizedBox(
+        Container(
           width: double.infinity,
           height: 300, // Removed .sp
           child:
@@ -176,26 +177,25 @@ class _ProjectsState extends State<Projects> {
           height: 300, // Removed .sp
           color: Colors.black.withOpacity(0.5),
         ),
-        Container(
-          width: double.infinity,
-          height: 300, // Removed .sp
-          padding: EdgeInsets.symmetric(horizontal: 50), // Removed .sp
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 600, // Removed .sp
+              FittedBox(
+                fit: BoxFit.scaleDown,
                 child: Text(
-                  "Discover our innovative projects and research work",
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    color: WebsiteColors.whiteColor,
-                    fontSize: 28, // Removed .sp
+                  "Discover our projects and research work.",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
+                    shadows: const [Shadow(blurRadius: 10.0, color: Colors.black54)],
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20), // Removed .sp
+              const SizedBox(height: 20),
               _buildSearchBar(),
             ],
           ),
@@ -207,8 +207,6 @@ class _ProjectsState extends State<Projects> {
   Widget _buildSearchBar() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        
-
         return Container(
           width: 500,
           height: 40,
@@ -243,18 +241,18 @@ class _ProjectsState extends State<Projects> {
                 });
               },
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 16,
+                fontSize: 14,
                 color: WebsiteColors.primaryBlueColor,
               ),
               decoration: InputDecoration(
                 hintText: "Search Projects, Categories, Features...",
                 hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  size: 20,
+                  size: 18,
                   color: WebsiteColors.primaryBlueColor,
                 ),
                 border: OutlineInputBorder(
@@ -389,7 +387,7 @@ class _ProjectsState extends State<Projects> {
         child: Text(
           category ?? 'All',
           style: TextStyle(
-            fontSize: 20, // Updated size
+            fontSize:  MediaQuery.of(context).size.width < 600 ?12:16,
             fontWeight: FontWeight.bold,
             color:
                 isSelected
@@ -411,7 +409,9 @@ class _ProjectsState extends State<Projects> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Allow the column to shrink-wrap its children
+                mainAxisSize:
+                    MainAxisSize
+                        .min, // Allow the column to shrink-wrap its children
                 children: [
                   // Header Section
                   Container(
@@ -448,7 +448,8 @@ class _ProjectsState extends State<Projects> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 100),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Allow the column to shrink-wrap its children
+        mainAxisSize:
+            MainAxisSize.min, // Allow the column to shrink-wrap its children
         children: [
           ...List.generate(_projects.length, (index) {
             return _buildProjectItem(index); // Directly display projects
@@ -482,21 +483,16 @@ class _ProjectsState extends State<Projects> {
             },
           );
         }),
-      )
+      ),
     );
   }
 
   Widget _buildLoadMoreButton() {
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: 60,
-      ),
+      padding: EdgeInsets.only(bottom: 60),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          fixedSize: Size(
-           250,
-            50,
-          ),
+          fixedSize: Size(250, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -507,7 +503,7 @@ class _ProjectsState extends State<Projects> {
           child: Text(
             "See More",
             style: TextStyle(
-              fontSize: 18,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?16:18,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.whiteColor,
             ),
@@ -536,43 +532,51 @@ class _ProjectsState extends State<Projects> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.white,
-                  boxShadow: _isHovered[index]
-                      ? [
-                          BoxShadow(
-                            color: WebsiteColors.primaryBlueColor.withOpacity(0.2),
-                            blurRadius: 15,
-                            spreadRadius: 15,
-                          ),
-                        ]
-                      : [],
+                  boxShadow:
+                      _isHovered[index]
+                          ? [
+                            BoxShadow(
+                              color: WebsiteColors.primaryBlueColor.withOpacity(
+                                0.2,
+                              ),
+                              blurRadius: 15,
+                              spreadRadius: 15,
+                            ),
+                          ]
+                          : [],
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(isMobile ? 16 : 30),
-                  child: isMobile
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Allow column to shrink-wrap
-                          children: [
-                            _buildProjectImage(_projects[index]),
-                            const SizedBox(height: 20),
-                            _buildProjectContent(_projects[index]),
-                          ],
-                        )
-                      : Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, // Allow row to shrink-wrap
-                          children: [
-                            if (isEven) ...[
+                  child:
+                      isMobile
+                          ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize:
+                                MainAxisSize.min, // Allow column to shrink-wrap
+                            children: [
                               _buildProjectImage(_projects[index]),
-                              const SizedBox(width: 60),
+                              const SizedBox(height: 20),
+                              _buildProjectContent(_projects[index]),
                             ],
-                            Expanded(child: _buildProjectContent(_projects[index])),
-                            if (!isEven) ...[
-                              const SizedBox(width: 60),
-                              _buildProjectImage(_projects[index]),
+                          )
+                          : Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize:
+                                MainAxisSize.min, // Allow row to shrink-wrap
+                            children: [
+                              if (isEven) ...[
+                                _buildProjectImage(_projects[index]),
+                                const SizedBox(width: 60),
+                              ],
+                              Expanded(
+                                child: _buildProjectContent(_projects[index]),
+                              ),
+                              if (!isEven) ...[
+                                const SizedBox(width: 60),
+                                _buildProjectImage(_projects[index]),
+                              ],
                             ],
-                          ],
-                        ),
+                          ),
                 ),
               ),
             ),
@@ -621,7 +625,9 @@ class _ProjectsState extends State<Projects> {
                   fit: BoxFit.cover,
                 )
                 : DecorationImage(
-                  image: NetworkImage('https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/n.png'), // Static image
+                  image: NetworkImage(
+                    'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/n.png',
+                  ), // Static image
                   fit: BoxFit.cover,
                 ),
       ),
@@ -629,65 +635,53 @@ class _ProjectsState extends State<Projects> {
   }
 
   Widget _buildProjectContent(Project project) {
-  return Container(
-    constraints: BoxConstraints(
-      minHeight: 300,
-    ),
-    margin: EdgeInsets.only(
-      left: 20,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
+    return Container(
+      constraints: BoxConstraints(minHeight: 300),
+      margin: EdgeInsets.only(left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
           Text(
             project.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
               color: WebsiteColors.primaryBlueColor,
-              fontSize:24,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?20:24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Text(
             "Made By: ${project.madeBy}",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: WebsiteColors.primaryBlueColor,
               fontWeight: FontWeight.bold,
-              fontSize: 20,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?14:18,
             ),
           ),
-          SizedBox(
-            height:20,
-          ),
+          SizedBox(height: 20),
           Text(
             project.description,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
               height: 1.5,
               color: WebsiteColors.darkBlueColor,
-              fontSize: 16,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?12:16,
             ),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 16),
           Text(
             "Date: ${DateFormat('dd MMMM yyyy').format(project.date)}",
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: Colors.grey[700],
-              fontSize: 16,
+              fontSize:  MediaQuery.of(context).size.width < 600 ?12:16,
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Wrap(
             spacing: 10,
-            runSpacing:10,
+            runSpacing: 10,
             children:
                 project.tags.map((tag) => _buildTag(tag, project)).toList(),
           ),
@@ -713,7 +707,7 @@ class _ProjectsState extends State<Projects> {
         );
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: WebsiteColors.primaryYellowColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(15),
@@ -721,7 +715,7 @@ class _ProjectsState extends State<Projects> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize:  MediaQuery.of(context).size.width < 600 ?12:18,
             color: WebsiteColors.primaryYellowColor,
             fontWeight: FontWeight.bold,
           ),

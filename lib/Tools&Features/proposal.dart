@@ -125,7 +125,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
         ),
         title: Text(
           'Propose an Event',
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width < 600 ?16:18,),
         ),
       ),
       body: Form(
@@ -141,7 +141,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                   style: TextStyle(
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: MediaQuery.of(context).size.width < 600 ?16:18,
                   ),
                 ),
               ),
@@ -149,7 +149,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
               Text(
                 'Do you want to propose an event to collaborate with IEEE? Fill out the form below with your details and event information, and we will get back to you shortly!',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: MediaQuery.of(context).size.width < 600 ?12:14,
                   color: WebsiteColors.darkBlueColor,
                 ),
                 textAlign: TextAlign.center,
@@ -241,7 +241,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
               Text(
                 "Proposed Date",
                 style: TextStyle(
-                  fontSize:18 ,
+                  fontSize:MediaQuery.of(context).size.width < 600 ?16:18 ,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.darkBlueColor,
                 ),
@@ -263,7 +263,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
               Text(
                 'Event Format',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: MediaQuery.of(context).size.width < 600 ?16:18,
                   fontWeight: FontWeight.bold,
                   color: WebsiteColors.primaryBlueColor,
                 ),
@@ -357,7 +357,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize:
-                                      18,
+                                     MediaQuery.of(context).size.width < 600 ?16:18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -387,7 +387,7 @@ class _EventProposalFormState extends State<EventProposalForm> {
     return Text(
       title,
       style: TextStyle(
-        fontSize: 22,
+        fontSize:MediaQuery.of(context).size.width < 600 ?16:18,
         fontWeight: FontWeight.bold,
         color: WebsiteColors.primaryBlueColor,
       ),

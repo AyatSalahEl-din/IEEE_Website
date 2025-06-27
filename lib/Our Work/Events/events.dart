@@ -100,7 +100,7 @@ class _EventsState extends State<Events> {
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 32,
+          fontSize:   MediaQuery.of(context).size.width < 600 ?18:32,
           fontWeight: FontWeight.bold,
           color: color,
         ),
@@ -135,7 +135,7 @@ class _EventsState extends State<Events> {
                   "Don't miss out! Explore our events.",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 32,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     shadows: [Shadow(blurRadius: 10.0, color: Colors.black54)],
                   ),
@@ -178,18 +178,18 @@ class _EventsState extends State<Events> {
                 });
               },
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 16,
+                fontSize: 14,
                 color: WebsiteColors.primaryBlueColor,
               ),
               decoration: InputDecoration(
                 hintText: "Search Events, Categories, Location...",
                 hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: WebsiteColors.primaryBlueColor.withOpacity(0.7),
                 ),
                 prefixIcon: Icon(
                   Icons.search,
-                  size: 20,
+                  size: 18,
                   color: WebsiteColors.primaryBlueColor,
                 ),
                 border: OutlineInputBorder(
@@ -256,7 +256,7 @@ class _EventsState extends State<Events> {
                           "Secure your Spot",
                           style: TextStyle(
                             color: WebsiteColors.primaryYellowColor,
-                            fontSize: isSmallScreen ? 26 : 28,
+                            fontSize: isSmallScreen ? 16 : 28,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -265,7 +265,7 @@ class _EventsState extends State<Events> {
                           "Empowering Ideas, Connecting Minds.",
                           style: TextStyle(
                             color: WebsiteColors.whiteColor,
-                            fontSize: isSmallScreen ? 18 : 20,
+                            fontSize: isSmallScreen ? 14 : 26,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -300,10 +300,10 @@ class _EventsState extends State<Events> {
                                 ),
                               ],
                             ),
-                            child: const Text(
+                            child: Text(
                               "Book Your Ticket",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: isSmallScreen ? 12 : 16,
                                 fontWeight: FontWeight.bold,
                                 color: WebsiteColors.lightGreyColor,
                               ),

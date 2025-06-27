@@ -20,7 +20,7 @@ class Tools extends StatelessWidget {
           'Our Tools & Features',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18, // Fixed size
+            fontSize: MediaQuery.of(context).size.width < 600 ?16:18, 
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -71,7 +71,7 @@ class Tools extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'Discover the tools and features we offer to enhance your experience. Stay tuned for more exciting updates!',
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.width < 600 ?12:16, color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
         ),
@@ -193,7 +193,7 @@ class Tools extends StatelessWidget {
             child: Text(
               'Stay tuned for more updates!',
               style: TextStyle(
-                fontSize: 16,
+                fontSize:MediaQuery.of(context).size.width < 600 ?12:16,
                 fontWeight: FontWeight.bold,
                 color: WebsiteColors.primaryBlueColor,
               ),
@@ -267,7 +267,7 @@ class Tools extends StatelessWidget {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 14, // Adjusted to match contact_us.dart
+                        fontSize: MediaQuery.of(context).size.width < 600 ?12:14,// Adjusted to match contact_us.dart
                         fontWeight: FontWeight.bold,
                         color: WebsiteColors.darkBlueColor,
                       ),

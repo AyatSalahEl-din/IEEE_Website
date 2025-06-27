@@ -49,7 +49,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                     color: WebsiteColors.primaryBlueColor,
                     fontWeight: FontWeight.bold,
                     fontSize:
-                        40,
+                        MediaQuery.of(context).size.width < 600 ?20:40,
                   ),
                 ),
                 IconButton(
@@ -57,7 +57,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                   icon: Icon(
                     Icons.close,
                     size:
-                        24,
+                        MediaQuery.of(context).size.width < 600 ?18:24,
                   ),
                 ),
               ],
@@ -174,7 +174,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                         style: TextStyle(
                                           color: Colors.grey[600],
                                           fontSize:
-                                              14,
+                                              MediaQuery.of(context).size.width < 600 ?12:14,
                                         ),
                                       ),
                                     ),
@@ -196,7 +196,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                           fontSize:
-                                              18,
+                                            MediaQuery.of(context).size.width < 600 ?14:18,
                                         ),
                                       ),
                                       SizedBox(
@@ -226,7 +226,7 @@ class _CategoryProjectsDialogState extends State<CategoryProjectsDialog> {
                                         ).textTheme.bodySmall!.copyWith(
                                           color: Colors.grey[600],
                                           fontSize:
-                                              14,
+                                            MediaQuery.of(context).size.width < 600 ?12:14,
                                         ),
                                       ),
                                     ],

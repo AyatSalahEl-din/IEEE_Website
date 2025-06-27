@@ -37,7 +37,7 @@ class CustomDropdown<T> extends StatelessWidget {
             hintText,
             style: TextStyle(
               color: WebsiteColors.greyColor,
-              fontSize: 16,
+              fontSize: MediaQuery.of(context).size.width < 600 ?12:16,
               fontWeight: FontWeight.w100,
               fontFamily: 'Poppins',
             ),
@@ -50,11 +50,11 @@ class CustomDropdown<T> extends StatelessWidget {
           icon: Icon(
             Icons.keyboard_arrow_down,
             color: WebsiteColors.primaryBlueColor,
-            size: 24,
+            size: MediaQuery.of(context).size.width < 600 ?16:24,
           ),
           style: TextStyle(
             color: WebsiteColors.greyColor,
-            fontSize: 16,
+            fontSize: MediaQuery.of(context).size.width < 600 ?12:16,
             fontWeight: FontWeight.w100,
             fontFamily: 'Poppins',
           ),

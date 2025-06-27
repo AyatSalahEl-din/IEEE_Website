@@ -81,86 +81,62 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              // Decorative background elements
-              Positioned(
-                top: -50,
-                right: -50,
-                child: Container(
-                  width: 200,
-                  height: 200,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal:
+                  isMobile ? 14 : 40, // Reduced horizontal padding for mobile
+              vertical:
+                  isMobile ? 14 : 40, // Reduced vertical padding for mobile
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Logos section
+                _buildLogosSection(isMobile),
+
+                SizedBox(
+                  height: isMobile ? 8 : 18,
+                ), // Reduced spacing for mobile
+                // Motivation text
+                _buildMotivationSection(isMobile),
+
+                SizedBox(
+                  height: isMobile ? 8 : 18,
+                ), // Reduced spacing for mobile
+                // Navigation links
+                _buildNavigationSection(context, isMobile),
+
+                SizedBox(
+                  height: isMobile ? 8 : 18,
+                ), // Reduced spacing for mobile
+                // Social media section
+                _buildSocialSection(),
+
+                SizedBox(
+                  height: isMobile ? 8: 18,
+                ), // Reduced spacing for mobile
+                // Divider
+                Container(
+                  height: 1,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.05),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: -30,
-                left: -30,
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.03),
-                  ),
-                ),
-              ),
-
-              // Main content
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 20 : 40,
-                  vertical: isMobile ? 40 : 60,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Enhanced logos section
-                    _buildLogosSection(isMobile),
-
-                    SizedBox(height: isMobile ? 24 : 32),
-
-                    // Enhanced motivation text
-                    _buildMotivationSection(isMobile),
-
-                    SizedBox(height: isMobile ? 20 : 28),
-
-                    // Enhanced navigation links
-                    _buildNavigationSection(context, isMobile),
-
-                    SizedBox(height: isMobile ? 24 : 32),
-
-                    // Enhanced social media section
-                    _buildSocialSection(),
-
-                    SizedBox(height: isMobile ? 20 : 24),
-
-                    // Enhanced divider
-                    Container(
-                      height: 1,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.transparent,
-                            Colors.white.withOpacity(0.4),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.transparent,
+                        Colors.white.withOpacity(0.4),
+                        Colors.transparent,
+                      ],
                     ),
-
-                    SizedBox(height: isMobile ? 16 : 20),
-
-                    // Enhanced copyright
-                    _buildCopyrightSection(isMobile),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+
+                SizedBox(
+                  height: isMobile ? 12 : 20,
+                ), // Reduced spacing for mobile
+                // Copyright
+                _buildCopyrightSection(isMobile),
+              ],
+            ),
           ),
         ),
       ),
@@ -177,7 +153,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
           child: Opacity(
             opacity: value,
             child: Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white.withOpacity(0.1),
@@ -188,15 +164,15 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               ),
               child: Wrap(
                 alignment: WrapAlignment.center,
-                spacing: 32,
+                spacing: 20,
                 children: [
                   _buildAnimatedLogo(
                     'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/ieeepua-logo.webp',
-                    isMobile ? 45 : 55,
+                    isMobile ? 24 : 40,
                   ),
                   _buildAnimatedLogo(
                     'https://raw.githubusercontent.com/AyatSalahEl-din/IEEE_Images/refs/heads/main/ieee-logo.webp',
-                    isMobile ? 45 : 55,
+                    isMobile ? 24 : 40,
                   ),
                 ],
               ),
@@ -237,7 +213,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
 
   Widget _buildMotivationSection(bool isMobile) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white.withOpacity(0.08),
@@ -258,20 +234,20 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w700,
-                fontSize: isMobile ? 20 : 26,
+                fontSize: isMobile ? 12: 26,
                 color: Colors.white,
                 letterSpacing: 0.5,
                 height: 1.2,
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             "Connect • Innovate • Lead",
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.w400,
-              fontSize: isMobile ? 14 : 16,
+              fontSize: isMobile ? 12 : 16,
               color: Colors.white,
               letterSpacing: 2,
             ),
@@ -283,7 +259,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
 
   Widget _buildNavigationSection(BuildContext context, bool isMobile) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white.withOpacity(0.05),
@@ -291,8 +267,8 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
       ),
       child: Wrap(
         alignment: WrapAlignment.center,
-        spacing: isMobile ? 16 : 32,
-        runSpacing: 16,
+        spacing: isMobile ? 12: 18,
+        runSpacing: 12,
         children: [
           _buildEnhancedNavItem(context, "About Us", Icons.info_outline, 1),
           _buildEnhancedNavItem(
@@ -326,7 +302,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white.withOpacity(0.1),
@@ -334,13 +310,13 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, color:WebsiteColors.primaryBlueColor, size: 18),
-              const SizedBox(width: 8),
+              Icon(icon, color: WebsiteColors.primaryBlueColor, size: 14),
+              const SizedBox(width: 6),
               Text(
                 text,
                 style: GoogleFonts.poppins(
                   color: WebsiteColors.primaryBlueColor,
-                  fontSize: 16,
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -358,7 +334,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
         onTap: () => url,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white.withOpacity(0.1),
@@ -366,13 +342,13 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, color:WebsiteColors.primaryBlueColor, size: 18),
-              const SizedBox(width: 8),
+              Icon(icon, color: WebsiteColors.primaryBlueColor, size: 16),
+              const SizedBox(width: 6),
               Text(
                 label,
                 style: GoogleFonts.poppins(
-                  color:WebsiteColors.primaryBlueColor,
-                  fontSize: 16,
+                  color: WebsiteColors.primaryBlueColor,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -390,7 +366,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
         onTap: () => UrlHelper.fetchAndLaunchURL('joinUs'),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white.withOpacity(0.1),
@@ -401,14 +377,14 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               Icon(
                 Icons.group_add,
                 color: WebsiteColors.primaryBlueColor,
-                size: 18,
+                size: 16,
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               Text(
                 "Join Us",
                 style: GoogleFonts.poppins(
-                  color:WebsiteColors.primaryBlueColor,
-                  fontSize: 16,
+                  color: WebsiteColors.primaryBlueColor,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -421,7 +397,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
 
   Widget _buildSocialSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white.withOpacity(0.08),
@@ -432,7 +408,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
             "Follow Us",
             style: GoogleFonts.poppins(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               letterSpacing: 1,
             ),
@@ -494,7 +470,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               ),
             ],
           ),
-          child: FaIcon(iconData, color: Colors.white, size: 24),
+          child: FaIcon(iconData, color: Colors.white, size: 16),
         ),
       ),
     );
@@ -502,7 +478,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
 
   Widget _buildCopyrightSection(bool isMobile) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white.withOpacity(0.05),

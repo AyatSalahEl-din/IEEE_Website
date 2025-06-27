@@ -26,11 +26,11 @@ class CustomDatePicker extends StatelessWidget {
               data: Theme.of(context).copyWith(
                 textTheme: TextTheme(
                   bodyMedium: TextStyle(
-                    fontSize: 16,
+                    fontSize:MediaQuery.of(context).size.width < 600 ?12:16,
                     color: WebsiteColors.darkBlueColor,
                   ),
                   titleLarge: TextStyle(
-                    fontSize: 18,
+                    fontSize:MediaQuery.of(context).size.width < 600 ?14:18,
                     fontWeight: FontWeight.bold,
                     color: WebsiteColors.primaryBlueColor,
                   ),
@@ -66,7 +66,7 @@ class CustomDatePicker extends StatelessWidget {
             Icon(
               Icons.calendar_today,
               color: WebsiteColors.primaryBlueColor,
-              size: 20,
+              size: MediaQuery.of(context).size.width < 600 ?16:20,
             ),
             SizedBox(width: 10),
             Text(
@@ -74,7 +74,7 @@ class CustomDatePicker extends StatelessWidget {
                   ? DateFormat.yMMMd().format(initialDate!)
                   : "Pick a date",
               style: TextStyle(
-                fontSize: 14,
+                fontSize: MediaQuery.of(context).size.width < 600 ?12:14,
                 fontWeight: FontWeight.normal,
                 color: WebsiteColors.darkGreyColor,
               ),

@@ -15,7 +15,7 @@ class ComingSoonWidget extends StatelessWidget {
         children: [
           Icon(
             Icons.hourglass_empty,
-            size: 100,
+            size: MediaQuery.of(context).size.width < 600 ?50:100,
             color: WebsiteColors.primaryBlueColor,
           ),
           SizedBox(
@@ -24,7 +24,7 @@ class ComingSoonWidget extends StatelessWidget {
           Text(
             message,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: MediaQuery.of(context).size.width < 600 ?16:24,
               fontWeight: FontWeight.bold,
               color: WebsiteColors.primaryBlueColor,
             ),

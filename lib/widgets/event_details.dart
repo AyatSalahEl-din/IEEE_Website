@@ -59,7 +59,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           widget.event.name,
           style: TextStyle(
             color: WebsiteColors.whiteColor,
-            fontSize: 24,
+            fontSize:MediaQuery.of(context).size.width < 600 ?14:24,
           ),
         ),
         centerTitle: true,
@@ -67,7 +67,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
-            size: 24,
+            size: MediaQuery.of(context).size.width < 600 ?14:24,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -131,7 +131,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                           return Icon(
                                             Icons.error,
                                             size:
-                                               50
+                                               MediaQuery.of(context).size.width < 600 ?30:50,
                                           );
                                         },
                                       );
@@ -258,7 +258,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   : Colors.black.withOpacity(0.7),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: Colors.white, size: 30),
+        child: Icon(icon, color: Colors.white, size:MediaQuery.of(context).size.width < 600 ?20:30,),
       ),
     );
   }
@@ -270,7 +270,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         title,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: WebsiteColors.darkBlueColor,
-          fontSize: 40,
+          fontSize: MediaQuery.of(context).size.width < 600 ?20:40,
         ),
       ),
     );
@@ -283,7 +283,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         text.isNotEmpty ? text : "No details available",
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: WebsiteColors.darkGreyColor,
-          fontSize: 30,
+          fontSize:MediaQuery.of(context).size.width < 600 ?16:30,
         ),
       ),
     );
@@ -298,7 +298,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         Icon(
           icon,
           color: WebsiteColors.primaryBlueColor,
-          size: 30,
+          size: MediaQuery.of(context).size.width < 600 ?20:30,
         ),
         SizedBox(width: 8),
         Expanded(  // prevent overflow by letting text wrap
@@ -306,7 +306,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             text,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: WebsiteColors.primaryBlueColor,
-              fontSize: 18, // reduced from 30 to avoid overflow
+              fontSize: MediaQuery.of(context).size.width < 600 ?12:18,
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
