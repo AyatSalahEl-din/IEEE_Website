@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 HomeScreenFeatureButton(
                   left: 1000.sp,
-                  top: 410.sp,
+                  top: 450.sp,
                   onTap: () => widget.tabController!.animateTo(5),
                   child: Row(
                     children: [
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 HomeScreenFeatureButton(
                   left: 1400.sp,
-                  top: 600.sp,
+                  top: 650.sp,
                   onTap: () => widget.tabController!.animateTo(3),
                   child: Row(
                     children: [

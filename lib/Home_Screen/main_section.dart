@@ -7,7 +7,6 @@ import 'package:ieee_website/Themes/website_colors.dart';
 
 class MainSection extends StatelessWidget {
   final List<String> imageUrls = [
-    
     'assets/images/Picture2.png',
     'assets/images/Picture3.png',
     'assets/images/Picture1.png',
@@ -154,15 +153,30 @@ class MainSection extends StatelessWidget {
                           parentWidth - 40.w,
                         ),
                       ),
-                      child: Text(
-                        "Join us in shaping a future where technology and creativity unite, and where every member has the opportunity to thrive.",
-                        style: GoogleFonts.poppins(
-                          color: WebsiteColors.whiteColor,
-                          fontWeight: FontWeight.w400,
-                          fontSize: isMobile ? 14 : 22,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Join us in shaping a future where technology and creativity unite,",
+                            style: GoogleFonts.poppins(
+                              color: WebsiteColors.whiteColor,
+                              fontWeight: FontWeight.w400,
+                              fontSize: isMobile ? 14 : 22,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "and where every member has the opportunity to thrive.",
+                            style: GoogleFonts.poppins(
+                              color: WebsiteColors.whiteColor,
+                              fontWeight: FontWeight.w400,
+                              fontSize: isMobile ? 14 : 22,
+                            ),
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 20.sp),
