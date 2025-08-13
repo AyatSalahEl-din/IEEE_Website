@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Footer extends StatefulWidget {
   final TabController tabController;
 
-  const Footer({required this.tabController});
+  const Footer({super.key, required this.tabController});
 
   @override
   State<Footer> createState() => _FooterState();
@@ -113,7 +113,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
                 _buildSocialSection(),
 
                 SizedBox(
-                  height: isMobile ? 8: 18,
+                  height: isMobile ? 8 : 18,
                 ), // Reduced spacing for mobile
                 // Divider
                 Container(
@@ -234,7 +234,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w700,
-                fontSize: isMobile ? 12: 26,
+                fontSize: isMobile ? 12 : 26,
                 color: Colors.white,
                 letterSpacing: 0.5,
                 height: 1.2,
@@ -267,7 +267,7 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
       ),
       child: Wrap(
         alignment: WrapAlignment.center,
-        spacing: isMobile ? 12: 18,
+        spacing: isMobile ? 12 : 18,
         runSpacing: 12,
         children: [
           _buildEnhancedNavItem(context, "About Us", Icons.info_outline, 1),
@@ -278,10 +278,16 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
             4,
           ),
           _buildEnhancedLinkItem(
+            "Admin Site",
+            Icons.supervisor_account,
+            "https://ieeepuasb-admin.netlify.app/",
+          ),
+          _buildEnhancedLinkItem(
             "IEEE Official",
             Icons.language,
             "https://www.ieee.org/",
           ),
+
           _buildEnhancedJoinUsButton(context, isMobile),
         ],
       ),
@@ -331,7 +337,13 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => url,
+        onTap: () async {
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
