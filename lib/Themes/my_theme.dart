@@ -5,6 +5,8 @@ import 'package:ieee_website/Themes/website_colors.dart';
 
 class MyTheme {
   static ThemeData theme = ThemeData(
+    splashColor: WebsiteColors.primaryBlueColor.withOpacity(0.2),
+    highlightColor: WebsiteColors.primaryBlueColor.withOpacity(0.1),
     textTheme: TextTheme(
       displayMedium: GoogleFonts.poppins(
         color: WebsiteColors.whiteColor,
@@ -42,11 +44,11 @@ class MyTheme {
         fontWeight: FontWeight.bold,
         fontSize: 48.sp,
       ),
-      bodyMedium: GoogleFonts.poppins (
-      color: WebsiteColors.whiteColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 45.sp,
-    ),
+      bodyMedium: GoogleFonts.poppins(
+        color: WebsiteColors.whiteColor,
+        fontWeight: FontWeight.bold,
+        fontSize: 45.sp,
+      ),
       bodySmall: GoogleFonts.poppins(
         color: WebsiteColors.darkBlueColor,
         fontWeight: FontWeight.normal,

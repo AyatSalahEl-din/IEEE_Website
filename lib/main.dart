@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'IEEE PUA SB',
           theme: MyTheme.theme,
+          
           initialRoute: Base.routeName,
           routes: {
             HomeScreen.routeName: (context) => HomeScreen(),
