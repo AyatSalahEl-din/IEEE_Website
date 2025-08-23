@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WebsiteColors {
-  static const Color primaryBlueColor = Color(0xff00629B);
+  static const Color primaryBlueColor = Color(0xFF00629B);
   static const Color darkBlueColor = Color(0xff012D63);
   static const Color visionColor = Color(0xff2F327D);
   static const Color lightGreyColor = Color(0xff5A5A5A);

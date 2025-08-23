@@ -11,6 +11,20 @@
   <meta name="keywords" content="IEEE PUA Student Branch, Pharos University, Alexandria, Engineering, Technology, Egypt, Workshops, Innovation, Robotics, AI, Leadership">
   <meta name="author" content="IEEE PUA Student Branch">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ieeepua.com/"> <!-- Update to your real domain -->
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="IEEE PUA Student Branch | Pharos University in Alexandria">
+  <meta property="og:description" content="Official IEEE PUA Student Branch website – connecting students in engineering and technology through events, workshops, and innovation.">
+  <meta property="og:image" content="https://ieeepua.com/icons/Icon-512.png"> <!-- Update to your real image URL -->
+  <meta property="og:url" content="https://ieeepua.com/">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IEEE PUA Student Branch | Pharos University in Alexandria">
+  <meta name="twitter:description" content="Official IEEE PUA Student Branch website – connecting students in engineering and technology through events, workshops, and innovation.">
+  <meta name="twitter:image" content="https://ieeepua.com/icons/Icon-512.png"> <!-- Update to your real image URL -->
 
   <!-- Base URL -->
   <base href="/">
@@ -21,15 +35,41 @@
   <meta name="apple-mobile-web-app-title" content="IEEE PUA SB">
 
   <!-- Icons -->
-  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png"">
   <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
+  <script src="flutter_bootstrap.js"></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollegeOrUniversity",
+      "name": "IEEE PUA Student Branch",
+      "url": "https://ieeepua.com/",
+      "logo": "https://ieeepua.com/icons/Icon-512.png",
+      "sameAs": [
+        "https://www.facebook.com/people/Pharos-IEEE-SB/61572440826700/",
+        "https://www.instagram.com/ieeepua/",
+        "https://www.linkedin.com/company/ieee-pua-student-branch/"
+      ]
+    }
+  </script>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-
-<!--  <script src="//code.tidio.co/bxkzx5fgrkoq4wbdyxs0tg9w9jyrsbcm.js" async></script>-->
+  <div id="loading-indicator" style="position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:#fff;z-index:9999;">
+    <div style="text-align:center;">
+      <img src="favicon.png" alt="Loading..." style="width:64px;height:64px;opacity:0.8;">
+      <div style="margin-top:16px;font-family:sans-serif;color:#043f87;font-size:18px;">Loading IEEE PUA SB...</div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function() {
+      var el = document.getElementById('loading-indicator');
+      if (el) el.style.display = 'none';
+    });
+  </script>
 </body>
 </html>

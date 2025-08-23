@@ -278,11 +278,6 @@ class _FooterState extends State<Footer> with TickerProviderStateMixin {
             4,
           ),
           _buildEnhancedLinkItem(
-            "Admin Site",
-            Icons.supervisor_account,
-            "https://ieeepuasb-admin.netlify.app/",
-          ),
-          _buildEnhancedLinkItem(
             "IEEE Official",
             Icons.language,
             "https://www.ieee.org/",
